@@ -29,7 +29,7 @@ func NewPictureAttr() *PictureAttr {
 
 //根据图片ID查询图片属性
 func (p *PictureAttr) GetListByPicIds(ids []int) (list []PictureAttr) {
-	fields := "id,width,height,file_name,is_qiniu,image_url"
+	fields := "id,pic_id,width,height,file_name,is_qiniu,image_url"
 	GetDB().Where("pic_id IN (?) AND state=?", ids, 1).Select(fields).Find(&list)
 	return
 }

@@ -7,7 +7,6 @@
 package models
 
 import (
-	"errors"
 	"time"
 )
 
@@ -24,16 +23,14 @@ func NewTag() *Tag {
 	return &Tag{}
 }
 
-//插入数据
-func (t *Tag) Insert() (id int, err error) {
-	if t.TagName == "" {
-		return 0, errors.New("TagName is nil")
+//根据标签ID查询标签信息
+func (t *Tag) GetTagListByIds(tagIds []int) (result map[int]string) {
+	var list []Tag
+	fields := "id,tag_name"
+	GetDB().Where("id IN (?) AND state=?", tagIds, 1).Select(fields).Find(&list)
+	result = make(map[int]string, len(list))
+	for _, tag := range list {
+		result[tag.Id] = tag.TagName
 	}
-	tmpTag := &Tag{}
-	GetDB().Where("tag_name = ?", t.TagName).Select("id").First(tmpTag)
-	if tmpTag.Id > 0 {
-		return tmpTag.Id, nil
-	}
-	create := GetDB().Create(t)
-	return t.Id, create.Error
+	return result
 }

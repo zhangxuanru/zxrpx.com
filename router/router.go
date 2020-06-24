@@ -13,4 +13,5 @@ import (
 //设置路由
 func (h *HttpServer) settingRouter() {
 	h.engine.GET("/", controllers.Index)
+	h.engine.GET("/src", controllers.Test)
 }

@@ -7,7 +7,9 @@
 package controllers
 
 import (
+	"net/http"
 	"pix/application/services"
+	"pix/configs"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +25,15 @@ func Index(c *gin.Context) {
 	if page, err = strconv.Atoi(pageStr); err != nil {
 		page = 1
 	}
-	result := services.NewPicService(page, 10).GetPicListByAddTimeOrder()
+	picList, count := services.NewPicService(page, 10).GetPicListByAddTimeOrder()
+	c.HTML(http.StatusOK, "index.html", gin.H{
+		"frontDomain": configs.STATIC_DOMAIN,
+		"picList":     picList,
+		"count":       count,
+	})
+}
 
-	//context.HTML(http.StatusOK, "index.html", gin.H{"frontDomain": configs.STATIC_DOMAIN})
+func Test(c *gin.Context) {
+	c.HTML(http.StatusOK, "src.html", gin.H{
+		"frontDomain": configs.STATIC_DOMAIN})
 }

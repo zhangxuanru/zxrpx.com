@@ -37,8 +37,9 @@ func NewPicture() *Picture {
 	return &Picture{}
 }
 
-func (p *Picture) GetPicListByParams(params *QueryParams) (pic []Picture) {
+func (p *Picture) GetPicListByParams(params *QueryParams) (pic []Picture, count int) {
 	params = setDefaultParams(params)
+	GetDB().Model(p).Where(params.Where).Count(&count)
 	db := GetDB().Select(params.Fields)
 	if params.Where != "" {
 		db = db.Where(params.Where)

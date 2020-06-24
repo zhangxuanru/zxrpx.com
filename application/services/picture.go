@@ -40,7 +40,7 @@ func NewPicService(page int, limit int) *PicService {
 }
 
 //根据添加时间查询图片列表
-func (p *PicService) GetPicListByAddTimeOrder() (result []*PicResult) {
+func (p *PicService) GetPicListByAddTimeOrder() (result []*PicResult, count int) {
 	var (
 		picList []models.Picture
 	)
@@ -52,10 +52,10 @@ func (p *PicService) GetPicListByAddTimeOrder() (result []*PicResult) {
 		Order:  "add_time DESC,like_num DESC",
 		Where:  "state=1",
 	}
-	if picList = models.NewPicture().GetPicListByParams(params); len(picList) == 0 {
+	if picList, count = models.NewPicture().GetPicListByParams(params); len(picList) == 0 {
 		return
 	}
-	return p.CombinePicData(picList)
+	return p.CombinePicData(picList), count
 }
 
 //组合图片数据

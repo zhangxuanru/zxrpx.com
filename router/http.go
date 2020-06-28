@@ -8,9 +8,11 @@ package router
 
 import (
 	"context"
+	"html/template"
 	"net/http"
 	"os"
 	"os/signal"
+	"pix/application/logic"
 	"pix/configs"
 	"syscall"
 	"time"
@@ -35,6 +37,7 @@ func NewHttpServer() *HttpServer {
 	}
 	server.settingRouter()
 	server.setMiddleware()
+	server.LoadTemplateFunc()
 	server.LoadHtml()
 	server.LoadStatic()
 	return server
@@ -80,4 +83,12 @@ func (h *HttpServer) LoadHtml() {
 //载入静态文件
 func (h *HttpServer) LoadStatic() {
 	h.engine.StaticFS("/static", http.Dir("public"))
+}
+
+//模板函数
+func (h *HttpServer) LoadTemplateFunc() {
+	h.engine.SetFuncMap(template.FuncMap{
+		"ViewWH":        logic.ViewWHAttr,
+		"ViewImageAddr": logic.ViewImageAddr,
+	})
 }

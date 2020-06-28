@@ -7,6 +7,7 @@
 package services
 
 import (
+	"bytes"
 	"pix/application/models"
 	"strconv"
 	"strings"
@@ -62,4 +63,16 @@ func (t *TagService) GetTagIdByPicTag(picTag []models.PictureTag) []int {
 		}
 	}
 	return tagIds
+}
+
+//根据tag数组获取tag的字符串
+func (t *TagService) GetTagStrByTagModels(models []models.Tag) string {
+	if len(models) == 0 {
+		return ""
+	}
+	var buf bytes.Buffer
+	for _, tag := range models {
+		buf.WriteString(tag.TagName + ",")
+	}
+	return buf.String()
 }

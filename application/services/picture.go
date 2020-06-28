@@ -25,6 +25,7 @@ type PicResult struct {
 	LikeNum      uint  `json:"like_num"`
 	FavoritesNum uint  `json:"favorites_num"`
 	CommentsNum  uint  `json:"comments_num"`
+	TagStr       string
 	Attr         []models.PictureAttr
 	Tags         []models.Tag
 }
@@ -49,7 +50,7 @@ func (p *PicService) GetPicListByAddTimeOrder() (result []*PicResult, count int)
 		Offset: offset,
 		Limit:  p.Limit,
 		Fields: "id,uid,px_img_id,like_num,favorites_num,comments_num,image_type",
-		Order:  "add_time DESC,like_num DESC",
+		Order:  "sort ASC,like_num DESC,add_time DESC",
 		Where:  "state=1",
 	}
 	if picList, count = models.NewPicture().GetPicListByParams(params); len(picList) == 0 {
@@ -61,17 +62,22 @@ func (p *PicService) GetPicListByAddTimeOrder() (result []*PicResult, count int)
 //组合图片数据
 func (p *PicService) CombinePicData(picList []models.Picture) (result []*PicResult) {
 	var (
-		attrRes attrMapRes
-		tagRes  tagMapRes
-		idList  []int
+		attrRes    attrMapRes
+		tagRes     tagMapRes
+		tagService *TagService
+		idList     []int
 	)
 	idList = p.GetIdList(picList)
 	if attrRes = p.GetPicAttrListByIds(idList); len(attrRes) == 0 {
 		return
 	}
-	tagRes = NewTagService().GetTagListByPicIds(idList)
+	tagService = NewTagService()
+	tagRes = tagService.GetTagListByPicIds(idList)
 	result = make([]*PicResult, len(picList))
 	for key, pic := range picList {
+		if _, ok := attrRes[pic.PxImgId]; !ok || len(attrRes[pic.PxImgId]) == 0 {
+			continue
+		}
 		result[key] = &PicResult{
 			Id:           pic.Id,
 			Uid:          pic.Uid,
@@ -82,6 +88,7 @@ func (p *PicService) CombinePicData(picList []models.Picture) (result []*PicResu
 			CommentsNum:  pic.CommentsNum,
 			Attr:         attrRes[pic.PxImgId],
 			Tags:         tagRes[pic.PxImgId],
+			TagStr:       tagService.GetTagStrByTagModels(tagRes[pic.PxImgId]),
 		}
 	}
 	return result

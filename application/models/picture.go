@@ -27,6 +27,7 @@ type Picture struct {
 	LikeNum        uint      `gorm:"NOT NULL; default:0; comment:'喜欢总数'" json:"like_num"`
 	FavoritesNum   uint      `gorm:"NOT NULL; default:0; comment:'收藏总数'" json:"favorites_num"`
 	CommentsNum    uint      `gorm:"NOT NULL; default:0; comment:'评论总数'" json:"comments_num"`
+	Sort           uint      `gorm:"NOT NULL; default:0; comment:'排序字段,从小到大'" json:"sort"`
 	IsHandpick     int       `gorm:"type:TINYINT(1); NOT NULL;default:0; comment:'是否精选 1:精选 0:不是精选'" json:"is_hand_pick"`
 	State          int       `gorm:"type:TINYINT(1); NOT NULL;default:1; comment:'状态 1:状态正常 0:删除'" json:"state"`
 	AddTime        time.Time `gorm:"comment:'添加时间'" json:"add_time"`

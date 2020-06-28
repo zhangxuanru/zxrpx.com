@@ -7,6 +7,7 @@
 package controllers
 
 import (
+	"math"
 	"net/http"
 	"pix/application/services"
 	"pix/configs"
@@ -18,22 +19,31 @@ import (
 //首页
 func Index(c *gin.Context) {
 	var (
-		page int
-		err  error
+		limit = 100
+		page  int
+		err   error
 	)
 	pageStr := c.DefaultQuery("page", "1")
-	if page, err = strconv.Atoi(pageStr); err != nil {
+	if page, err = strconv.Atoi(pageStr); err != nil || page > 500 || page < 1 {
 		page = 1
 	}
-	picList, count := services.NewPicService(page, 10).GetPicListByAddTimeOrder()
+	picList, count := services.NewPicService(page, limit).GetPicListByAddTimeOrder()
+	totalPage := int(math.Ceil(float64(count) / float64(limit)))
+	isNextPage := totalPage-page >= 1
+
 	c.HTML(http.StatusOK, "index.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"picList":     picList,
 		"count":       count,
+		"page":        page,
+		"prevPage":    page - 1,
+		"nextPage":    page + 1,
+		"totalPage":   totalPage,
+		"isNextPage":  isNextPage,
 	})
 }
 
 func Test(c *gin.Context) {
-	c.HTML(http.StatusOK, "src.html", gin.H{
+	c.HTML(http.StatusOK, "test.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN})
 }

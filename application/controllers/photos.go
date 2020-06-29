@@ -8,6 +8,7 @@ package controllers
 
 import (
 	"net/http"
+	"pix/application/services"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -24,5 +25,9 @@ func Detail(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/404")
 		return
 	}
-
+	data := services.NewPicService(1, 1).GetPhotosDetailByPxId(pxId)
+	if len(data) == 0 {
+		c.Redirect(http.StatusFound, "/404")
+		return
+	}
 }

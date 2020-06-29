@@ -11,6 +11,7 @@ import (
 	"pix/application/models"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 type TagService struct {
@@ -18,8 +19,14 @@ type TagService struct {
 
 type tagMapRes map[int][]models.Tag
 
+var tag *TagService
+var once sync.Once
+
 func NewTagService() *TagService {
-	return &TagService{}
+	once.Do(func() {
+		tag = &TagService{}
+	})
+	return tag
 }
 
 //根据图片ID获取标签信息

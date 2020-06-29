@@ -22,11 +22,12 @@ var Db *gorm.DB
 
 //查询参数结构体
 type QueryParams struct {
-	Offset int
-	Limit  int
-	Order  string
-	Where  string
-	Fields string
+	Offset  int
+	Limit   int
+	Order   string
+	Where   string
+	Fields  string
+	IsCount bool
 }
 
 //初始化MYSQL

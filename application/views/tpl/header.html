@@ -1,20 +1,122 @@
 {{define "header"}}
-<!DOCTYPE html>
-<html lang="zh" prefix="og: http://ogp.me/ns#">
-<head>
-    <meta charset="utf-8">
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl+ '&gtm_auth=EzJCsJwDfVlqG8d1K6KKOg&gtm_preview=env-1&gtm_cookies_win=x';f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5CF9ZN');</script>
-    <link rel="canonical" href="http://13520v.com">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{.frontDomain}}/static/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{.frontDomain}}/static/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{.frontDomain}}/static/images/favicon-16x16.png">
-    <link rel="manifest" href="{{.frontDomain}}/static/txt/manifest.json">
-    <link rel="mask-icon" href="{{.frontDomain}}/static/images/safari-pinned-tab.svg" color="#02be6e">
-    <meta name="theme-color" content="#4ea64e">
-    <link rel="search" type="application/opensearchdescription+xml" title="Pixabay" href="https://pixabay.com/static/misc/opensearch.xml">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{.frontDomain}}/static/css/base.1b1bed0c.min.css">
-    <title>发现并下载免费图片</title>
-    <meta name="description" content="本站所有内容均抓取自 https://pixabay.com。发现免费图片和视频的最佳来源。 可以做商业用途 ✓ 不要求署名 ✓">
-</head>
+<div id="header">
+    <div id="header_inner">
+        <div class="pure-menu pure-menu-horizontal pure-menu-open">
+            <ul>
+                <li class="pure-dropdown hide-xs hide-sm hide-md">
+                    <a>探索 <i class="dropdown_arrow hide-xs"></i></a>
+                    <ul id="clone_to_mobile_menu" class="pure-menu-children">
+                        <li>
+                            <div class="columns-menu">
+                                <div>
+                                    <div class="last-column"><div><b>About</b>
+                                            <a href="/editors_choice/">小编精选</a>
+                                            <a href="/service/terms/">服务条款</a>
+                                            <a href="/service/privacy/">隐私政策</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="pure-dropdown">
+                    <a href="/users/strive965432-16938088/">
+                        <div style="width:30px;height:22px">
+                            <img class="profile_image" alt="" srcset="{{.frontDomain}}/static/images/profile_image_dummy.svg 1x, {{.frontDomain}}/static/images/profile_image_dummy.svg 2x" src="{{.frontDomain}}/static/images/profile_image_dummy.svg"></div></a>
+                    <ul class="pure-menu-children">
+                        <li>
+                            <div id="mobile_menu_top" class="hide-sm hide-md hide-lg hide-xl">
+                                <a href="/zh/accounts/media/upload/" class="pure-button button-green"><i class="icon icon_upload"></i> 上传</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="/zh/users/strive965432-16938088/">我的资料</a>
+                        </li>
+                        <li>
+                            <a href="/zh/accounts/media/">我的图片</a>
+                        </li>
+                        <li class="hide-xs"><a href="/zh/accounts/media/upload/">上传</a></li>
+                        <li><a href="/zh/accounts/favorites/">收藏</a></li>
+                        <li><a href="/zh/accounts/following/">关注</a></li>
+                        <li><a href="/zh/accounts/messages/inbox/">消息</a></li>
+                        <li><a href="/zh/accounts/settings/">设置</a></li>
+                        <li class="pure-menu-separator hide-xs hide-sm"></li>
+                        <li class="hide-xs hide-sm"><a href="/zh/images/tools/quality_rating/">质量检查</a></li>
+                        <li class="pure-menu-separator"></li>
+                        <li><a href="/zh/accounts/logout/">注销</a></li>
+                    </ul>
+                </li>
+
+                <li class="hide-xs"><a href="/accounts/media/upload/" class="pure-button button-green"><i class="icon icon_upload"></i> 上传</a></li>
+                <li class="pure-dropdown hide-lg hide-xl">
+                    <a><i class="icon icon_mobile_menu"></i></a>
+                    <ul id="mobile_menu" class="pure-menu-children"></ul>
+                </li>
+
+            </ul>
+        </div>
+
+        <a id="logo_authenticated" href="/zh/"></a>
+        <i class="toggle_mobile_search icon icon_menu_loupe"></i>
+        <div id="media_type_menu" class="hide-xs hide-sm hide-md hide-lg">
+            <a href="/photos/">照片</a>
+            <a href="/illustrations/">插画</a>
+            <a href="/vectors/">向量</a>
+        </div>
+        <div id="mobile_search_background">
+            <span class="pure-button button-md" style="float:right;margin:11px 14px 0 0;border-radius:2px!important;padding:9px 12px 9px;color:#7a7e98">✖</span>
+        </div>
+        <form class="media_search header_search" action="/images/search/" method="get">
+            <div>
+                <div class="dd_box menu" data-left="1">
+                    <span class="image_type" style="margin-right:2px">图片</span>
+                    <i class="dropdown_arrow"></i>
+                </div>
+                <div class="pure-form bubble sw">
+                    <div class="select_image_type">
+                        <span data-type="image">图片</span>
+                        <span data-type="photo" style="padding-left:30px">照片</span>
+                        <span data-type="vector" style="padding-left:30px">矢量图</span>
+                        <span data-type="illustration" style="padding-left:30px">插画</span>
+                    </div>
+                    <hr>
+                    <a href="/blog/posts/id-46/" target="_blank">搜索选项 →</a>
+                </div>
+                <input type="submit" value=" " class="loupe">
+                <span>
+                        <input class="q" type="text" name="q" value="" placeholder="搜索" data-autofocus>
+                    </span>
+                <div style="position:absolute;left:-9999px">
+                    <input type="text" name="hp" autocomplete="off" tabindex="-1" value="">
+                    <input type="hidden" name="order" value="">
+                    <input type="hidden" name="cat" value="">
+                    <input type="checkbox" name="orientation" value="horizontal">
+                    <input type="checkbox" name="orientation" value="vertical">
+                    <input type="hidden" name="min_width" value="">
+                    <input type="hidden" name="min_height" value="">
+                    <input type="checkbox" name="colors" value="transparent">
+                    <input type="checkbox" name="colors" value="grayscale">
+                    <input type="checkbox" name="colors" value="red">
+                    <input type="checkbox" name="colors" value="orange">
+                    <input type="checkbox" name="colors" value="yellow">
+                    <input type="checkbox" name="colors" value="green">
+                    <input type="checkbox" name="colors" value="turquoise">
+                    <input type="checkbox" name="colors" value="blue">
+                    <input type="checkbox" name="colors" value="lilac">
+                    <input type="checkbox" name="colors" value="pink">
+                    <input type="checkbox" name="colors" value="white">
+                    <input type="checkbox" name="colors" value="gray">
+                    <input type="checkbox" name="colors" value="black">
+                    <input type="checkbox" name="colors" value="brown">
+                    <input type="checkbox" name="animation" value="1">
+                    <input type="checkbox" name="slow_motion" value="1">
+                    <input type="checkbox" name="time_lapse" value="1">
+                    <input type="checkbox" name="resolution_4k" value="1">
+                    <input type="checkbox" name="resolution_hd" value="1">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 {{end}}

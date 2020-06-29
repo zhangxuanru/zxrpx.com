@@ -1,0 +1,84 @@
+{{define "topnav"}}
+<div style="border-bottom:1px solid #f0f1f4">
+    <div style="max-width:1788px;margin:10px auto 0;padding:0 20px">
+        <div class="hide-xs hide-sm">
+            <div class="paginator" style="float:right;position:relative;left:-2px;margin-left:20px">
+                <form action="." method="get" class="add_search_params pure-form hide-xs hide-sm hide-md" style="display:inline-block">
+                    <input name="pagi" type="text" value="{{.page}}" style="width:50px">
+                    / {{.totalPage}}&nbsp;
+                </form>
+
+                {{if le  .page 1}}
+                    <i>‹</i>
+                {{else}}
+                    <a href="/?page={{.prevPage}}" class="pure-button"><i>‹</i></a>
+                {{end}}
+
+                {{if .isNextPage}}
+                    <a href="/?page={{.nextPage}}" class="pure-button"><i>›</i></a>
+                {{end}}
+
+            </div>
+        </div>
+
+        <div class="media_filter">
+            <span style="padding:5px 10px;background:#eee;border-radius:2px" title="排序方式" class="dd_box menu"><b>热门</b> <i class="arrow"></i></span>
+            <div>
+                <a href="/images/search/?order=latest">最新</a>
+                <a href="/images/search/">热门<i class="check">✓</i></a>
+                <a href="/images/search/?order=ec">小编精选</a>
+            </div>
+            <span class="dd_box menu">图片 <i class="arrow"></i></span>
+            <div>
+                <a href="/images/search/">图片<i class="check">✓</i></a>
+                <a style="padding-left:25px" href="/photos/search/">照片</a>
+                <a style="padding-left:25px" href="/vectors/search/">矢量图</a>
+                <a style="padding-left:25px" href="/illustrations/search/">插画</a>
+            </div>
+            <span class="dd_box menu">图像方向 <i class="arrow"></i></span>
+            <div>
+                <a href="/images/search/">任意方位<i class="check">✓</i></a>
+                <a href="/images/search/?orientation=horizontal">水平</a>
+                <a href="/images/search/?orientation=vertical">垂直</a>
+            </div>
+            <span class="dd_box menu">类别 <i class="arrow"></i></span>
+            <div id="cat_filter"></div>
+            <form action="." method="get" class="add_search_params filter" style="display:inline-block">
+                <span class="dd_box menu">尺寸 <i class="arrow"></i></span>
+                <div style="padding:10px 15px 15px">
+                    <div class="pure-form">
+                        <p style="margin:0 0 5px">大于</p>
+                        <input type="text" name="min_width" value="" placeholder="宽度" class="min_width_height">
+                        <i class="times" style="font-size:14px;margin:0 3px">×</i>
+                        <input type="text" name="min_height" value="" placeholder="高度" class="min_width_height">
+                        px
+                        &nbsp; <input type="submit" class="pure-button button-md" value="转到" style="padding:0 20px;line-height:28px;position:relative;top:-1px">
+                    </div>
+                </div>
+                <span class="dd_box menu">颜色 <i class="arrow"></i></span>
+                <div style="padding:10px 15px 15px">
+                    <label><input type="checkbox" name="colors" value="transparent"> 透明</label>
+                    <input id="cf_grayscale_2" class="cf_grayscale" type="checkbox" name="colors" value="grayscale" style="float:none"><label style="display:inline" for="cf_grayscale_2"> 黑与白</label>
+                    <div class="color_filter bg_colors" style="margin:10px 0">
+                        <input id="cf_red_2" type="checkbox" name="colors" value="red"><label for="cf_red_2"><b class="red"></b></label>
+                        <input id="cf_orange_2" type="checkbox" name="colors" value="orange"><label for="cf_orange_2"><b class="orange"></b></label>
+                        <input id="cf_yellow_2" type="checkbox" name="colors" value="yellow"><label for="cf_yellow_2"><b class="yellow"></b></label>
+                        <input id="cf_green_2" type="checkbox" name="colors" value="green"><label for="cf_green_2"><b class="green"></b></label>
+                        <input id="cf_turquoise_2" type="checkbox" name="colors" value="turquoise"><label for="cf_turquoise_2"><b class="turquoise"></b></label>
+                        <input id="cf_blue_2" type="checkbox" name="colors" value="blue"><label for="cf_blue_2"><b class="blue"></b></label>
+                        <input id="cf_lilac_2" type="checkbox" name="colors" value="lilac"><label for="cf_lilac_2"><b class="lilac"></b></label>
+                        <input id="cf_pink_2" type="checkbox" name="colors" value="pink"><label for="cf_pink_2"><b class="pink"></b></label>
+                        <input id="cf_white_2" type="checkbox" name="colors" value="white"><label for="cf_white_2"><b class="white"></b></label>
+                        <input id="cf_gray_2" type="checkbox" name="colors" value="gray"><label for="cf_gray_2"><b class="gray"></b></label>
+                        <input id="cf_black_2" type="checkbox" name="colors" value="black"><label for="cf_black_2"><b class="black"></b></label>
+                        <input id="cf_brown_2" type="checkbox" name="colors" value="brown"><label for="cf_brown_2"><b class="brown"></b></label>
+
+                    </div>
+                    <input type="submit" class="pure-button button-md" value="转到" style="padding:0 20px;line-height:28px">
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+{{end}}

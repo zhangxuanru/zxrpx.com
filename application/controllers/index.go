@@ -42,8 +42,3 @@ func Index(c *gin.Context) {
 		"isNextPage":  isNextPage,
 	})
 }
-
-func Test(c *gin.Context) {
-	c.HTML(http.StatusOK, "test.html", gin.H{
-		"frontDomain": configs.STATIC_DOMAIN})
-}

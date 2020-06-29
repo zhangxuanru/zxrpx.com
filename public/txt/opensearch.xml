@@ -1,0 +1,7 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+    <ShortName>Pixabay</ShortName>
+    <Description>Public Domain Images</Description>
+    <InputEncoding>UTF-8</InputEncoding>
+    <Image height="16" width="16" type="image/x-icon">https://pixabay.com/favicon.ico</Image>
+    <Url type="text/html" method="get" template="https://pixabay.com/images/search/{searchTerms}/" />
+</OpenSearchDescription>

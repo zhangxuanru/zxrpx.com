@@ -2,7 +2,6 @@
 <body class="ua-authenticated is-authenticated">
 <div id="wrapper">
     {{template "header" .}}
-
     <div id="content" class="clearfix">
         <div class="media_list">
             {{template "topnav" .}}
@@ -11,11 +10,10 @@
                     <h1 style="font-size:13px;color:#bbb;margin:0 19px">{{.count}} 免费图片</h1>
                     <div style="clear:both"></div>
                     <div class="flex_grid credits search_results" style="margin:4px 14px 0 15px">
-
                     {{range $i, $v := .picList}}
                         <div itemscope itemtype="schema.org/ImageObject" class="item" data-w="{{ViewWH $i "w"}}" data-h="{{ViewWH $i "h"}}">
                             <meta itemprop="contentUrl" content="{{ViewImageAddr $v.Attr 340}}">
-                             <a href="/photos/scenery-moon-sky-town-night-city-{{$v.PxImgId}}/">
+                             <a href="/photos/{{$v.PxImgId}}/">
                                  <img srcset="{{ViewImageAddr $v.Attr 340}} 1x, {{ViewImageAddr $v.Attr 480}} 2x" src="{{ViewImageAddr $v.Attr 340}}" alt="{{$v.TagStr}}"></a>
                             <div>
                                 <div class="counts hide-xs hide-sm photo-{{$v.PxImgId}}  ">
@@ -31,18 +29,17 @@
                             </div>
                         </div>
                     {{end}}
-
                     </div></div>
             </div>
     {{if .isNextPage}}
             <a style="display:block;margin:50px auto;max-width:240px" class="pure-button" href="/?page={{.nextPage}}">
                 下一页 <i class="single_quot">›</i></a>
-     {{end}}
-
+   {{end}}
             <div style="border-top:1px solid #f0f1f4;max-width:1788px;margin:auto;padding:10px 20px 0">
                 <span id="paginator_clone" style="z-index:999;position:relative;top:-10px"></span>
                 <div style="position:relative;top:8px;left:2px;font-size:14px" class="hide-xs hide-sm hide-md">{{.count}} 免费图片</div>
-            </div></div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -54,8 +51,7 @@
 </script>
 <script src="{{.frontDomain}}/static/js/base.f3b82b8b.min.js"></script>
 <script>
-    var cat_base_url = "/zh/images/search/?cat=val";
-
+    var cat_base_url = "/images/search/?cat=val";
     $('.header_search').find('input[type="text"], input:checked, input[type="hidden"]').each(function(){
         var i = this;
         $('.add_search_params').each(function(){
@@ -64,7 +60,6 @@
         });
     });
     $('.add_search_params').submit(function(){
-        // remove unused fields / GET params
         if (!$(this).find('[name="min_width"]').val()) { $(this).find('[name="min_width"]').removeAttr('name'); }
         if (!$(this).find('[name="min_height"]').val()) { $(this).find('[name="min_height"]').removeAttr('name'); }
     });

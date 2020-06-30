@@ -55,7 +55,7 @@ func (p *PicService) comBindPicUserResult(picList []models.Picture) (result []*P
 		if _, ok := userData[item.Uid]; ok {
 			item.User = userData[item.Uid]
 		} else {
-			item.User = models.User{}
+			item.User = nil
 		}
 	}
 	return

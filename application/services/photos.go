@@ -30,7 +30,7 @@ type PhotoResult struct {
 	TagStr       string
 	Attr         []models.PictureAttr
 	Tags         []models.Tag
-	User         models.User
+	User         *UserStat
 }
 
 var Fields = "id,uid,px_img_id,category_id,like_num,favorites_num,comments_num,image_type"

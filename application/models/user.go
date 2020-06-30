@@ -16,7 +16,7 @@ const UserStation = 1
 //用户表
 type User struct {
 	Id           int       `gorm:"primary_key; AUTO_INCREMENT; comment:'自增ID'" json:"id"`                               //指定主键并自增
-	PxUid        int64     `gorm:"unique; not null; comment:'px 用户ID'" json:"px_uid"`                                   //用户ID
+	PxUid        int       `gorm:"unique; not null; comment:'px 用户ID'" json:"px_uid"`                                   //用户ID
 	NickName     string    `gorm:"type:varchar(100); NOT NULL; comment:'用户昵称'" json:"nick_name"`                        //昵称
 	UserName     string    `gorm:"index:user_pass; type:varchar(50);  comment:'登录用户名'" json:"user_name"`                //登录用户名
 	Passwd       string    `gorm:"index:user_pass; type:char(32);     comment:'登录密码'" json:"passwd"`                    //用户密码
@@ -37,7 +37,7 @@ func (u *User) GetUserByUidList(uidList []int) (list []User) {
 	if len(uidList) == 0 {
 		return
 	}
-	fields := "id,nick_name,head_portrait,file_name,is_qiniu"
+	fields := "id,px_uid,nick_name,head_portrait,file_name,is_qiniu"
 	GetDB().Where("id IN (?) ", uidList).Select(fields).Find(&list)
 	return
 }

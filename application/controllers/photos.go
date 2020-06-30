@@ -7,8 +7,10 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"pix/application/services"
+	"pix/configs"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -30,4 +32,14 @@ func Detail(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/404")
 		return
 	}
+	photo := data[0]
+
+	fmt.Printf("photo:%+v\n\n", photo)
+	fmt.Printf("User:%+v\n\n", photo.User)
+
+	c.HTML(http.StatusOK, "photos.html", gin.H{
+		"frontDomain": configs.STATIC_DOMAIN,
+		"baseUrl":     "/photos/" + idStr,
+		"photo":       photo,
+	})
 }

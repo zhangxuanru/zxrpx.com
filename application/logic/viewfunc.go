@@ -11,6 +11,10 @@ import (
 	"pix/configs"
 )
 
+var Env = EnvTest
+var EnvTest = "test"
+var DefaultPicUrl = ""
+
 //首页模板宽高设置
 func ViewWHAttr(index int, style string) int {
 	viewAttr := GetViewAttrData()
@@ -25,19 +29,25 @@ func ViewWHAttr(index int, style string) int {
 func ViewImageAddr(attrList []models.PictureAttr, height int) string {
 	if len(attrList) == 0 {
 		//这里可以返回一张默认图片
-		return ""
+		return DefaultPicUrl
 	}
 	for _, attr := range attrList {
 		if attr.Height == height {
-			//test start
-			return attr.ImageURL
-			//test end
-
+			if Env == EnvTest {
+				//test start
+				return attr.ImageURL
+				//test end
+			}
 			if attr.IsQiniu == 1 {
 				return configs.STATIC_CDN_DOMAIN + attr.FileName
 			}
 			return attr.ImageURL
 		}
 	}
-	return ""
+	return DefaultPicUrl
+}
+
+//显示头像 todo
+func ViewHeadPortrait(fileName string, width, height int) {
+
 }

@@ -7,13 +7,16 @@
 package logic
 
 import (
+	"fmt"
 	"pix/application/models"
 	"pix/configs"
 )
 
-var Env = EnvTest
-var EnvTest = "test"
-var DefaultPicUrl = ""
+const (
+	Env           = EnvTest
+	EnvTest       = "test"
+	DefaultPicUrl = ""
+)
 
 //首页模板宽高设置
 func ViewWHAttr(index int, style string) int {
@@ -47,7 +50,8 @@ func ViewImageAddr(attrList []models.PictureAttr, height int) string {
 	return DefaultPicUrl
 }
 
-//显示头像 todo
-func ViewHeadPortrait(fileName string, width, height int) {
-
+//显示头像
+func ViewHeadPortrait(fileName string, width, height int) string {
+	headImgUrl := fmt.Sprintf("%s%s%s%d%s%d%s", configs.STATIC_CDN_DOMAIN, fileName, "?imageView2/1/w/", width, "/h/", height, "/q/80|imageslim")
+	return headImgUrl
 }

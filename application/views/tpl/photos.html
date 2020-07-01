@@ -38,19 +38,20 @@
                             <img srcset="{{ViewImageAddr .photo.Attr 720}} 1x, {{ViewImageAddr .photo.Attr 1280}}.jpg 1.333x" src="{{ViewImageAddr .photo.Attr 720}}.jpg" alt="{{.photo.TagStr}}">
                             <div id="say_thanks_overlay" class="hide-xs">
                                 <em onclick="$('#say_thanks_overlay').fadeOut();">×</em>
-                                <table style="height:100%" class="ua-attribution-overlay"><tr><td>
+                                <table style="height:100%" class="ua-attribution-overlay">
+                                    <tr>
+                                        <td>
                                             <div style="color:#fff">
                                                 <p style="font-size:34px;text-shadow:0 1px 10px rgba(0,0,0,.7)">感谢图片作者</p>
-                                                <p style="margin:20px 0 35px">
-                                                    <span style="font-size:15px;line-height:18px" class="pure-button button-green attribution-donate ua-donation-attribution" onclick="$('#donate_button').click();">$ 捐赠</span>
-                                                </p>
                                                 <p class="hide-sm hide-md" style="margin:0 auto 8px;max-width:420px">信用不是必需的，但非常感谢链接，并允许图像作者获得曝光。 您可以使用以下文本：</p>
-                                                <span class="attribution_field hide-sm hide-md">
-<span>该图片由<a href="https://pixabay.com/zh/users/Capri23auto-1767157/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=5331083">{{.photo.User.NickName}}Capri23auto</a>在<a href="https://pixabay.com/zh/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=5331083">Pixabay</a>上发布</span>
+                                      <span class="attribution_field hide-sm hide-md">
+<span>该图片由{{.photo.User.NickName}}在<a href="https://pixabay.com/zh/">Pixabay</a>上发布</span>
 <input class="copy_to_clipboard copy-attribution-text ua-copy-attribution pure-button" type="button" value="复制">
 </span>
                                             </div>
-                                        </td></tr></table>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                             <h1>
                                {{range $j,$tag := .photo.Tags}}
@@ -58,15 +59,14 @@
                                 {{end}}
                             </h1>
                         </div>
-                        <a style="position:absolute;left:-9999px" rel="license" about="https://cdn.pixabay.com/photo/2020/06/23/02/24/squirrel-5331083_960_720.jpg" href="https://creativecommons.org/licenses/publicdomain/">Public Domain</a>
-                    </div>
-
-                </div></div>
+                     </div>
+                </div>
+            </div>
             <div class="right">
                 <div style="margin:0 0 20px">
                     <div class="clearfix">
                         <a href="/users/{{.photo.User.PxUid}}">
-                            <img class="hover_opacity" style="float:left;width:48px;height:48px;border-radius:48px;margin:0 12px 0 0" alt="Capri23auto" srcset="https://cdn.pixabay.com/user/2020/06/24/09-38-01-336_48x48.jpg 1x, https://cdn.pixabay.com/user/2020/06/24/09-38-01-336_96x96.jpg 2x" src="https://cdn.pixabay.com/user/2020/06/24/09-38-01-336_48x48.jpg"></a>
+                            <img class="hover_opacity" style="float:left;width:48px;height:48px;border-radius:48px;margin:0 12px 0 0" alt="{{.photo.User.NickName}}" srcset="{{ViewHeadPortrait .photo.User.FileName 48 48}} 1x, {{ViewHeadPortrait .photo.User.FileName 96 96}} 2x" src="{{ViewHeadPortrait .photo.User.FileName 48 48}}"></a>
                         <a style="display:block;font-size:15px;margin:-3px 0 -8px 60px;color:#555" class="hover_opacity" href="/users/{{.photo.User.PxUid}}/">
                             {{.photo.User.NickName}} / {{.photo.User.PicNum}} 张照片
                         </a>
@@ -81,18 +81,17 @@
                             <input type="hidden" name="business" value="menzinger13&#64;aol&#46;com">
                             <input type="submit" id="donate_button" class="ua-donation-button">
                         </form>
-                         <span id="follow_button" class="ua-engagement-follow pure-button button-sm ajax" data-href="/accounts/follow/1767157/"><i class="check">✓</i> 关注</span>
+                         <span id="follow_button" class="ua-engagement-follow pure-button button-sm ajax" data-href="/accounts/follow/{{.photo.User.PxUid}}/"><i class="check">✓</i> 关注</span>
                     </div>
                 </div>
                 <div class="like_buttons">
-                    <span data-href="/images/like/5331083/?button" class="ua-engagement-like like_button pure-button pure-button-primary button-sm ajax" title="喜欢"><i class="icon icon_like_filled"></i><b>82</b></span>
-                    <span data-href="/accounts/favorite/photo/5331083/?button" class="ua-engagement-favorite favorite_button pure-button pure-button-primary button-sm ajax" title="收藏"><i class="icon icon_favorite_filled"></i><b>29</b></span>
-                    <span data-href="/go/?t=share&amp;type=photo&amp;id=5331083" class="share_button ua-engagement-share pure-button button-sm dd_box ajax" data-target=".share_links" title="分享"><i class="icon icon_share"></i></span>
-                    <div class="share_links" style="width:216px;padding:15px"></div>
-                </div>
-                <div class="carbon-ad"><script src="//cdn.carbonads.com/carbon.js?zoneid=2598&serve=CK7D4K77&placement=pixabaycom" id="_carbonads_js" async></script></div>
-                <div class="download_menu" data-type="images">
-                    <span class="pure-button button-green ua-download-open-menu" style="display:block;max-width:310px;margin:10px 0 0"><i class="icon icon_download"></i> 免费下载</span>
+                    <span data-href="/images/like/{{.photo.PxImgId}}/?button" class="ua-engagement-like like_button pure-button pure-button-primary button-sm ajax" title="喜欢"><i class="icon icon_like_filled"></i><b>{{.photo.LikeNum}}</b></span>
+                    <span data-href="/accounts/favorite/photo/{{.photo.PxImgId}}/?button" class="ua-engagement-favorite favorite_button pure-button pure-button-primary button-sm ajax" title="收藏"><i class="icon icon_favorite_filled"></i><b>{{.photo.FavoritesNum}}</b></span>
+                 </div>
+                 <div class="download_menu" data-type="images">
+                    <span class="pure-button button-green ua-download-open-menu" style="display:block;max-width:310px;margin:10px 0 0">
+                        <i class="icon icon_download"></i> 免费下载</span>
+
                     <div class="bubble" style="padding:15px">
                         <table>
                             <tr><td><input type="radio" name="download" value="squirrel-5331083_640.jpg"> 640×428</td><td>JPG</td><td>62 kB</td></tr>
@@ -109,67 +108,79 @@
                 <p style="margin:15px 0 5px;font-size:13px;padding:5px 15px;background:#f6f5fa;border-bottom: 1px solid #eeeff2">近期图像</p>
                 <div class="flex_grid sidebar_thumbs" style="margin:-4px -6px 15px -5px">
                     <div class="item" data-w="640" data-h="426"><a href="/zh/photos/animal-brown-cold-creature-cute-17819/">
-                            <img title="动物, 棕色, 冷, 生物, 可爱, 吃, 毛皮, 灰色, 螺母" src="/static/img/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2012/02/28/00/48/animal-17819__180.jpg">
+                            <img title="动物, 棕色, 冷, 生物, 可爱, 吃, 毛皮, 灰色, 螺母" src="{{.frontDomain}}/static/images/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2012/02/28/00/48/animal-17819__180.jpg">
                             <em>动物, 棕色, 冷, 生物, 可爱, 吃, 毛皮, 灰色, 螺母, 之一, 美丽</em>
-                        </a></div>
+                        </a>
+                    </div>
+
                     <div class="item" data-w="640" data-h="426"><a href="/zh/photos/squirrel-rodent-animal-brown-cold-17854/">
-                            <img title="松鼠, 灭鼠, 动物, 棕色, 冷, 生物, 吃, 毛皮, 灰色" src="/static/img/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2012/02/28/00/49/squirrel-17854__180.jpg">
+                            <img title="松鼠, 灭鼠, 动物, 棕色, 冷, 生物, 吃, 毛皮, 灰色" src="{{.frontDomain}}/static/images/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2012/02/28/00/49/squirrel-17854__180.jpg">
                             <em>松鼠, 灭鼠, 动物, 棕色, 冷, 生物, 吃, 毛皮, 灰色, 螺母, 美丽</em>
-                        </a></div>
+                        </a>
+                    </div>
+
                     <div class="item" data-w="640" data-h="480"><a href="/zh/photos/squirrel-rodent-animal-furry-80575/">
-                            <img title="松鼠, 灭鼠, 动物, 毛茸茸的, 自然, 目睹, 特写, 野生动物" src="/static/img/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2013/02/11/15/54/squirrel-80575__180.jpg">
+                            <img title="松鼠, 灭鼠, 动物, 毛茸茸的, 自然, 目睹, 特写, 野生动物" src="{{.frontDomain}}/static/images/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2013/02/11/15/54/squirrel-80575__180.jpg">
                             <em>松鼠, 灭鼠, 动物, 毛茸茸的, 自然, 目睹, 特写, 野生动物, 可爱</em>
-                        </a></div>
+                        </a>
+                    </div>
+
                     <div class="item" data-w="640" data-h="480"><a href="/zh/photos/squirrel-wildlife-nature-animal-498139/">
-                            <img title="松鼠, 野生动物, 自然, 动物, 毛皮, 毛茸茸的, 野生, 灭鼠" src="/static/img/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2014/10/22/15/47/squirrel-498139__180.jpg">
+                            <img title="松鼠, 野生动物, 自然, 动物, 毛皮, 毛茸茸的, 野生, 灭鼠" src="{{.frontDomain}}/static/images/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2014/10/22/15/47/squirrel-498139__180.jpg">
                             <em>松鼠, 野生动物, 自然, 动物, 毛皮, 毛茸茸的, 野生, 灭鼠, 可爱</em>
-                        </a></div>
+                        </a>
+                    </div>
+
                     <div class="item" data-w="640" data-h="416"><a href="/zh/photos/red-squirrel-rodent-nature-wildlife-570936/">
                             <img title="红松鼠, 灭鼠, 自然, 野生动物, 动物, 环境, 可爱, 户外" src="/static/img/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2014/12/17/00/28/red-squirrel-570936__180.jpg">
                             <em>红松鼠, 灭鼠, 自然, 野生动物, 动物, 环境, 可爱, 户外, 野生</em>
-                        </a></div>
+                        </a>
+                    </div>
+
                     <div class="item" data-w="640" data-h="426"><a href="/zh/photos/squirrel-common-squirrel-eating-1407699/">
                             <img title="松鼠, 普通的松鼠, 吃, 地面, 毛茸茸的, 毛绒绒的尾巴, 可爱" src="/static/img/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2016/05/21/23/51/squirrel-1407699__180.jpg">
                             <em>松鼠, 普通的松鼠, 吃, 地面, 毛茸茸的, 毛绒绒的尾巴, 可爱, 灭鼠</em>
-                        </a></div>
+                        </a>
+                    </div>
+
                     <div class="item" data-w="640" data-h="426"><a href="/zh/photos/animal-squirrel-rodent-branches-1850210/">
                             <img title="动物, 松鼠, 灭鼠, 分支机构, 小, 自然, 户外, 树" src="/static/img/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2016/11/22/19/30/animal-1850210__180.jpg">
                             <em>动物, 松鼠, 灭鼠, 分支机构, 小, 自然, 户外, 树, 野生动物</em>
-                        </a></div>
+                        </a>
+                    </div>
+
                     <div class="item" data-w="640" data-h="426"><a href="/zh/photos/chipmunk-spring-field-meadow-2323827/">
                             <img title="金花, 春, 原野, 草甸, 鲜花, 动物, 自然, 可爱, 毛皮" src="/static/img/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2017/05/18/15/05/chipmunk-2323827__180.jpg">
                             <em>金花, 春, 原野, 草甸, 鲜花, 动物, 自然, 可爱, 毛皮, 小</em>
-                        </a></div>
+                        </a>
+                    </div>
+
                     <div class="item" data-w="640" data-h="480"><a href="/zh/photos/surprised-sweet-animal-squirrel-3786845/">
                             <img title="感到惊讶, 甜, 动物, 松鼠, 美国加州, 性质, 啮齿动物, 可爱" src="/static/img/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2018/10/31/22/42/surprised-3786845__180.jpg">
                             <em>感到惊讶, 甜, 动物, 松鼠, 美国加州, 性质, 啮齿动物, 可爱, 觅食</em>
-                        </a></div>
+                        </a>
+                    </div>
+
                     <div class="item" data-w="640" data-h="427"><a href="/zh/photos/squirrel-young-young-animal-mammal-4310069/">
                             <img title="松鼠, 青年, 年轻的动物, 哺乳动物, 动物, 性质, 可爱" src="/static/img/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2019/07/01/14/30/squirrel-4310069__180.jpg">
                             <em>松鼠, 青年, 年轻的动物, 哺乳动物, 动物, 性质, 可爱, 动物世界</em>
-                        </a></div>
+                        </a>
+                    </div>
+
                     <div class="item" data-w="640" data-h="426"><a href="/zh/photos/squirrel-nature-cute-wild-mammals-4515962/">
                             <img title="松鼠, 性质, 可爱, 野生, 哺乳动物" src="/static/img/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2019/09/30/14/51/squirrel-4515962__180.jpg">
                             <em>松鼠, 性质, 可爱, 野生, 哺乳动物</em>
-                        </a></div>
+                        </a>
+                    </div>
+
                     <div class="item" data-w="640" data-h="427"><a href="/zh/photos/squirrel-nager-animal-cute-nature-5158715/">
                             <img title="松鼠, Nager, 动物, 可爱, 性质, 啮齿动物, 动物世界" src="/static/img/blank.gif" alt="" data-src="https://cdn.pixabay.com/photo/2020/05/11/15/14/squirrel-5158715__180.jpg">
                             <em>松鼠, Nager, 动物, 可爱, 性质, 啮齿动物, 动物世界, 花园</em>
-                        </a></div>
-                </div>
-                <div style="padding:15px 20px;background:#f6f5fa;border-bottom:1px solid #eeeff2;line-height:1.7;white-space:nowrap;overflow:hidden">
-                    <a href="/zh/cameras/nikon-d7200-7183/" style="display:block;overflow:hidden;text-overflow:ellipsis">
-                        <img src="/static/img/camera_dummy.svg" style="height:15px;margin-right:3px;position:relative;top:1px" alt='相机'>
-                        Nikon D7200
-                    </a>
-                    <div style="font-size:13px;overflow:hidden;text-overflow:ellipsis;color:#636363">
-                        70-300mm f/4.5-5.6<br>
-                        300.0mm
-                        · ƒ/5.6
-                        · 1/250s
-                        · ISO 1600
+                        </a>
                     </div>
+
                 </div>
+
                 <div style="padding:15px 20px;background:#f6f5fa">
                     <table id="details">
                         <tr><th style="white-space:nowrap">图片类型</th><td>JPG</td></tr>
@@ -182,7 +193,9 @@
                     </table>
                 </div>
             </div>
-            <div class="left"><div class="inside" style="margin-top:15px">
+
+            <div class="left">
+                <div class="inside" style="margin-top:15px">
                     <div id="comments">
                         <form onsubmit="$('#comment_submit_btn ').attr('disabled', 1);" class="ajax_form pure-form" data-target="#comments" data-replace="1" action="/zh/images/comments/5331083/create/" method="post">
                             <table>
@@ -215,7 +228,7 @@
                             </tr>
                             <tr id="comment_4233901" class="comment">
                                 <td>
-                                    <img srcset="/static/img/profile_image_dummy.svg 1x, /static/img/profile_image_dummy.svg 2x" src="/static/img/profile_image_dummy.svg" alt="">
+                                    <img srcset="{{.frontDomain}}/static/images/profile_image_dummy.svg 1x, {{.frontDomain}}/static/images/profile_image_dummy.svg 2x" src="{{.frontDomain}}/static/images/profile_image_dummy.svg" alt="">
                                 </td>
                                 <td>
                                     <div class="options hide-md">
@@ -317,8 +330,7 @@
 <script>
     var show_captcha=0, auth_user=1;
 
-    if ($(window).innerWidth() > 767) document.write('<script src="//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=114593902037957" async defer><\/script>');
-    else $('#fb_like_widget').hide();
+       $('#fb_like_widget').hide();
 
 
     if (!window.PX) window.PX = {};

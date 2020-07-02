@@ -7,6 +7,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"pix/application/services"
 	"pix/configs"
@@ -35,12 +36,19 @@ func Detail(c *gin.Context) {
 	photo := data[0]
 
 	//获取评论
+	commentsList, commentCount := services.NewComments().GetCommentsByPicId(pxId, 1, 5)
+	fmt.Printf("commentsList:%+v\n\n", commentsList)
 
 	//获取近期图像
+	recentImages := services.NewUserService().GetRecentImagesByUid(photo.User.PxUid, 12)
+	fmt.Printf("recentImages:%+v\n\n", recentImages)
 
 	c.HTML(http.StatusOK, "photos.html", gin.H{
-		"frontDomain": configs.STATIC_DOMAIN,
-		"baseUrl":     "/photos/" + idStr,
-		"photo":       photo,
+		"frontDomain":  configs.STATIC_DOMAIN,
+		"baseUrl":      "/photos/" + idStr,
+		"photo":        photo,
+		"commentsList": commentsList,
+		"commentCount": commentCount,
+		"recentImages": recentImages,
 	})
 }

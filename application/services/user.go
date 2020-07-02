@@ -7,6 +7,7 @@
 package services
 
 import (
+	"fmt"
 	"pix/application/models"
 )
 
@@ -67,4 +68,21 @@ func (u *UserService) GetUserDataByUidList(uidList []int) (userMap UserCenter) {
 		userMap[user.Id] = userInfo
 	}
 	return
+}
+
+//根据uid获取近期的num张图像
+func (u *UserService) GetRecentImagesByUid(uid int, num int) (result []*PhotoResult) {
+	var picList []models.Picture
+	params := &models.QueryParams{
+		Offset:  0,
+		Limit:   num,
+		IsCount: false,
+		Fields:  Fields,
+		Order:   "add_time DESC",
+		Where:   fmt.Sprintf("px_uid=%d AND state=1", uid),
+	}
+	if picList, _ = models.NewPicture().GetPicListByParams(params); len(picList) == 0 {
+		return
+	}
+	return NewPicService(0, 0).combinePicAttrTagData(picList)
 }

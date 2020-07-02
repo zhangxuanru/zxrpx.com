@@ -11,6 +11,11 @@ import (
 	"pix/application/models"
 )
 
+type PicService struct {
+	Page  int
+	Limit int
+}
+
 var Fields = "id,uid,px_img_id,category_id,like_num,view_num,downloads_num,favorites_num,comments_num,image_type,image_format,add_time"
 
 func NewPicService(page int, limit int) *PicService {

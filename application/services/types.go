@@ -11,11 +11,6 @@ import (
 	"time"
 )
 
-type PicService struct {
-	Page  int
-	Limit int
-}
-
 type attrMapRes map[int][]models.PictureAttr
 
 type PhotoResult struct {

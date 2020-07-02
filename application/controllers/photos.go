@@ -7,7 +7,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"pix/application/services"
 	"pix/configs"
@@ -27,6 +26,7 @@ func Detail(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/404")
 		return
 	}
+	//获取图片基础信息
 	data := services.NewPicService(1, 1).GetPhotosDetailByPxId(pxId)
 	if len(data) == 0 {
 		c.Redirect(http.StatusFound, "/404")
@@ -34,8 +34,9 @@ func Detail(c *gin.Context) {
 	}
 	photo := data[0]
 
-	fmt.Printf("photo:%+v\n\n", photo)
-	fmt.Printf("User:%+v\n\n", photo.User)
+	//获取评论
+
+	//获取近期图像
 
 	c.HTML(http.StatusOK, "photos.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,

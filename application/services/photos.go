@@ -11,29 +11,7 @@ import (
 	"pix/application/models"
 )
 
-type PicService struct {
-	Page  int
-	Limit int
-}
-
-type attrMapRes map[int][]models.PictureAttr
-
-type PhotoResult struct {
-	Id           int  `json:"id"`
-	Uid          int  `json:"uid"`
-	PxImgId      int  `json:"px_img_id"`
-	CategoryId   int  `json:"category_id"`
-	ImageType    int  `json:"image_type"`
-	LikeNum      uint `json:"like_num"`
-	FavoritesNum uint `json:"favorites_num"`
-	CommentsNum  uint `json:"comments_num"`
-	TagStr       string
-	Attr         []models.PictureAttr
-	Tags         []models.Tag
-	User         *UserStat
-}
-
-var Fields = "id,uid,px_img_id,category_id,like_num,favorites_num,comments_num,image_type"
+var Fields = "id,uid,px_img_id,category_id,like_num,view_num,downloads_num,favorites_num,comments_num,image_type,image_format,add_time"
 
 func NewPicService(page int, limit int) *PicService {
 	if page < 1 {

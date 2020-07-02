@@ -94,10 +94,13 @@
 
                     <div class="bubble" style="padding:15px">
                         <table>
-                            <tr><td><input type="radio" name="download" value="squirrel-5331083_640.jpg"> 640×428</td><td>JPG</td><td>62 kB</td></tr>
-                            <tr><td><input type="radio" name="download" value="squirrel-5331083_1280.jpg" data-perm="check"> 1280×855</td><td>JPG</td><td>204 kB</td></tr>
-                            <tr><td><input type="radio" name="download" value="squirrel-5331083_1920.jpg" data-perm="check"> 1920×1283</td><td>JPG</td><td>432 kB</td></tr>
-                            <tr class="no_default"><td><input type="radio" name="download" value="squirrel-5331083.jpg" data-perm="auth"> 4668×3121</td><td>JPG</td><td>1.8 MB</td></tr>
+                            {{$extStr :=.photo.ImageFormatStr}}
+                        {{range $i,$attr :=.photo.Attr}}
+                            <tr>
+                                <td><input type="radio" name="download" value="{{$attr.FileName}}"> {{$attr.Width}}×{{$attr.Height}}</td>
+                                <td>{{$extStr}}</td>
+                            </tr>
+                          {{end}}
                         </table>
                         <a target="_blank" class="view_btn pure-button button-md ua-view-button" data-w="332" style="display:inline-block;width:49%;float:right">查看</a>
                         <a class="dl_btn pure-button button-green button-md ua-download-button" data-w="332" style="display:inline-block;width:49%;">下载</a>
@@ -183,13 +186,10 @@
 
                 <div style="padding:15px 20px;background:#f6f5fa">
                     <table id="details">
-                        <tr><th style="white-space:nowrap">图片类型</th><td>JPG</td></tr>
-                        <tr><th>解析度</th><td>4668×3121</td></tr>
-                        <tr><th>创建</th><td>June 20, 2020</td></tr>
-                        <tr><th>已上传</th><td>June 25, 2020</td></tr>
-                        <tr><th>类别</th><td><a href="/zh/images/search/?cat=animals">动物</a></td></tr>
-                        <tr><th>视图</th><td>13162</td></tr>
-                        <tr><th>下载量</th><td>11591</td></tr>
+                        <tr><th style="white-space:nowrap">图片类型</th><td>{{$extStr}}</td></tr>
+                        <tr><th>创建</th><td>{{.photo.AddTime}}</td></tr>
+                        <tr><th>浏览量</th><td>{{.photo.ViewNum}}</td></tr>
+                        <tr><th>下载量</th><td>{{.photo.DownloadsNum}}</td></tr>
                     </table>
                 </div>
             </div>
@@ -203,12 +203,11 @@
                                     <td><img srcset="{{.frontDomain}}/static/images/profile_image_dummy.svg 1x, {{.frontDomain}}/static/images/profile_image_dummy.svg 2x" src="{{.frontDomain}}/static/images/profile_image_dummy.svg" alt=""></td>
                                     <td style="padding-bottom:0"><textarea name="text" cols="40" rows="10" placeholder="添加您的评论..." class="autosize" style="width:100%;height:48px" onfocus="$('#comment_submit').show();" maxlength="2000" required id="id_text"></textarea></td>
                                 </tr>
-                                <tr style="display:none" id="comment_submit"><td></td><td style="padding-top:0">
-                                        <p id="notification_option" style="margin:0 0 10px 1px">
-                                            <label style="display:inline;font-size:14px"><input name="subscribe" value="true" type="checkbox"> 有新帖时请通过电子邮件通知我</label>
-                                        </p>
-                                        <input id="comment_submit_btn" type="submit" type="submit" class="ua-engagement-comment pure-button button-green button-md" value="提交">
-                                    </td></tr>
+                                <tr style="display:none" id="comment_submit">
+                                    <td></td><td style="padding-top:0">
+                                        <input id="comment_submit_btn"  type="submit" class="ua-engagement-comment pure-button button-green button-md" value="提交">
+                                    </td>
+                                </tr>
                             </table>
                         </form>
                         <table id="comment_list">
@@ -299,6 +298,7 @@
 </span>
                     </p>
                 </div></div>
+
         </div>
     </div>
 </div>
@@ -310,23 +310,6 @@
 </script>
 <script src="{{.frontDomain}}/static/js/base.f3b82b8b.min.js"></script>
 
-<script type="application/ld+json">{
-        "@context": "https://schema.org",
-        "@type": "ImageObject",
-        "author": { "@type": "Person", "name": "Capri23auto" },
-        "contentUrl": "https://cdn.pixabay.com/photo/2020/06/23/02/24/squirrel-5331083_1280.jpg",
-        "thumbnail": { "@type": "ImageObject", "url": "https://cdn.pixabay.com/photo/2020/06/23/02/24/squirrel-5331083_640.jpg" },
-        "datePublished": "2020-06-25T17:21:00+00:00",
-        "name": "松鼠 核查的小猫 啮齿动物 \u002D Pixabay上的免费照片",
-        "caption": "松鼠 核查的小猫 啮齿动物 \u002D Pixabay上的免费照片",
-        "description": "从Pixabay庞大的公共领域图片和视频库下载关于松鼠 核查的小猫 啮齿动物的免费图片。",
-        "license": "https://creativecommons.org/licenses/publicdomain/",
-        "width": "1280px",
-        "height": "856px",
-        "isAccessibleForFree": true,
-        "isFamilyFriendly": true,
-        "representativeOfPage": true
-    }</script>
 <script>
     var show_captcha=0, auth_user=1;
 

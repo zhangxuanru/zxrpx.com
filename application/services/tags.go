@@ -8,10 +8,12 @@ package services
 
 import (
 	"bytes"
+	"math/rand"
 	"pix/application/models"
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 )
 
 type TagService struct {
@@ -56,6 +58,18 @@ func (t *TagService) GetTagListByPicIds(picIds []int) (result tagMapRes) {
 	return
 }
 
+//获取TAG列表
+func (t *TagService) GetRandOffsetTagList(limit int) (list []models.Tag) {
+	rand.Seed(time.Now().UnixNano())
+	offset := rand.Intn(900)
+	data := models.NewTag().GetTagList(offset, limit)
+	for k, tag := range data {
+		tag.TagName = strings.TrimSpace(tag.TagName)
+		data[k] = tag
+	}
+	return data
+}
+
 //根据picTag 获取tagId列表
 func (t *TagService) GetTagIdByPicTag(picTag []models.PictureTag) []int {
 	tagIds := make([]int, 0)
@@ -79,7 +93,8 @@ func (t *TagService) GetTagStrByTagModels(models []models.Tag) string {
 	}
 	var buf bytes.Buffer
 	for _, tag := range models {
-		buf.WriteString(tag.TagName + ",")
+		tagName := strings.TrimSpace(tag.TagName)
+		buf.WriteString(tagName + ",")
 	}
 	return buf.String()
 }

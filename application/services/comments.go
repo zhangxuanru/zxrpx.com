@@ -15,6 +15,7 @@ type CommentsService struct {
 }
 
 type CommentItem struct {
+	CommentId    int
 	Uid          int
 	PicId        int
 	HeadPortrait string
@@ -45,6 +46,7 @@ func (c *CommentsService) GetCommentsByPicId(picId int, page, limit int) (result
 	for k, comment := range list {
 		uid := comment.Uid
 		item := CommentItem{
+			CommentId:    comment.Id,
 			Uid:          uid,
 			PicId:        comment.PicId,
 			HeadPortrait: userMap[uid].HeadPortrait,

@@ -7,6 +7,7 @@
 package models
 
 import (
+	"strings"
 	"time"
 )
 
@@ -30,7 +31,14 @@ func (t *Tag) GetTagListByIds(tagIds []int) (result map[int]string) {
 	GetDB().Where("id IN (?) AND state=?", tagIds, 1).Select(fields).Find(&list)
 	result = make(map[int]string, len(list))
 	for _, tag := range list {
-		result[tag.Id] = tag.TagName
+		result[tag.Id] = strings.TrimSpace(tag.TagName)
 	}
 	return result
+}
+
+//获取tag列表
+func (t *Tag) GetTagList(offset, limit int) (list []Tag) {
+	fields := "id,tag_name"
+	GetDB().Where("state=?", 1).Offset(offset).Limit(limit).Select(fields).Find(&list)
+	return
 }

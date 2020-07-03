@@ -70,8 +70,8 @@ func (u *UserService) GetUserDataByUidList(uidList []int) (userMap UserCenter) {
 	return
 }
 
-//根据uid获取近期的num张图像
-func (u *UserService) GetRecentImagesByUid(uid int, num int) (result []*PhotoResult) {
+//根据uid获取近期的num张图像,排队pxId的图片
+func (u *UserService) GetRecentImagesByUid(uid int, num int, pxId int) (result []*PhotoResult) {
 	var picList []models.Picture
 	params := &models.QueryParams{
 		Offset:  0,
@@ -79,10 +79,10 @@ func (u *UserService) GetRecentImagesByUid(uid int, num int) (result []*PhotoRes
 		IsCount: false,
 		Fields:  Fields,
 		Order:   "add_time DESC",
-		Where:   fmt.Sprintf("px_uid=%d AND state=1", uid),
+		Where:   fmt.Sprintf("px_uid=%d AND state=1 AND px_img_id!=%d", uid, pxId),
 	}
 	if picList, _ = models.NewPicture().GetPicListByParams(params); len(picList) == 0 {
 		return
 	}
-	return NewPicService(0, 0).combinePicAttrTagData(picList)
+	return NewPicService().combinePicAttrTagData(picList)
 }

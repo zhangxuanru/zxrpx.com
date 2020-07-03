@@ -18,14 +18,18 @@ type PicService struct {
 
 var Fields = "id,uid,px_img_id,category_id,like_num,view_num,downloads_num,favorites_num,comments_num,image_type,image_format,add_time"
 
-func NewPicService(page int, limit int) *PicService {
+func NewPicService() *PicService {
+	return &PicService{}
+}
+
+//设置分页参数
+func (p *PicService) SetPageParams(page int, limit int) *PicService {
 	if page < 1 {
 		page = 1
 	}
-	return &PicService{
-		Page:  page,
-		Limit: limit,
-	}
+	p.Page = page
+	p.Limit = limit
+	return p
 }
 
 //根据添加时间查询图片列表

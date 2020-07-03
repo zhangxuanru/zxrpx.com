@@ -27,7 +27,7 @@ func NewComments() *Comments {
 
 //根据PICID获取评论列表
 func (c *Comments) GetListByPicId(picId int, offset, limit int) (list []Comments, count int) {
-	field := "pic_id,content,uid,add_time"
+	field := "id,pic_id,content,uid,add_time"
 	GetDB().Select(field).Where("pic_id =? AND state =?", picId, 1).Order("sort ASC,add_time DESC").Offset(offset).Limit(limit).Find(&list)
 	GetDB().Model(c).Where("pic_id =? AND state =?", picId, 1).Count(&count)
 	return

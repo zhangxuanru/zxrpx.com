@@ -27,7 +27,7 @@ func Index(c *gin.Context) {
 	if page, err = strconv.Atoi(pageStr); err != nil || page > 500 || page < 1 {
 		page = 1
 	}
-	picList, count := services.NewPicService(page, limit).GetPicListByAddTimeOrder()
+	picList, count := services.NewPicService().SetPageParams(page, limit).GetPicListByAddTimeOrder()
 	totalPage := int(math.Ceil(float64(count) / float64(limit)))
 	isNextPage := totalPage-page >= 1
 

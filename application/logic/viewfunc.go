@@ -31,15 +31,18 @@ func ViewWHAttr(index int, style string) int {
 //根据图片属性和宽度获取图片地址
 func ViewImageAddr(attrList []models.PictureAttr, height int) string {
 	if len(attrList) == 0 {
-		//这里可以返回一张默认图片
 		return DefaultPicUrl
 	}
+	fileName := ""
+	maxHeight := 0
 	for _, attr := range attrList {
+		if attr.Height > maxHeight {
+			maxHeight = attr.Height
+			fileName = attr.FileName
+		}
 		if attr.Height == height {
 			if Env == EnvTest {
-				//test start
 				return attr.ImageURL
-				//test end
 			}
 			if attr.IsQiniu == 1 {
 				return configs.STATIC_CDN_DOMAIN + attr.FileName
@@ -47,11 +50,18 @@ func ViewImageAddr(attrList []models.PictureAttr, height int) string {
 			return attr.ImageURL
 		}
 	}
-	return DefaultPicUrl
+	url := fmt.Sprintf("%s%s%s%d%s", configs.STATIC_CDN_DOMAIN, fileName, "?imageView2/0/h/", height, "/q/85|imageslim")
+	return url
 }
 
 //显示头像
 func ViewHeadPortrait(fileName string, width, height int) string {
 	headImgUrl := fmt.Sprintf("%s%s%s%d%s%d%s", configs.STATIC_CDN_DOMAIN, fileName, "?imageView2/1/w/", width, "/h/", height, "/q/80|imageslim")
 	return headImgUrl
+}
+
+//显示图片,只设置高度
+func ViewPicByHeight(fileName string, height int) string {
+	url := fmt.Sprintf("%s%s%s%d%s", configs.STATIC_CDN_DOMAIN, fileName, "imageView2/0/h/", height, "/q/85|imageslim")
+	return url
 }

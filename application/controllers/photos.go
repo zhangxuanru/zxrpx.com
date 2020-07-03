@@ -24,10 +24,7 @@ func Detail(c *gin.Context) {
 		picData    []*services.PhotoResult
 		commentNum = 3
 	)
-	if pxIdStr = c.Param("id"); pxIdStr == "" {
-		c.Redirect(http.StatusFound, "/404")
-		return
-	}
+	pxIdStr = c.Param("id")
 	if pxId, err = strconv.Atoi(pxIdStr); err != nil || pxId == 0 {
 		c.Redirect(http.StatusFound, "/404")
 		return

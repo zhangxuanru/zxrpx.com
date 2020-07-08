@@ -65,3 +65,21 @@ func (p *PicService) comBindPicUserResult(picList []models.Picture) (result []*P
 	}
 	return
 }
+
+//更新图片表下载量
+func (p *PicService) incrByDownNum(picId, num int) (affected int64, err error) {
+	if picId == 0 {
+		return
+	}
+	affected, err = models.NewPicture().IncrByDownNum(picId, num)
+	return
+}
+
+//更新浏览量
+func (p *PicService) incrByViewNum(picId, num int) (affected int64, err error) {
+	if picId == 0 {
+		return
+	}
+	affected, err = models.NewPicture().IncrByViewNum(picId, num)
+	return
+}

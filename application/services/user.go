@@ -7,6 +7,7 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 	"pix/application/models"
 )
@@ -85,4 +86,13 @@ func (u *UserService) GetRecentImagesByUid(uid int, num int, pxId int) (result [
 		return
 	}
 	return NewPicService().combinePicAttrTagData(picList)
+}
+
+//更新用户统计下载量
+func (u *UserService) IncrByUserDownNum(pxUid, num int) (affected int64, err error) {
+	if pxUid == 0 {
+		return 0, errors.New("uid is zero")
+	}
+	affected, err = models.NewUserStat().IncrByUserDownNum(pxUid, num)
+	return
 }

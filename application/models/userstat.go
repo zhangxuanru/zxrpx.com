@@ -45,22 +45,6 @@ func (u *UserStat) UpdateStat() (affected int64, err error) {
 	return updates.RowsAffected, updates.Error
 }
 
-//插入用户统计表
-func (u *UserStat) Insert() (id int, err error) {
-	create := GetDB().Create(u)
-	return u.Id, create.Error
-}
-
-//根据UID查询ID，判断UID是否存在
-func (u *UserStat) GetIdByUid(uid int) int {
-	stat := &UserStat{}
-	GetDB().Where("uid = ?", u.Uid).Select("id").First(stat)
-	if stat.Id > 0 {
-		return stat.Id
-	}
-	return 0
-}
-
 //根据用户ID数组批量获取用户统计信息
 func (u *UserStat) GetUserStatByUidList(uidList []int) (userMap map[int]UserStat) {
 	if len(uidList) == 0 {
@@ -76,4 +60,22 @@ func (u *UserStat) GetUserStatByUidList(uidList []int) (userMap map[int]UserStat
 		userMap[uid] = user
 	}
 	return
+}
+
+//更新用户统计下载量
+func (u *UserStat) IncrByUserDownNum(pxUid, num int) (affected int64, err error) {
+	buildMap := map[string]interface{}{
+		"downloads_num": gorm.Expr("downloads_num + ?", num),
+	}
+	updates := GetDB().Model(u).Where("px_uid = ?", pxUid).Updates(buildMap).Omit("add_time")
+	return updates.RowsAffected, updates.Error
+}
+
+//更新用户统计浏览量
+func (u *UserStat) IncrByUserViewNum(pxUid, num int) (affected int64, err error) {
+	buildMap := map[string]interface{}{
+		"view_num": gorm.Expr("view_num + ?", num),
+	}
+	updates := GetDB().Model(u).Where("px_uid = ?", pxUid).Updates(buildMap).Omit("add_time")
+	return updates.RowsAffected, updates.Error
 }

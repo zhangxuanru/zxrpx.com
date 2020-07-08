@@ -8,6 +8,8 @@ package models
 
 import (
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 //图片主表
@@ -51,5 +53,29 @@ func (p *Picture) GetPicListByParams(params *QueryParams) (pic []Picture, count 
 		db = db.Order(params.Order)
 	}
 	db.Offset(params.Offset).Limit(params.Limit).Find(&pic)
+	return
+}
+
+//更新下载量
+func (p *Picture) IncrByDownNum(picId, num int) (affected int64, err error) {
+	buildMap := map[string]interface{}{
+		"downloads_num": gorm.Expr("downloads_num + ?", num),
+	}
+	updates := GetDB().Model(p).Where("px_img_id = ?", picId).Updates(buildMap).Omit("add_time")
+	return updates.RowsAffected, updates.Error
+}
+
+//更新浏览量
+func (p *Picture) IncrByViewNum(picId, num int) (affected int64, err error) {
+	buildMap := map[string]interface{}{
+		"view_num": gorm.Expr("view_num + ?", num),
+	}
+	updates := GetDB().Model(p).Where("px_img_id = ?", picId).Updates(buildMap).Omit("add_time")
+	return updates.RowsAffected, updates.Error
+}
+
+//根据图片ID查询图片作者ID
+func (p *Picture) GetPxUidByPicId(picId int) (pic Picture) {
+	GetDB().Where("px_img_id =?", picId).Select("px_uid").First(&pic)
 	return
 }

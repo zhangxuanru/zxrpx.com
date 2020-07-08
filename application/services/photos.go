@@ -67,3 +67,24 @@ func (p *PicService) GetPhotosDetailByPxId(pxId int) (result []*PhotoResult) {
 	result = p.comBindPicUserResult(picList)
 	return result
 }
+
+//根据图片名更新图片表与用户统计表的下载量
+func (p *PicService) UpdateUserPhotoDownNumByFile(file string) (err error) {
+	picId := p.GetPxIdByFile(file)
+	if _, err = p.incrByDownNum(picId, 1); err != nil {
+		return
+	}
+	photo := models.NewPicture().GetPxUidByPicId(picId)
+	_, err = NewUserService().IncrByUserDownNum(int(photo.PxUid), 1)
+	return
+}
+
+//根据图片ID更新图片表与用户统计表的浏览量
+func (p *PicService) UpdateUserPhotoViewNumByPicId(picId int) (err error) {
+	if _, err = p.incrByViewNum(picId, 1); err != nil {
+		return
+	}
+	photo := models.NewPicture().GetPxUidByPicId(picId)
+	_, err = models.NewUserStat().IncrByUserViewNum(int(photo.PxUid), 1)
+	return
+}

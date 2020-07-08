@@ -6,7 +6,9 @@
 */
 package services
 
-import "pix/application/models"
+import (
+	"pix/application/models"
+)
 
 //根据图片ID查询图片属性信息
 func (p *PicService) GetPicAttrListByIds(idList []int) (result attrMapRes) {
@@ -19,4 +21,10 @@ func (p *PicService) GetPicAttrListByIds(idList []int) (result attrMapRes) {
 		result[attr.PicId] = append(result[attr.PicId], attr)
 	}
 	return
+}
+
+//根据文件名获取图片picId
+func (p *PicService) GetPxIdByFile(file string) int {
+	attr := models.NewPictureAttr().GetPxIdByFile(file)
+	return attr.PicId
 }

@@ -27,12 +27,10 @@ func Detail(c *gin.Context) {
 	pxIdStr = c.Param("id")
 	if pxId, err = strconv.Atoi(pxIdStr); err != nil || pxId == 0 {
 		c.Redirect(http.StatusFound, "/404")
-		return
 	}
 	//获取图片基础信息
 	if picData = services.NewPicService().SetPageParams(1, 1).GetPhotosDetailByPxId(pxId); len(picData) == 0 {
 		c.Redirect(http.StatusFound, "/404")
-		return
 	}
 	photo := picData[0]
 	//获取评论
@@ -41,6 +39,11 @@ func Detail(c *gin.Context) {
 	recentImages := services.NewUserService().GetRecentImagesByUid(photo.User.PxUid, 12, pxId)
 	//获取推荐标签
 	tagList := services.NewTagService().GetRandOffsetTagList(16)
+	//更新浏览量
+	go func() {
+		services.NewPicService().UpdateUserPhotoViewNumByPicId(pxId)
+	}()
+
 	c.HTML(http.StatusOK, "photos.html", gin.H{
 		"frontDomain":  configs.STATIC_DOMAIN,
 		"baseUrl":      "/photos/" + pxIdStr,

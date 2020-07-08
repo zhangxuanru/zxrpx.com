@@ -33,3 +33,9 @@ func (p *PictureAttr) GetListByPicIds(ids []int) (list []PictureAttr) {
 	GetDB().Where("pic_id IN (?) AND state=?", ids, 1).Select(fields).Find(&list)
 	return
 }
+
+//根据文件名查询图片ID
+func (p *PictureAttr) GetPxIdByFile(file string) (attr PictureAttr) {
+	GetDB().Where("file_name =?", file).Select("pic_id").First(&attr)
+	return
+}

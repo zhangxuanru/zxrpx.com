@@ -43,18 +43,3 @@ func Download(c *gin.Context) {
 	c.Writer.Header().Add("Content-Disposition", "attachment; filename=\""+filename+"\"")
 	_, _ = c.Writer.Write(body)
 }
-
-//为图片添加评论
-func AddComment(c *gin.Context) {
-
-}
-
-//喜欢
-func Like(c *gin.Context) {
-
-}
-
-//收藏
-func Collect(c *gin.Context) {
-
-}

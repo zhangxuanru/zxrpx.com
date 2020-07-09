@@ -10,3 +10,8 @@ package router
 func (h *HttpServer) setMiddleware() {
 	//h.engine.Use()
 }
+
+//验证登录
+func (h *HttpServer) CheckLogin() {
+
+}

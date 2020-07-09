@@ -88,3 +88,22 @@ func (p *PicService) UpdateUserPhotoViewNumByPicId(picId int) (err error) {
 	_, err = models.NewUserStat().IncrByUserViewNum(int(photo.PxUid), 1)
 	return
 }
+
+//根据图片ID查询图片属性信息
+func (p *PicService) GetPicAttrListByIds(idList []int) (result attrMapRes) {
+	var attrList []models.PictureAttr
+	if attrList = models.NewPictureAttr().GetListByPicIds(idList); len(attrList) == 0 {
+		return
+	}
+	result = make(attrMapRes)
+	for _, attr := range attrList {
+		result[attr.PicId] = append(result[attr.PicId], attr)
+	}
+	return
+}
+
+//根据文件名获取图片picId
+func (p *PicService) GetPxIdByFile(file string) int {
+	attr := models.NewPictureAttr().GetPxIdByFile(file)
+	return attr.PicId
+}

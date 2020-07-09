@@ -77,7 +77,7 @@ func (h *HttpServer) MonitorServer() {
 
 //载入模板文件
 func (h *HttpServer) LoadHtml() {
-	h.engine.LoadHTMLGlob("application/views/**/*")
+	h.engine.LoadHTMLGlob("application/views/tpl/**/*")
 }
 
 //载入静态文件

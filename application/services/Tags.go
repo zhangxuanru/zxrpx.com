@@ -58,7 +58,7 @@ func (t *TagService) GetTagListByPicIds(picIds []int) (result tagMapRes) {
 	return
 }
 
-//获取TAG列表
+//随机获取TAG列表
 func (t *TagService) GetRandOffsetTagList(limit int) (list []models.Tag) {
 	rand.Seed(time.Now().UnixNano())
 	offset := rand.Intn(900)

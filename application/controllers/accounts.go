@@ -9,24 +9,55 @@ package controllers
 
 import (
 	"net/http"
+	"pix/application/logic"
 	"pix/application/services"
+	"pix/configs"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Login(c *gin.Context) {
-
+type UserLogin struct {
+	UserName string `form:"username"`
+	PassWord string `form:"password"`
+	Token    string `form:"token"`
 }
 
+var loginToken string
+
+//显示登录模板
+func Login(c *gin.Context) {
+	loginToken = logic.Md5(logic.GetRandomString(6))
+	c.HTML(http.StatusOK, "login.html", gin.H{
+		"frontDomain": configs.STATIC_DOMAIN,
+		"cdnDomain":   configs.STATIC_CDN_DOMAIN,
+		"token":       loginToken,
+	})
+}
+
+//登录
+func LoginDo(c *gin.Context) {
+	var (
+		login UserLogin
+		err   error
+	)
+	if err = c.ShouldBind(&login); err != nil {
+
+	}
+	c.JSON(http.StatusOK, login)
+}
+
+//注销
 func Logout(c *gin.Context) {
 
 }
 
+//注册
 func Register(c *gin.Context) {
 
 }
 
+//评论
 func Comment(c *gin.Context) {
 
 }

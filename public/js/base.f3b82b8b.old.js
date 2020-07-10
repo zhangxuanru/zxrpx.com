@@ -1573,7 +1573,7 @@ if ($(document).on("click", ".dd_box", (function() {
         if ($(".language_menu+div").html(s), !getCookie("lang") && browser_lang && browser_lang != LANG) {
             s = "";
             for (i = 0; i < LANGS.length; i++) LANGS[i][0] == browser_lang || LANGS[i][0] == LANG ? s += "<a style=\"margin-right:15px\" onmousedown=\"setCookie('lang', '" + LANGS[i][0] + '\', 3650);" href="' + ("en" != LANGS[i][0] ? "/" + LANGS[i][0] : "") + loc + '">' + LANGS[i][1] + "</a>" : s2 += "<a onmousedown=\"setCookie('lang', '" + LANGS[i][0] + '\', 3650);" href="' + ("en" != LANGS[i][0] ? "/" + LANGS[i][0] : "") + loc + '">' + LANGS[i][1] + "</a>";
-            $("body").append('<div class="message_box info" style="top:auto;bottom:0;margin:0;"><span style="margin-right:15px"><img class="hide-xs" src="/static/img/language_fff.svg" style="height:16px;position:relative;top:3px"> Choose your language:</span>' + s + '<a class="dd_box menu language_menu">More &rarr;</a><div>' + s2 + "</div></div>")
+            $("body").append('<div class="message_box info" style="top:auto;bottom:0;margin:0;"><span style="margin-right:15px"><img class="hide-xs" src="/static/images/language_fff.svg" style="height:16px;position:relative;top:3px"> Choose your language:</span>' + s + '<a class="dd_box menu language_menu">More &rarr;</a><div>' + s2 + "</div></div>")
         }
         $(".media_search").submit((function() {
             var q = $.trim($(this).find(".q").removeAttr("name").val());

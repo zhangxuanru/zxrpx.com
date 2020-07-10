@@ -35,13 +35,13 @@
                     <div>
                     </div>
 
-                    <form id="login_form" spellcheck="false" class="right_side pure-form" action="/accounts/loginDo" method="post">
-                        <p> <input type="text" name="username" data-autofocus="" placeholder="用户名或电子邮件" maxlength="100" required id="id_username"></p>
-                        <p> <input type="password" name="password" placeholder="密码" required id="id_password"></p>
+                    <form id="login_form" spellcheck="false" class="right_side pure-form layui-form" action="/accounts/loginDo" method="post">
+                        <p> <input type="text" name="username" lay-verify="username" lay-verify="required" lay-reqtext="请输入用户名" data-autofocus="" placeholder="用户名" maxlength="50" id="id_username" class="layui-input"></p>
+                        <p> <input type="password" name="password"  lay-verify="password" placeholder="密码" required id="id_password"></p>
                         <input type='hidden' name='token' value='{{.token}}' />
                         <input type="hidden" name="next" value="">
                         <div>
-                            <input style="text-align:center" class="ua-login-completion sign_in_button pure-button button-green g-recaptcha"   data-callback="onCheckRobot" type="submit" value="登录">
+                            <button style="text-align:center; width: 100%; height: 100%;" class="ua-login-completion sign_in_button pure-button button-green g-recaptcha layui-btn"  lay-submit lay-filter="formDemo"> 登录 </button>
                         </div>
                     </form>
                 </div>
@@ -58,12 +58,49 @@
 <script src="{{.frontDomain}}/static/js/base.9d3480b1.min.js"></script>
 <script>if ((document.documentMode || 10) > 8) $('body').prepend("<svg id='bg_svg' viewBox='0 0 1440 480' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' preserveAspectRatio='xMidYMid slice'><filter id='blur'><feGaussianBlur stdDeviation='5'/></filter><image xlink:href='{{.cdnDomain}}/12-40-33-693_1440x480.jpg' width='1440' height='480' filter='url(#blur)'/></svg>");</script>
 <script>function onCheckRobot(token){ document.getElementById('login_form').submit(); }</script>
-<script src="{{.frontDomain}}/static/layer/layer.js"></script>
+
+<script src="{{.frontDomain}}/static/layui/layui.js"></script>
 <script>
-    layer.open({
-        title: '在线调试'
-        ,content: '可以填写任意的layer代码'
-    });
+    // layer.open({
+    //     title: '在线调试'
+    //     ,content: '可以填写任意的layer代码'
+    // });
+
+    layui.use(['form','layer'], function() {
+        var layer = layui.layer
+            ,form = layui.form;
+        //自定义验证规则
+        form.verify({
+            username: function(value){
+                if(value.length < 5 || value.length > 20){
+                    return '用户名不正确';
+                }
+            },
+            password: [
+                /^[\S]{6,12}$/
+                ,'密码必须6到12位，且不能出现空格'
+            ],
+        });
+        form.on('submit(formDemo)',function (data) {
+            layer.alert(JSON.stringify(data.field));
+            $.ajax({
+                url:'/accounts/loginDo',
+                method:'post',
+                data: data.field,
+                dataType:'JSON',
+                success:function (data) {
+                       console.log("success:",data)
+
+
+                },
+                error:function (data) {
+
+                }
+            });
+
+            return false;
+        })
+    })
 </script>
 </body>
 </html>

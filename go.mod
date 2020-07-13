@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	github.com/antonfisher/nested-logrus-formatter v1.1.0
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-sql-driver/mysql v1.5.0

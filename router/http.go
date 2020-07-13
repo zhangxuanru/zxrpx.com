@@ -35,8 +35,8 @@ func NewHttpServer() *HttpServer {
 	server := &HttpServer{
 		engine: gin.Default(),
 	}
-	server.settingRouter()
 	server.setMiddleware()
+	server.settingRouter()
 	server.LoadTemplateFunc()
 	server.LoadHtml()
 	server.LoadStatic()

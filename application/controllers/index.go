@@ -7,6 +7,7 @@
 package controllers
 
 import (
+	"fmt"
 	"math"
 	"net/http"
 	"pix/application/services"
@@ -23,6 +24,8 @@ func Index(c *gin.Context) {
 		page  int
 		err   error
 	)
+	fmt.Printf("Header:%+v\n\n", c.Request.Header)
+
 	pageStr := c.DefaultQuery("page", "1")
 	if page, err = strconv.Atoi(pageStr); err != nil || page > 500 || page < 1 {
 		page = 1

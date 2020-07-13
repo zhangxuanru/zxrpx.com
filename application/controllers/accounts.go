@@ -13,38 +13,66 @@ import (
 	"pix/application/services"
 	"pix/configs"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 type UserLogin struct {
-	UserName string `form:"username"`
-	PassWord string `form:"password"`
-	Token    string `form:"token"`
+	UserName string `form:"username" binding:"required"`
+	PassWord string `form:"password" binding:"required"`
+	Next     string `form:"next" json:"next"`
+	FormToken
+}
+type FormToken struct {
+	Token string `form:"token" binding:"required" json:"token"`
 }
 
 var loginToken string
 
-//显示登录模板
+//登录 - 显示登录模板
 func Login(c *gin.Context) {
-	loginToken = logic.Md5(logic.GetRandomString(6))
+	loginToken = logic.GenLoginToken()
+	nextUrl := c.DefaultQuery("next", "/")
 	c.HTML(http.StatusOK, "login.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"cdnDomain":   configs.STATIC_CDN_DOMAIN,
 		"token":       loginToken,
+		"nextUrl":     nextUrl,
 	})
 }
 
 //登录
 func LoginDo(c *gin.Context) {
 	var (
-		login UserLogin
-		err   error
+		login          UserLogin
+		formToken      FormToken
+		accountService *services.Account
+		account        *services.Account
+		err            error
 	)
-	if err = c.ShouldBind(&login); err != nil {
-
+	if err = c.ShouldBind(&login); err != nil || login.Token != loginToken {
+		logrus.Error("LoginDo err:", err)
+		loginToken = logic.GenLoginToken()
+		formToken.Token = loginToken
+		c.JSON(http.StatusOK, ResponseErr(formToken, logic.LoginError))
+		return
 	}
-	c.JSON(http.StatusOK, login)
+	accountService = &services.Account{
+		UserName: strings.TrimSpace(login.UserName),
+		PassWord: logic.Md5(strings.TrimSpace(login.PassWord)),
+	}
+	if account, err = accountService.Login(); err != nil {
+		loginToken = logic.GenLoginToken()
+		formToken.Token = loginToken
+		c.JSON(http.StatusOK, ResponseErr(formToken, logic.LoginError))
+		return
+	}
+	c.SetCookie("token", account.Token, 3600, "/", configs.COOKIEDOMAIN, false, true)
+	c.JSON(http.StatusOK, ResponseSucc(&UserLogin{
+		Next: login.Next,
+	}, logic.LoginSuccess))
 }
 
 //注销

@@ -41,3 +41,10 @@ func (u *User) GetUserByUidList(uidList []int) (list []User) {
 	GetDB().Where("id IN (?) ", uidList).Select(fields).Find(&list)
 	return
 }
+
+//根据用户名和密码查询用户信息
+func (u *User) GetUserInfoByNameAndPass(userName string, password string) (user User) {
+	fields := "id,px_uid,nick_name,head_portrait,user_name,passwd"
+	GetDB().Where("user_name=? AND passwd=?", userName, password).Select(fields).Find(&user)
+	return
+}

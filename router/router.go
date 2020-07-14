@@ -21,11 +21,11 @@ func (h *HttpServer) settingRouter() {
 	h.engine.GET("/accounts/collect", controllers.Collect)         //收藏
 	h.engine.GET("/accounts/follow/:authorId", controllers.Follow) //关注
 
-	h.engine.GET("/accounts/login", controllers.Login)      //登录的HTML
-	h.engine.POST("/accounts/loginDo", controllers.LoginDo) //执行登录
-
-	h.engine.GET("/accounts/logout", controllers.Logout)     //注销
-	h.engine.GET("/accounts/register", controllers.Register) //注册
+	h.engine.GET("/accounts/login", controllers.Login)            //登录的HTML
+	h.engine.POST("/accounts/loginDo", controllers.LoginDo)       //执行登录
+	h.engine.GET("/accounts/logout", controllers.Logout)          //注销
+	h.engine.GET("/accounts/register", controllers.Register)      //注册
+	h.engine.POST("/accounts/registerDo", controllers.RegisterDo) //注册
 
 	//h.engine.Any()
 

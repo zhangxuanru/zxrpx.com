@@ -27,21 +27,21 @@
                     </div>
 
                     <hr style="margin:0 0 30px;border-color:#f0f1f4">
-
-                    <form id="signup_form_a" class="pure-form" action="." method="post" autocomplete="off" spellcheck="false">
+                    <form id="signup_form_a" class="pure-form layui-form" action="." method="post" autocomplete="off" spellcheck="false" lay-filter="registerForm">
                         <div>
-                            <input type="password" style="display:none">
-                            <input type='hidden' name='csrfmiddlewaretoken' value='T5SgO74QHbRAXE636aXOnJ07VsgAKt8xn2fkiboPyrYGW6BMNKgfz5SlLDUirnt9' />
-                            <input type="text" name="topyenoh" autocomplete="off" tabindex="-1" value="" style="position:absolute;left:-9999px">
+                             <input type='hidden' name='token' value='{{.token}}' />
+                         </div>
+                        <div class="signup_form_a new">
+                            <p> <input type="text" name="username"      lay-verify="required|username"        lay-reqtext="请输入用户名" data-autofocus="" placeholder="用户名" class="data" maxlength="20"   id="id_username"></p>
+                            <p> <input type="text" name="email"         lay-verify="required|email"  placeholder="电子邮箱地址" class="data"   id="id_email"></p>
+                            <p> <input type="password" name="password"  lay-verify="required|password"        placeholder="密码"       autocomplete="new-password" class="data"   id="id_password1">
+                                <input type="hidden" name="next" value="/" class="data" id="next"></p>
                         </div>
-                        <div class="signup_form_a new"><p> <input type="text" name="username" data-autofocus="" placeholder="用户名" class="data" maxlength="25" required id="id_username"></p>
-                            <p> <input type="text" name="email" placeholder="电子邮箱地址" class="data" required id="id_email"></p>
-                            <p> <input type="password" name="password1" placeholder="密码" autocomplete="new-password" class="data" required id="id_password1"><input type="hidden" name="source" value="main_nav" class="data" id="id_source"></p></div>
-                        <div><input style="text-align:center" class="sign_up_button g-recaptcha pure-button button-green" data-sitekey="6Lf8Bg4UAAAAAJ9KPbr_AoCbQ5l9jDqcuaLAgBDM" data-callback="onCheckRobot" type="submit" value='Join'></div>
+                        <div><input style="text-align:center" class="sign_up_button g-recaptcha pure-button button-green layui-btn" data-sitekey="6Lf8Bg4UAAAAAJ9KPbr_AoCbQ5l9jDqcuaLAgBDM" data-callback="onCheckRobot" type="submit"  lay-submit lay-filter="registerForm"value='Join'></div>
                     </form>
                 </div>
                 <div style="margin:1px;padding:20px 25px;background:#f7f7f7;font-size:13px;line-height:1.7;text-align:center">
-                    完成此注册，即表明您同意了我们的<a href='/zh/service/terms/' target='_blank'>使用条款和隐私策略</a>。
+                    完成此注册，即表明您同意了我们的<a href='javascript:;' target='_blank'>使用条款和隐私策略</a>。
                 </div>
             </div>
         </div>
@@ -55,13 +55,64 @@
 </script>
 <script src="{{.frontDomain}}/static/js/base.9d3480b1.min.js"></script>
  <script>
-
     if ((document.documentMode || 10) > 8) $('body').prepend("<svg id='bg_svg' viewBox='0 0 1440 480' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' preserveAspectRatio='xMidYMid slice'><filter id='blur'><feGaussianBlur stdDeviation='5'/></filter><image xlink:href='{{.cdnDomain}}/14-04-33-934_1440x480.jpg' width='1440' height='480' filter='url(#blur)'/></svg>");
-
-    $('input[type="text"]').eq(2).on('keyup', function (e) { var v = this.value.replace(/[^\w-]+/gi, ''); if (this.value != v) this.value = v; });
-    $(document).on('click', '.prevent_dblsubmit', function(e){
-        if ($(this).data('submitted')) e.preventDefault(); else $(this).attr('disabled', 1).data('submitted', 1);
-    });
 </script>
+
+<script src="{{.frontDomain}}/static/layui/layui.js"></script>
+<script type="text/javascript">
+    var errCode ="-1";
+    layui.use(['form','layer'], function() {
+        var layer = layui.layer
+            ,form = layui.form;
+        form.render();
+        //自定义验证规则
+        form.verify({
+            username: function(value){
+                if(value.length < 5 || value.length > 20){
+                    return '用户名不正确';
+                }
+            },
+            password: [
+                /^[\S]{6,12}$/
+                ,'密码必须6到12位，且不能出现空格'
+            ],
+        });
+        form.on('submit(registerForm)',function (data) {
+            $.ajax({
+                url:'/accounts/registerDo',
+                method:'post',
+                data: data.field,
+                dataType:'JSON',
+                success:function (data) {
+                    if(data.code == errCode){
+                        layer.open({
+                            title: '注册失败'
+                            ,content: data.msg,
+                        });
+                        form.val('registerForm',{
+                            "token":data.data.token
+                        });
+                        return false;
+                    }else {
+                        layer.open({
+                            title: '注册成功'
+                            ,content: "注册成功",
+                        });
+                        window.location.href= data.data.next;
+                    }
+                },
+                error:function (data) {
+                    layer.open({
+                        title: '注册失败'
+                        ,content: data.msg,
+                    });
+                    return false;
+                }
+            });
+            return false;
+        })
+    })
+</script>
+
  </body>
 </html>

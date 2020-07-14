@@ -10,6 +10,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -30,4 +31,10 @@ func GetRandomString(length int) string {
 		result = append(result, bytes[r.Intn(len(bytes))])
 	}
 	return string(result)
+}
+
+//生成加密密码
+func EncryptPassword(password string) string {
+	password = strings.TrimSpace(password)
+	return Md5(password)
 }

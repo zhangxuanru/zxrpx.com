@@ -19,6 +19,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+//用户登录表单
 type UserLogin struct {
 	UserName string `form:"username" binding:"required"`
 	PassWord string `form:"password" binding:"required"`
@@ -28,6 +29,12 @@ type UserLogin struct {
 
 type Form struct {
 	Token string `form:"token" binding:"required" json:"token"`
+}
+
+//用户注册表单
+type UserRegister struct {
+	UserLogin
+	Email string `form:"email" binding:"required"`
 }
 
 var formToken string
@@ -46,7 +53,7 @@ func Login(c *gin.Context) {
 	})
 }
 
-//登录
+//执行登录
 func LoginDo(c *gin.Context) {
 	var (
 		login          UserLogin
@@ -64,7 +71,7 @@ func LoginDo(c *gin.Context) {
 	}
 	accountService = &services.Account{
 		UserName: strings.TrimSpace(login.UserName),
-		PassWord: logic.Md5(strings.TrimSpace(login.PassWord)),
+		PassWord: logic.EncryptPassword(login.PassWord),
 	}
 	if account, err = accountService.Login(); err != nil {
 		formToken = logic.GenLoginFormToken()
@@ -73,6 +80,7 @@ func LoginDo(c *gin.Context) {
 		return
 	}
 	setUserCookie(c, account.Token)
+	formToken = ""
 	c.JSON(http.StatusOK, ResponseSucc(&UserLogin{
 		Next: login.Next,
 	}, logic.LoginSuccess))
@@ -93,12 +101,47 @@ func Logout(c *gin.Context) {
 //注册
 func Register(c *gin.Context) {
 	account, _ := getUser(c)
+	formToken = logic.GenLoginFormToken()
 	c.HTML(http.StatusOK, "register.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"cdnDomain":   configs.STATIC_CDN_DOMAIN,
 		"token":       formToken,
 		"account":     account,
 	})
+}
+
+//执行注册
+func RegisterDo(c *gin.Context) {
+	var (
+		register       UserRegister
+		form           Form
+		accountService *services.Account
+		account        *services.Account
+		err            error
+	)
+	if err = c.ShouldBind(&register); err != nil || register.Token != formToken {
+		logrus.Error("RegisterDo err:", err)
+		formToken = logic.GenLoginFormToken()
+		form.Token = formToken
+		c.JSON(http.StatusOK, ResponseErr(form, logic.RegisterError))
+		return
+	}
+	accountService = &services.Account{
+		UserName: strings.TrimSpace(register.UserName),
+		PassWord: logic.EncryptPassword(register.PassWord),
+		Email:    strings.TrimSpace(register.Email),
+	}
+	if account, err = accountService.Register(); err != nil {
+		formToken = logic.GenLoginFormToken()
+		form.Token = formToken
+		c.JSON(http.StatusOK, ResponseErr(form, err.Error()))
+		return
+	}
+	setUserCookie(c, account.Token)
+	formToken = ""
+	c.JSON(http.StatusOK, ResponseSucc(&UserLogin{
+		Next: register.Next,
+	}, logic.RegisterSuccess))
 }
 
 //评论

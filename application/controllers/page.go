@@ -15,8 +15,10 @@ import (
 
 //404 page
 func NotFound(c *gin.Context) {
+	account, _ := getUser(c)
 	c.HTML(http.StatusNotFound, "404.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
+		"account":     account,
 	})
 	return
 }

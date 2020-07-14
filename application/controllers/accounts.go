@@ -81,14 +81,8 @@ func LoginDo(c *gin.Context) {
 
 //注销
 func Logout(c *gin.Context) {
-	var (
-		account *services.AccountAuth
-		err     error
-	)
-	if account, err = getUser(c); err != nil || account.UserId == 0 {
-		c.Redirect(http.StatusFound, "/404")
-	}
-	//	delUserCookie(c)
+	delUserCookie(c)
+	account, _ := getUser(c)
 	c.HTML(http.StatusOK, "logout.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"account":     account,
@@ -98,7 +92,13 @@ func Logout(c *gin.Context) {
 
 //注册
 func Register(c *gin.Context) {
-
+	account, _ := getUser(c)
+	c.HTML(http.StatusOK, "register.html", gin.H{
+		"frontDomain": configs.STATIC_DOMAIN,
+		"cdnDomain":   configs.STATIC_CDN_DOMAIN,
+		"token":       formToken,
+		"account":     account,
+	})
 }
 
 //评论

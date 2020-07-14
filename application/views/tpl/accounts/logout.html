@@ -9,7 +9,6 @@
 <body class="">
 <div id="wrapper">
     {{template "header" .}}
-
     <div id="content" class="clearfix">
         <div style="margin:0 10px">
             <div style="margin:4% auto 0;max-width:640px;padding:40px;background:rgba(0,0,0,.6);border-radius:2px">
@@ -18,10 +17,6 @@
                             <div style="text-align:center;color:#fff;font-weight:bold;font-size:30px;text-shadow:0 1px 10px rgba(0,0,0,.7)">
                                 您现在已经注销了。
                             </div>
-                        </td></tr>
-                    <tr><td>
-                            <p style="margin:40px 0 5px">赠予我们一杯咖啡</p>
-                            <span class="pure-button modal" style="min-width:100px;font-size:18px" data-href="/zh/service/donate/" data-w="550"><span style="color:#ff5959">❤</span> 咖啡</span>
                         </td></tr>
                     <tr><td>
                             <p style="margin:40px 0 5px">在Facebook上赞一下Pixabay</p>
@@ -38,13 +33,12 @@
     </div>
 </div>
 <div id="fb-root"></div><a id="toTop">▲</a>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="{{.frontDomain}}/static/js/jquery-1.12.4.min.js"></script>
 <script>
     window.jQuery || document.write('<script src="/static/js/jquery.js"><\/script>');
     var LANG = '', LANG_URL_PREFIX = '', LANGS = [["cs","\u010ce\u0161tina"],["da","Dansk"],["de","Deutsch"],["en","English"],["es","Espa\u00f1ol"],["fr","Fran\u00e7ais"],["id","Indonesia"],["it","Italiano"],["hu","Magyar"],["nl","Nederlands"],["no","Norsk"],["pl","Polski"],["pt","Portugu\u00eas"],["ro","Rom\u00e2n\u0103"],["sk","Sloven\u010dina"],["fi","Suomi"],["sv","Svenska"],["tr","T\u00fcrk\u00e7e"],["vi","Vi\u1ec7t"],["th","\u0e44\u0e17\u0e22"],["bg","\u0411\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438"],["ru","\u0420\u0443\u0441\u0441\u043a\u0438\u0439"],["el","\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ae"],["ja","\u65e5\u672c\u8a9e"],["ko","\ud55c\uad6d\uc5b4"],["zh","\u7b80\u4f53\u4e2d\u6587"]], I18N = { 'delete': '确认删除？', 'safesearch': '安全搜索', 'adult_content': '成人内容' };
 </script>
-<script src="/static/js/min/base.9d3480b1.min.js"></script>
+<script src="{{.frontDomain}}/static/js/base.9d3480b1.min.js"></script>
 <script>if ((document.documentMode || 10) > 8) $('body').prepend("<svg id='bg_svg' viewBox='0 0 1440 480' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' preserveAspectRatio='xMidYMid slice'><filter id='blur'><feGaussianBlur stdDeviation='5'/></filter><image xlink:href='https://cdn.pixabay.com/index/2020/07/13/14-04-33-934_1440x480.jpg' width='1440' height='480' filter='url(#blur)'/></svg>");</script>
- <script src="//platform.twitter.com/widgets.js" async defer></script>
-</body>
+ </body>
 </html>

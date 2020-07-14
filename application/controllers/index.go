@@ -7,7 +7,6 @@
 package controllers
 
 import (
-	"fmt"
 	"math"
 	"net/http"
 	"pix/application/services"
@@ -20,12 +19,11 @@ import (
 //首页
 func Index(c *gin.Context) {
 	var (
-		limit = 100
-		page  int
-		err   error
+		limit   = 100
+		account *services.AccountAuth
+		page    int
+		err     error
 	)
-	fmt.Printf("Header:%+v\n\n", c.Request.Header)
-
 	pageStr := c.DefaultQuery("page", "1")
 	if page, err = strconv.Atoi(pageStr); err != nil || page > 500 || page < 1 {
 		page = 1
@@ -34,6 +32,7 @@ func Index(c *gin.Context) {
 	totalPage := int(math.Ceil(float64(count) / float64(limit)))
 	isNextPage := totalPage-page >= 1
 
+	account, _ = getUser(c)
 	c.HTML(http.StatusOK, "index.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"picList":     picList,
@@ -43,5 +42,6 @@ func Index(c *gin.Context) {
 		"nextPage":    page + 1,
 		"totalPage":   totalPage,
 		"isNextPage":  isNextPage,
+		"account":     account,
 	})
 }

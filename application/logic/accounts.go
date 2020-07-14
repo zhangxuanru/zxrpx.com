@@ -6,7 +6,8 @@
 */
 package logic
 
-func GenLoginToken() string {
+//生成登录表单token
+func GenLoginFormToken() string {
 	token := Md5(GetRandomString(6))
 	return token
 }

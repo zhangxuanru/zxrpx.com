@@ -22,6 +22,7 @@ func Detail(c *gin.Context) {
 		pxIdStr    string
 		err        error
 		picData    []*services.PhotoResult
+		account    *services.AccountAuth
 		commentNum = 3
 	)
 	pxIdStr = c.Param("id")
@@ -43,7 +44,7 @@ func Detail(c *gin.Context) {
 	go func() {
 		services.NewPicService().UpdateUserPhotoViewNumByPicId(pxId)
 	}()
-
+	account, _ = getUser(c)
 	c.HTML(http.StatusOK, "photos.html", gin.H{
 		"frontDomain":  configs.STATIC_DOMAIN,
 		"baseUrl":      "/photos/" + pxIdStr,
@@ -53,5 +54,6 @@ func Detail(c *gin.Context) {
 		"commentNum":   commentNum,
 		"recentImages": recentImages,
 		"tagList":      tagList,
+		"account":      account,
 	})
 }

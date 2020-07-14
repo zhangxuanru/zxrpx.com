@@ -15,11 +15,11 @@ import (
 )
 
 var (
-	TokenExpired     = errors.New("Token is expired")
-	TokenNotValidYet = errors.New("Token not active yet")
-	TokenMalformed   = errors.New("That's not even a token")
-	TokenInvalid     = errors.New("Couldn't handle this token:")
-	SignKey          = "zxrStrive"
+	TokenExpired     error = errors.New("Token is expired")
+	TokenNotValidYet       = errors.New("Token not active yet")
+	TokenMalformed         = errors.New("That's not even a token")
+	TokenInvalid           = errors.New("Couldn't handle this token:")
+	SignKey                = "zxrStrive"
 )
 
 type JWT struct {
@@ -27,11 +27,15 @@ type JWT struct {
 }
 
 type CustomClaims struct {
+	AccountAuth
+	jwt.StandardClaims
+}
+
+type AccountAuth struct {
 	UserId   int    `json:"user_id"`
 	UserPxId int    `json:"user_px_id"`
 	UserName string `json:"user_name"`
-	Password string `json:"password"`
-	jwt.StandardClaims
+	//Password string `json:"password"`
 }
 
 func NewJWT() *JWT {
@@ -47,12 +51,14 @@ func GetSignKey() string {
 //生成用户登录token
 func (j *JWT) GenUserToken(user models.User) (token string, err error) {
 	claims := CustomClaims{
-		UserId:   user.Id,
-		UserPxId: user.PxUid,
-		UserName: user.UserName,
-		Password: user.Passwd,
+		AccountAuth: AccountAuth{
+			UserId:   user.Id,
+			UserPxId: user.PxUid,
+			UserName: user.UserName,
+			//Password: user.Passwd,
+		},
 		StandardClaims: jwt.StandardClaims{
-			NotBefore: int64(time.Now().Unix() - 1000), // 签名生效时间
+			NotBefore: int64(time.Now().Unix()),        // 签名生效时间
 			ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时
 		},
 	}

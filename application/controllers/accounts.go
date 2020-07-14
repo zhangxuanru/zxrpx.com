@@ -23,23 +23,26 @@ type UserLogin struct {
 	UserName string `form:"username" binding:"required"`
 	PassWord string `form:"password" binding:"required"`
 	Next     string `form:"next" json:"next"`
-	FormToken
+	Form
 }
-type FormToken struct {
+
+type Form struct {
 	Token string `form:"token" binding:"required" json:"token"`
 }
 
-var loginToken string
+var formToken string
 
 //登录 - 显示登录模板
 func Login(c *gin.Context) {
-	loginToken = logic.GenLoginToken()
+	account, _ := getUser(c)
+	formToken = logic.GenLoginFormToken()
 	nextUrl := c.DefaultQuery("next", "/")
 	c.HTML(http.StatusOK, "login.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"cdnDomain":   configs.STATIC_CDN_DOMAIN,
-		"token":       loginToken,
+		"token":       formToken,
 		"nextUrl":     nextUrl,
+		"account":     account,
 	})
 }
 
@@ -47,16 +50,16 @@ func Login(c *gin.Context) {
 func LoginDo(c *gin.Context) {
 	var (
 		login          UserLogin
-		formToken      FormToken
+		form           Form
 		accountService *services.Account
 		account        *services.Account
 		err            error
 	)
-	if err = c.ShouldBind(&login); err != nil || login.Token != loginToken {
+	if err = c.ShouldBind(&login); err != nil || login.Token != formToken {
 		logrus.Error("LoginDo err:", err)
-		loginToken = logic.GenLoginToken()
-		formToken.Token = loginToken
-		c.JSON(http.StatusOK, ResponseErr(formToken, logic.LoginError))
+		formToken = logic.GenLoginFormToken()
+		form.Token = formToken
+		c.JSON(http.StatusOK, ResponseErr(form, logic.LoginError))
 		return
 	}
 	accountService = &services.Account{
@@ -64,20 +67,33 @@ func LoginDo(c *gin.Context) {
 		PassWord: logic.Md5(strings.TrimSpace(login.PassWord)),
 	}
 	if account, err = accountService.Login(); err != nil {
-		loginToken = logic.GenLoginToken()
-		formToken.Token = loginToken
-		c.JSON(http.StatusOK, ResponseErr(formToken, logic.LoginError))
+		formToken = logic.GenLoginFormToken()
+		form.Token = formToken
+		c.JSON(http.StatusOK, ResponseErr(form, logic.LoginError))
 		return
 	}
-	c.SetCookie("token", account.Token, 3600, "/", configs.COOKIEDOMAIN, false, true)
+	setUserCookie(c, account.Token)
 	c.JSON(http.StatusOK, ResponseSucc(&UserLogin{
 		Next: login.Next,
 	}, logic.LoginSuccess))
+
 }
 
 //注销
 func Logout(c *gin.Context) {
-
+	var (
+		account *services.AccountAuth
+		err     error
+	)
+	if account, err = getUser(c); err != nil || account.UserId == 0 {
+		c.Redirect(http.StatusFound, "/404")
+	}
+	//	delUserCookie(c)
+	c.HTML(http.StatusOK, "logout.html", gin.H{
+		"frontDomain": configs.STATIC_DOMAIN,
+		"account":     account,
+		"website":     configs.WEBSITE,
+	})
 }
 
 //注册

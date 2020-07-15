@@ -48,13 +48,12 @@ func (a *Account) Register() (account *Account, err error) {
 	if user := userModel.GetUserInfoByName(a.UserName); user.Id > 0 {
 		return a, errors.New("用户名已存在")
 	}
-	if user := userModel.GetUserInfoByEmail(a.Email); user.Id > 0 {
+	if user := models.NewUserExtend().GetUserExtendByEmail(a.Email); user.Id > 0 {
 		return a, errors.New("邮箱已存在")
 	}
 	user := &models.User{
 		UserName: a.UserName,
 		Passwd:   a.PassWord,
-		Email:    a.Email,
 		UserType: 1,
 		AddTime:  time.Now(),
 	}
@@ -62,6 +61,13 @@ func (a *Account) Register() (account *Account, err error) {
 		return a, err
 	} else {
 		_, _ = user.UpdatePxUidById(id, id)
+		//插入扩展表
+		extend := &models.UserExtend{
+			Uid:     id,
+			Email:   a.Email,
+			AddTime: time.Now(),
+		}
+		_, _ = models.NewUserExtend().Insert(extend)
 	}
 	a.Token, err = NewJWT().GenUserToken(*user)
 	a.Account = user

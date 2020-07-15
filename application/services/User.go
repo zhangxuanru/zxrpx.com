@@ -96,3 +96,9 @@ func (u *UserService) IncrByUserDownNum(pxUid, num int) (affected int64, err err
 	affected, err = models.NewUserStat().IncrByUserDownNum(pxUid, num)
 	return
 }
+
+//根据uid查询用户的扩展信息
+func (u *UserService) GetUserExtend(uid int) (extend models.UserExtend) {
+	extend = models.NewUserExtend().GetUserExtendByUid(uid)
+	return
+}

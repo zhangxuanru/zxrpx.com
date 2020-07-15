@@ -10,6 +10,8 @@ import (
 	"pix/application/services"
 	"pix/configs"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -43,6 +45,7 @@ func getUser(c *gin.Context) (account *services.AccountAuth, err error) {
 		customClaims, err = services.NewJWT().ParseToken(token)
 	}
 	if err != nil {
+		logrus.Error("ParseToken error:", err)
 		return
 	}
 	account = &services.AccountAuth{

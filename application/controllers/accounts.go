@@ -9,6 +9,7 @@ package controllers
 
 import (
 	"net/http"
+	"net/url"
 	"pix/application/logic"
 	"pix/application/services"
 	"pix/configs"
@@ -44,6 +45,7 @@ func Login(c *gin.Context) {
 	account, _ := getUser(c)
 	formToken = logic.GenLoginFormToken()
 	nextUrl := c.DefaultQuery("next", "/")
+	nextUrl, _ = url.QueryUnescape(nextUrl)
 	c.HTML(http.StatusOK, "login.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"cdnDomain":   configs.STATIC_CDN_DOMAIN,
@@ -90,7 +92,7 @@ func LoginDo(c *gin.Context) {
 //注销
 func Logout(c *gin.Context) {
 	delUserCookie(c)
-	account, _ := getUser(c)
+	account := &services.AccountAuth{}
 	c.HTML(http.StatusOK, "logout.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"account":     account,
@@ -152,7 +154,21 @@ func Media(c *gin.Context) {
 
 //设置个人信息
 func Settings(c *gin.Context) {
-
+	var (
+		account *services.AccountAuth
+		err     error
+	)
+	if account, err = getUser(c); err != nil {
+		query := url.QueryEscape("/accounts/settings/")
+		c.Redirect(http.StatusFound, "/accounts/login/?next="+query)
+	}
+	formToken = logic.GenLoginFormToken()
+	c.HTML(http.StatusOK, "settings.html", gin.H{
+		"frontDomain": configs.STATIC_DOMAIN,
+		"cdnDomain":   configs.STATIC_CDN_DOMAIN,
+		"account":     account,
+		"token":       formToken,
+	})
 }
 
 //消息

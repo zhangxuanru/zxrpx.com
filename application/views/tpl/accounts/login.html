@@ -95,7 +95,10 @@
                             title: '登录成功'
                             ,content: "登录成功",
                         });
-                        window.location.href= data.data.next;
+                        setTimeout(function () {
+                            window.location.href = data.data.next;
+                        },3000);
+
                     }
                 },
                 error:function (data) {

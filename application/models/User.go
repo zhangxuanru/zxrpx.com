@@ -20,7 +20,6 @@ type User struct {
 	NickName     string    `gorm:"type:varchar(100); NOT NULL; comment:'用户昵称'" json:"nick_name"`                        //昵称
 	UserName     string    `gorm:"index:user_pass; type:varchar(50);  comment:'登录用户名'" json:"user_name"`                //登录用户名
 	Passwd       string    `gorm:"index:user_pass; type:char(32);     comment:'登录密码'" json:"passwd"`                    //用户密码
-	Email        string    `gorm:"type:varchar(100);    comment:'邮箱地址'" json:"email"`                                   //邮箱地址
 	UserType     int       `gorm:"type:TINYINT(1); NOT NULL;default:1; comment:'用户类型 1:本站注册 2:px站抓取'" json:"user_type"` //用户类型 1,本站注册， 2：px站抓取
 	HeadPortrait string    `gorm:"type:varchar(100); NOT NULL;comment:'头像地址'" json:"head_portrait"`                     //头像地址
 	FileName     string    `gorm:"type:varchar(255); NOT NULL; comment:'图片名称'" json:"file_name"`
@@ -54,13 +53,6 @@ func (u *User) GetUserInfoByNameAndPass(userName string, password string) (user 
 func (u *User) GetUserInfoByName(userName string) (user User) {
 	fields := "id"
 	GetDB().Where("user_name=?", userName).Select(fields).Find(&user)
-	return
-}
-
-//根据邮箱查询用户信息
-func (u *User) GetUserInfoByEmail(email string) (user User) {
-	fields := "id"
-	GetDB().Where("email=?", email).Select(fields).Find(&user)
 	return
 }
 

@@ -8,8 +8,11 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"pix/application/models"
 	"time"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -58,8 +61,9 @@ func (j *JWT) GenUserToken(user models.User) (token string, err error) {
 			//Password: user.Passwd,
 		},
 		StandardClaims: jwt.StandardClaims{
-			NotBefore: int64(time.Now().Unix()),        // 签名生效时间
-			ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时
+			NotBefore: int64(time.Now().Unix() - 300), // 签名生效时间
+			//ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时
+			ExpiresAt: time.Now().Add(time.Hour * 1).Unix(),
 		},
 	}
 	token, err = j.CreateToken(claims)
@@ -91,6 +95,7 @@ func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 		}
 	}
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
+		fmt.Printf("claims %+v:\n\n", claims)
 		return claims, nil
 	}
 	return nil, TokenInvalid
@@ -105,6 +110,7 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 		return j.SigningKey, nil
 	})
 	if err != nil {
+		logrus.Error("RefreshToken error:", err)
 		return "", err
 	}
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {

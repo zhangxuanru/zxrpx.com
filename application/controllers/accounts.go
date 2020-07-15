@@ -132,6 +132,7 @@ func RegisterDo(c *gin.Context) {
 		Email:    strings.TrimSpace(register.Email),
 	}
 	if account, err = accountService.Register(); err != nil {
+		logrus.Error("Register error:", err)
 		formToken = logic.GenLoginFormToken()
 		form.Token = formToken
 		c.JSON(http.StatusOK, ResponseErr(form, err.Error()))
@@ -144,18 +145,33 @@ func RegisterDo(c *gin.Context) {
 	}, logic.RegisterSuccess))
 }
 
-//评论
-func Comment(c *gin.Context) {
+//我的图片
+func Media(c *gin.Context) {
 
 }
 
-//喜欢
-func Like(c *gin.Context) {
+//设置个人信息
+func Settings(c *gin.Context) {
+
+}
+
+//消息
+func Messages(c *gin.Context) {
 
 }
 
 //收藏
 func Collect(c *gin.Context) {
+
+}
+
+//收藏列表
+func Favorites(c *gin.Context) {
+
+}
+
+//上传
+func Upload(c *gin.Context) {
 
 }
 
@@ -171,5 +187,15 @@ func Follow(c *gin.Context) {
 
 //关注列表
 func Following(c *gin.Context) {
+
+}
+
+//评论
+func Comment(c *gin.Context) {
+
+}
+
+//喜欢
+func Like(c *gin.Context) {
 
 }

@@ -65,7 +65,7 @@ func (a *Account) Register() (account *Account, err error) {
 	}
 	a.Token, err = NewJWT().GenUserToken(*user)
 	a.Account = user
-	return
+	return a, err
 }
 
 //关注

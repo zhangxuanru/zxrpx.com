@@ -35,7 +35,7 @@
                             <p> <input type="text" name="username"      lay-verify="required|username"        lay-reqtext="请输入用户名" data-autofocus="" placeholder="用户名" class="data" maxlength="20"   id="id_username"></p>
                             <p> <input type="text" name="email"         lay-verify="required|email"  placeholder="电子邮箱地址" class="data"   id="id_email"></p>
                             <p> <input type="password" name="password"  lay-verify="required|password"        placeholder="密码"       autocomplete="new-password" class="data"   id="id_password1">
-                                <input type="hidden" name="next" value="/" class="data" id="next"></p>
+                                <input type="hidden" name="next" value="/accounts/settings/" class="data" id="next"></p>
                         </div>
                         <div><input style="text-align:center" class="sign_up_button g-recaptcha pure-button button-green layui-btn" data-sitekey="6Lf8Bg4UAAAAAJ9KPbr_AoCbQ5l9jDqcuaLAgBDM" data-callback="onCheckRobot" type="submit"  lay-submit lay-filter="registerForm"value='Join'></div>
                     </form>
@@ -59,6 +59,7 @@
 </script>
 
 <script src="{{.frontDomain}}/static/layui/layui.js"></script>
+
 <script type="text/javascript">
     var errCode ="-1";
     layui.use(['form','layer'], function() {
@@ -68,10 +69,14 @@
         //自定义验证规则
         form.verify({
             username: function(value){
-                if(value.length < 5 || value.length > 20){
-                    return '用户名不正确';
+                if(new RegExp("[\u4e00-\u9fa5\]+").test(value)){
+                    return '用户名不能有中文';
+                }
+                if(!new RegExp("^[\\w]{5,20}$").test(value)){
+                     return '用户名格式不对';
                 }
             },
+           // number : ^[\w]{5,20}$, '必须输入数字啊'],
             password: [
                 /^[\S]{6,12}$/
                 ,'密码必须6到12位，且不能出现空格'
@@ -98,7 +103,9 @@
                             title: '注册成功'
                             ,content: "注册成功",
                         });
-                        window.location.href= data.data.next;
+                        setTimeout(function () {
+                            window.location.href = data.data.next;
+                        },2000);
                     }
                 },
                 error:function (data) {

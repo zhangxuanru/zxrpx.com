@@ -62,8 +62,11 @@
         //自定义验证规则
         form.verify({
             username: function(value){
-                if(value.length < 5 || value.length > 20){
-                    return '用户名不正确';
+                if(new RegExp("[\u4e00-\u9fa5\]+").test(value)){
+                    return '用户名不能有中文';
+                }
+                if(!new RegExp("^[\\w]{5,20}$").test(value)){
+                    return '用户名格式不对';
                 }
             },
             password: [

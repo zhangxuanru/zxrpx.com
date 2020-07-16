@@ -38,31 +38,19 @@ func (u *UserExtend) Insert(extend *UserExtend) (id int, err error) {
 
 //根据uid查询用户扩展信息
 func (u *UserExtend) GetUserExtendByUid(uid int) (user UserExtend) {
-	fields := "uid,gender,name,birth_day,intro,facebook,twitter,website,email"
+	fields := "id,uid,name,intro,facebook,twitter,website,email"
 	GetDB().Where("uid=?", uid).Select(fields).Find(&user)
 	return
 }
 
 //根据邮箱查询用户扩展信息
 func (u *UserExtend) GetUserExtendByEmail(email string) (user UserExtend) {
-	fields := "id"
-	GetDB().Where("email=?", email).Select(fields).Find(&user)
+	GetDB().Where("email=?", email).Select("id").Find(&user)
 	return
 }
 
 //更新扩展信息
-func (u *UserExtend) UpdateExtend(uid int, user *UserExtend) (affected int64, err error) {
-	buildMap := map[string]interface{}{
-		"gender":           "",
-		"name":             "",
-		"birth_day":        "",
-		"intro":            "",
-		"facebook":         "",
-		"twitter":          "",
-		"website":          "",
-		"email":            "",
-		"last_update_time": time.Now(),
-	}
+func (u *UserExtend) UpdateExtend(uid int, buildMap map[string]interface{}) (affected int64, err error) {
 	updates := GetDB().Model(u).Where("uid = ?", uid).Updates(buildMap).Omit("add_time")
 	return updates.RowsAffected, updates.Error
 }

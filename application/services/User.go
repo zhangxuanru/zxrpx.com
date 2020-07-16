@@ -99,6 +99,31 @@ func (u *UserService) IncrByUserDownNum(pxUid, num int) (affected int64, err err
 
 //根据uid查询用户的扩展信息
 func (u *UserService) GetUserExtend(uid int) (extend models.UserExtend) {
-	extend = models.NewUserExtend().GetUserExtendByUid(uid)
+	if uid == 0 {
+		extend = models.UserExtend{}
+	} else {
+		extend = models.NewUserExtend().GetUserExtendByUid(uid)
+	}
+	return
+}
+
+//根据UID查询用户信息
+func (u *UserService) GetUserInfoByUid(uid int) (user models.User) {
+	list := models.NewUser().GetUserByUidList([]int{uid})
+	if len(list) == 0 {
+		return
+	}
+	return list[0]
+}
+
+//修改用户资料
+func (u *UserService) UpdateUserInfo(uid int, buildMap map[string]interface{}) (err error) {
+	_, err = models.NewUser().UpdateUserInfo(uid, buildMap)
+	return
+}
+
+//修改用户扩展资料
+func (u *UserService) UpdateUserExtend(uid int, buildMap map[string]interface{}) (err error) {
+	_, err = models.NewUserExtend().UpdateExtend(uid, buildMap)
 	return
 }

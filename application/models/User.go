@@ -37,7 +37,7 @@ func (u *User) GetUserByUidList(uidList []int) (list []User) {
 	if len(uidList) == 0 {
 		return
 	}
-	fields := "id,px_uid,nick_name,head_portrait,file_name,is_qiniu"
+	fields := "id,user_name,px_uid,nick_name,head_portrait,file_name,is_qiniu"
 	GetDB().Where("id IN (?) ", uidList).Select(fields).Find(&list)
 	return
 }
@@ -51,8 +51,7 @@ func (u *User) GetUserInfoByNameAndPass(userName string, password string) (user 
 
 //根据用户名查询用户信息
 func (u *User) GetUserInfoByName(userName string) (user User) {
-	fields := "id"
-	GetDB().Where("user_name=?", userName).Select(fields).Find(&user)
+	GetDB().Where("user_name=?", userName).Select("id").Find(&user)
 	return
 }
 
@@ -68,5 +67,11 @@ func (u *User) UpdatePxUidById(id int, pxUid int) (affected int64, err error) {
 		"px_uid": pxUid,
 	}
 	updates := GetDB().Model(u).Where("id = ?", id).Updates(buildMap).Omit("add_time")
+	return updates.RowsAffected, updates.Error
+}
+
+//修改用户资料
+func (u *User) UpdateUserInfo(uid int, buildMap map[string]interface{}) (affected int64, err error) {
+	updates := GetDB().Model(u).Where("px_uid = ?", uid).Updates(buildMap).Omit("add_time")
 	return updates.RowsAffected, updates.Error
 }

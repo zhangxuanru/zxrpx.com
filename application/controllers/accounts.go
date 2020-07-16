@@ -154,26 +154,57 @@ func RegisterDo(c *gin.Context) {
 //设置个人信息 HTML
 func Settings(c *gin.Context) {
 	var (
-		account *services.AccountAuth
-		err     error
+		account     *services.AccountAuth
+		userService *services.UserService
+		err         error
 	)
 	if account, err = getUser(c); err != nil {
 		query := url.QueryEscape("/accounts/settings/")
 		c.Redirect(http.StatusFound, "/accounts/login/?next="+query)
 	}
-	//
+	userService = services.NewUserService()
+	extend := userService.GetUserExtend(account.UserId)
+	userInfo := userService.GetUserInfoByUid(account.UserId)
 	formToken = logic.GenLoginFormToken()
 	c.HTML(http.StatusOK, "settings.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"cdnDomain":   configs.STATIC_CDN_DOMAIN,
 		"account":     account,
 		"token":       formToken,
+		"extend":      extend,
+		"userInfo":    userInfo,
 	})
 }
 
 //设置个人信息
 func SettingsDo(c *gin.Context) {
-
+	var (
+		setting services.SettingUser
+		account *services.AccountAuth
+		form    Form
+		err     error
+	)
+	if account, err = getUser(c); err != nil {
+		c.JSON(http.StatusOK, Response(NotLoginCode, form, logic.BeforLogin))
+		return
+	}
+	if err = c.ShouldBind(&setting); err != nil || setting.Token != formToken {
+		logrus.Error("SettingsDo err:", err)
+		formToken = logic.GenLoginFormToken()
+		form.Token = formToken
+		c.JSON(http.StatusOK, ResponseErr(form, logic.SettingErr))
+		return
+	}
+	if err = services.NewAccount().SettingUser(&setting, account.UserId); err != nil {
+		logrus.Error("SettingUser err:", err)
+		formToken = logic.GenLoginFormToken()
+		form.Token = formToken
+		c.JSON(http.StatusOK, ResponseErr(form, err.Error()))
+		return
+	}
+	formToken = logic.GenLoginFormToken()
+	form.Token = formToken
+	c.JSON(http.StatusOK, ResponseSucc(form, logic.SettingSuccess))
 }
 
 //我的图片

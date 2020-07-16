@@ -37,7 +37,7 @@
         <div>
             <style>input[type="password"] { width: 100%; }</style>
             <form action="/accounts/change_password/" method="post" class="ajax_form pure-form" data-target="#cboxLoadedContent">
-                <input type="hidden" name="token" value="####">
+                <input type="hidden" name="pass_token" value="####">
                 <p><label for="id_old_password">Old password</label> <input type="password" name="old_password" autofocus="" required="" id="id_old_password"></p>
                 <p><label for="id_new_password1">New password</label> <input type="password" name="new_password1" required="" id="id_new_password1"></p>
                 <p><label for="id_new_password2">New password confirmation</label> <input type="password" name="new_password2" required="" id="id_new_password2"></p>
@@ -64,7 +64,7 @@
         <script>var el = document.querySelector('#account_tabs a[href="'+location.pathname.replace('outbox', 'inbox')+'"]'); if (el) el.className += ' selected';</script>
 
         <div style="max-width:1408px;margin:auto;padding:0 20px">
-            <form action="." method="post" enctype="multipart/form-data" class="profile_form pure-form pure-form-aligned layui-form" lay-filter="settingForm">
+            <form action="." method="post"  class="profile_form pure-form pure-form-aligned layui-form" lay-filter="settingForm">
                 <input type='hidden' name='token' value='{{.token}}' />
                 <div class="pure-g">
                     <div class="pure-u-1 pure-u-lg-1-2">
@@ -72,29 +72,29 @@
 
                         <div class="pure-control-group">
                             <label for="id_username">用户名</label>
-                            <input type="text" name="username"  lay-verify="required|username" value="" maxlength="20" required id="id_username">
+                            <input type="text" name="username"  lay-verify="required|username" value="{{.userInfo.UserName}}" maxlength="20" required id="id_username">
                         </div>
 
                         <div class="pure-control-group">
                             <label for="id_username">昵称</label>
-                            <input type="text" name="nick_name" lay-verify="required|nickname" value="" maxlength="25" required id="nick_name">
+                            <input type="text" name="nick_name" lay-verify="required|nickname" value="{{.userInfo.NickName}}" maxlength="25" required id="nick_name">
                         </div>
 
 
                         <div class="pure-control-group">
                             <label for="id_first_name">姓名</label>
-                            <input type="text" name="first_name" maxlength="30" lay-verify="firstname" id="id_first_name">
+                            <input type="text" name="first_name" value="{{.extend.Name}}" maxlength="30" lay-verify="firstname" id="id_first_name">
                         </div>
 
                         <div class="pure-control-group">
                             <label for="id_email">邮箱地址</label>
-                            <input type="email" name="email" value="1598484330@qq.com" lay-verify="required|email" id="id_email">
+                            <input type="email" name="email" value="{{.extend.Email}}" lay-verify="required|email" id="id_email">
                         </div>
 
 
                         <div class="pure-control-group">
                             <label for="id_about_me">个人简介</label>
-                            <textarea name="intro" cols="40" rows="10" placeholder="请简单介绍你自己" lay-verify="intro" class="autosize" style="height:65px" maxlength="500" id="id_about_me"></textarea>
+                            <textarea name="intro" cols="40" rows="10" placeholder="请简单介绍你自己" lay-verify="intro" class="autosize" style="height:65px" maxlength="500" id="id_about_me">{{.extend.Intro}}</textarea>
                         </div>
 
                         <div class="pure-control-group">
@@ -112,16 +112,16 @@
                             <h2 style="margin:0 0 20px;padding:0 0 8px;border-bottom:2px solid #ddd">社交资讯</h2>
                             <div class="pure-control-group">
                                 <label for="id_facebook">Facebook</label>
-                                <input type="url" name="facebook" placeholder="https://www.facebook.com/..." id="id_facebook">
+                                <input type="url" value="{{.extend.Facebook}}" name="facebook" placeholder="https://www.facebook.com/..." id="id_facebook">
                             </div>
                             <div class="pure-control-group">
                                 <label for="id_twitter">Twitter</label>
-                                <input type="url" name="twitter" placeholder="https://twitter.com/..." id="id_twitter">
+                                <input type="url" value="{{.extend.Twitter}}" name="twitter" placeholder="https://twitter.com/..." id="id_twitter">
                             </div>
 
                             <div class="pure-control-group">
                                 <label for="id_website">Website</label>
-                                <input type="url" name="website" placeholder="https://..." id="id_website">
+                                <input type="url" value="{{.extend.Website}}" name="website" placeholder="https://..." id="id_website">
                             </div>
 
                         </div>
@@ -129,7 +129,7 @@
                 </div>
                 <hr style="margin:20px 0 30px">
                 <div style="text-align:center">
-                    <input type="submit" lay-submit lay-filter="settingForm" class="pure-button button-green" style="padding-left:120px;padding-right:120px" value="保存">
+                    <input type="button" lay-submit lay-filter="settingForm" class="pure-button button-green" style="padding-left:120px;padding-right:120px" value="保存">
                 </div>
             </form>
         </div>
@@ -152,6 +152,7 @@
 
 <script type="text/javascript">
     var errCode ="-1";
+    var noLogin = "-2";
     layui.use(['form','layer'], function() {
         var layer = layui.layer
             ,form = layui.form;
@@ -167,12 +168,12 @@
                 }
             },
             nickname:function(value){
-                if(!new RegExp("^[\\w]{5,20}$").test(value)){
+                if(!new RegExp("^[\\w]{3,20}$").test(value)){
                     return '昵称格式不对';
                 }
             },
             firstname:function(value){
-                if(value.length >0 && !new RegExp("^[\\w]{5,20}$").test(value)){
+                if(value.length >0 && !new RegExp("^[\u4e00-\u9fa5]{2,5}$|^[\\w]{2,10}$").test(value)){
                     return '姓名格式不对';
                 }
             },
@@ -184,33 +185,41 @@
         });
         form.on('submit(settingForm)',function (data) {
             $.ajax({
-                url:'/accounts/settingsDo',
+                url:'/accounts/settingsDo/',
                 method:'post',
                 data: data.field,
                 dataType:'JSON',
                 success:function (data) {
                     if(data.code == errCode){
                         layer.open({
-                            title: '注册失败'
+                            title: '修改失败'
                             ,content: data.msg,
                         });
-                        form.val('registerForm',{
+                        form.val('settingForm',{
                             "token":data.data.token
                         });
                         return false;
-                    }else {
+                    }else if(data.code == noLogin){
                         layer.open({
-                            title: '注册成功'
-                            ,content: "注册成功",
+                            title: '请先登录'
+                            ,content: "请先登录",
                         });
                         setTimeout(function () {
-                            window.location.href = data.data.next;
-                        },3000);
+                            window.location.href="/accounts/login";
+                        },2000)
+                    }else {
+                        layer.open({
+                            title: '修改成功'
+                            ,content: "修改成功",
+                        });
+                        form.val('settingForm',{
+                            "token":data.data.token
+                        });
                     }
                 },
                 error:function (data) {
                     layer.open({
-                        title: '注册失败'
+                        title: '修改失败'
                         ,content: data.msg,
                     });
                     return false;

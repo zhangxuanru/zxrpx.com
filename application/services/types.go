@@ -32,3 +32,16 @@ type PhotoResult struct {
 	Tags           []models.Tag
 	User           *UserStat
 }
+
+//个人资料设置
+type SettingUser struct {
+	UserName  string `form:"username" binding:"required"`
+	NickName  string `form:"nick_name" binding:"required"`
+	FirstName string `form:"first_name"`
+	Email     string `form:"email" binding:"required"`
+	Intro     string `form:"intro"`
+	Facebook  string `form:"facebook" `
+	Twitter   string `form:"twitter" `
+	Website   string `form:"website" `
+	Token     string `form:"token" binding:"required" json:"token"`
+}

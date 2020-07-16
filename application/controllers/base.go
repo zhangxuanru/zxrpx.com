@@ -24,6 +24,7 @@ type response struct {
 const (
 	SuccessCode  = 200
 	ErrCode      = -1
+	NotLoginCode = -2
 	LOGIN_COOKIE = "token" //用户登录的cookie名
 )
 

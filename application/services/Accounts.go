@@ -9,6 +9,7 @@ package services
 import (
 	"errors"
 	"pix/application/models"
+	"strings"
 	"time"
 )
 
@@ -72,6 +73,45 @@ func (a *Account) Register() (account *Account, err error) {
 	a.Token, err = NewJWT().GenUserToken(*user)
 	a.Account = user
 	return a, err
+}
+
+//修改个人资料
+func (a *Account) SettingUser(setting *SettingUser, uid int) (err error) {
+	if user := models.NewUserExtend().GetUserExtendByEmail(setting.Email); user.Uid > 0 && user.Uid != uid {
+		return errors.New("邮箱已存在")
+	}
+	var userService *UserService
+	userService = NewUserService()
+	userInfo := userService.GetUserInfoByUid(uid)
+	build := make(map[string]interface{})
+
+	setting.UserName = strings.TrimSpace(setting.UserName)
+	setting.NickName = strings.TrimSpace(setting.NickName)
+
+	if userInfo.UserName != setting.UserName {
+		build["user_name"] = setting.UserName
+	}
+	if userInfo.NickName != setting.NickName {
+		build["nick_name"] = setting.NickName
+	}
+	if len(build) > 0 {
+		if err = userService.UpdateUserInfo(uid, build); err != nil {
+			return
+		}
+	}
+	build = map[string]interface{}{
+		"name":             setting.FirstName,
+		"intro":            setting.Intro,
+		"facebook":         setting.Facebook,
+		"twitter":          setting.Twitter,
+		"website":          setting.Website,
+		"email":            setting.Email,
+		"last_update_time": time.Now(),
+	}
+	if err = userService.UpdateUserExtend(uid, build); err != nil {
+		return
+	}
+	return nil
 }
 
 //关注

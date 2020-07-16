@@ -46,6 +46,9 @@ func Login(c *gin.Context) {
 	formToken = logic.GenLoginFormToken()
 	nextUrl := c.DefaultQuery("next", "/")
 	nextUrl, _ = url.QueryUnescape(nextUrl)
+	if account.UserId > 0 {
+		c.Redirect(http.StatusFound, nextUrl)
+	}
 	c.HTML(http.StatusOK, "login.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"cdnDomain":   configs.STATIC_CDN_DOMAIN,
@@ -102,7 +105,8 @@ func Logout(c *gin.Context) {
 
 //注册
 func Register(c *gin.Context) {
-	account, _ := getUser(c)
+	delUserCookie(c)
+	account := &services.AccountAuth{}
 	formToken = logic.GenLoginFormToken()
 	c.HTML(http.StatusOK, "register.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
@@ -147,12 +151,7 @@ func RegisterDo(c *gin.Context) {
 	}, logic.RegisterSuccess))
 }
 
-//我的图片
-func Media(c *gin.Context) {
-
-}
-
-//设置个人信息
+//设置个人信息 HTML
 func Settings(c *gin.Context) {
 	var (
 		account *services.AccountAuth
@@ -162,6 +161,7 @@ func Settings(c *gin.Context) {
 		query := url.QueryEscape("/accounts/settings/")
 		c.Redirect(http.StatusFound, "/accounts/login/?next="+query)
 	}
+	//
 	formToken = logic.GenLoginFormToken()
 	c.HTML(http.StatusOK, "settings.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
@@ -171,8 +171,13 @@ func Settings(c *gin.Context) {
 	})
 }
 
-//消息
-func Messages(c *gin.Context) {
+//设置个人信息
+func SettingsDo(c *gin.Context) {
+
+}
+
+//我的图片
+func Media(c *gin.Context) {
 
 }
 

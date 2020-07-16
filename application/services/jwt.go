@@ -53,6 +53,7 @@ func GetSignKey() string {
 
 //生成用户登录token
 func (j *JWT) GenUserToken(user models.User) (token string, err error) {
+	//var cstSh, _ = time.LoadLocation("Asia/Shanghai") //上海
 	claims := CustomClaims{
 		AccountAuth: AccountAuth{
 			UserId:   user.Id,
@@ -61,7 +62,8 @@ func (j *JWT) GenUserToken(user models.User) (token string, err error) {
 			//Password: user.Passwd,
 		},
 		StandardClaims: jwt.StandardClaims{
-			NotBefore: int64(time.Now().Unix() - 300), // 签名生效时间
+			//NotBefore: int64(time.Now().UTC().In(cstSh).Unix() - 100), // 签名生效时间
+			IssuedAt: time.Now().Unix(), //签发时间
 			//ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时
 			ExpiresAt: time.Now().Add(time.Hour * 1).Unix(),
 		},

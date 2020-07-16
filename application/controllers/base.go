@@ -9,10 +9,10 @@ package controllers
 import (
 	"pix/application/services"
 	"pix/configs"
-
-	"github.com/sirupsen/logrus"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 type response struct {
@@ -37,7 +37,12 @@ func getUser(c *gin.Context) (account *services.AccountAuth, err error) {
 	if token, err = c.Cookie(LOGIN_COOKIE); err != nil {
 		return
 	}
-	if customClaims, err = services.NewJWT().ParseToken(token); err != nil && err == services.TokenExpired {
+	if customClaims, err = services.NewJWT().ParseToken(token); err != nil {
+		logrus.Error("ParseToken error1:", err)
+		return
+	}
+	//快到期之前就延长生效期
+	if customClaims.ExpiresAt <= time.Now().Unix()-500 {
 		if token, err = services.NewJWT().RefreshToken(token); err != nil {
 			return
 		}
@@ -45,7 +50,7 @@ func getUser(c *gin.Context) (account *services.AccountAuth, err error) {
 		customClaims, err = services.NewJWT().ParseToken(token)
 	}
 	if err != nil {
-		logrus.Error("ParseToken error:", err)
+		logrus.Error("ParseToken error2:", err)
 		return
 	}
 	account = &services.AccountAuth{

@@ -8,10 +8,13 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"pix/application/models"
 	"strings"
 	"time"
 )
+
+type BuildMap map[string]interface{}
 
 type Account struct {
 	UserName string
@@ -112,6 +115,26 @@ func (a *Account) SettingUser(setting *SettingUser, uid int) (err error) {
 		return
 	}
 	return nil
+}
+
+//修改个人密码
+func (a *Account) ChangePassword(uid int, setPass UserChangePassword) (err error) {
+	if uid <= 0 {
+		return errors.New("用户为空")
+	}
+	if setPass.ConfPassword != setPass.NewPassword {
+		return errors.New("两次密码输入不一致！")
+	}
+	user := models.NewUser().GetPasswordByUid(uid)
+	fmt.Printf("user:%+v\n\n", user)
+	fmt.Printf("setPass:%+v\n\n", setPass)
+	if user.Passwd != setPass.OldPassword {
+		return errors.New("原密码输入错误！")
+	}
+	build := make(BuildMap)
+	build["passwd"] = setPass.NewPassword
+	_, err = models.NewUser().UpdateUserInfo(uid, build)
+	return
 }
 
 //关注

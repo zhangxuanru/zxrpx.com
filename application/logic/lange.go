@@ -12,6 +12,7 @@ const (
 	LoginError       = "登录失败,请稍后重试"
 	RegisterError    = "注册失败,请稍后重试"
 	SettingErr       = "有数据为空,资料修改失败"
+	ChangePassErr    = "密码数据有误,请重新输入"
 	SettingSuccess   = "修改成功"
 	SettingUpdateErr = "修改失败"
 	BeforLogin       = "请先登录"

@@ -36,5 +36,5 @@ func GetRandomString(length int) string {
 //生成加密密码
 func EncryptPassword(password string) string {
 	password = strings.TrimSpace(password)
-	return Md5(password)
+	return strings.ToUpper(Md5(password))
 }

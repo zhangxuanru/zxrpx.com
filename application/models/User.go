@@ -55,6 +55,12 @@ func (u *User) GetUserInfoByName(userName string) (user User) {
 	return
 }
 
+//获取用户密码
+func (u *User) GetPasswordByUid(uid int) (user User) {
+	GetDB().Where("px_uid = ?", uid).Select("passwd").Find(&user)
+	return
+}
+
 //插入用户
 func (u *User) Insert(user *User) (id int, err error) {
 	db := GetDB().Create(user)

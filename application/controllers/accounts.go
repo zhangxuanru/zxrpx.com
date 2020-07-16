@@ -207,6 +207,35 @@ func SettingsDo(c *gin.Context) {
 	c.JSON(http.StatusOK, ResponseSucc(form, logic.SettingSuccess))
 }
 
+//修改密码
+func ChangePassword(c *gin.Context) {
+	var (
+		account  *services.AccountAuth
+		settPass services.UserChangePassword
+		form     Form
+		err      error
+	)
+	if account, err = getUser(c); err != nil {
+		c.JSON(http.StatusOK, Response(NotLoginCode, form, logic.BeforLogin))
+		return
+	}
+	if err = c.ShouldBind(&settPass); err != nil {
+		logrus.Error("ChangePassword err:", err)
+		c.JSON(http.StatusOK, ResponseErr(form, logic.ChangePassErr))
+		return
+	}
+	settPass.NewPassword = logic.EncryptPassword(settPass.NewPassword)
+	settPass.OldPassword = logic.EncryptPassword(settPass.OldPassword)
+	settPass.ConfPassword = logic.EncryptPassword(settPass.ConfPassword)
+
+	if err = services.NewAccount().ChangePassword(account.UserId, settPass); err != nil {
+		c.JSON(http.StatusOK, ResponseErr(form, err.Error()))
+		return
+	}
+	delUserCookie(c)
+	c.JSON(http.StatusOK, ResponseSucc(form, logic.SettingSuccess))
+}
+
 //我的图片
 func Media(c *gin.Context) {
 

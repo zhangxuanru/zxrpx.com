@@ -36,13 +36,12 @@
         <h6></h6>
         <div>
             <style>input[type="password"] { width: 100%; }</style>
-            <form action="/accounts/change_password/" method="post" class="ajax_form pure-form" data-target="#cboxLoadedContent">
-                <input type="hidden" name="pass_token" value="####">
-                <p><label for="id_old_password">Old password</label> <input type="password" name="old_password" autofocus="" required="" id="id_old_password"></p>
-                <p><label for="id_new_password1">New password</label> <input type="password" name="new_password1" required="" id="id_new_password1"></p>
-                <p><label for="id_new_password2">New password confirmation</label> <input type="password" name="new_password2" required="" id="id_new_password2"></p>
+            <form action="/accounts/change_password/" method="post" class="ajax_form pure-form layui-form" data-target="#cboxLoadedContent" lay-filter="changePassForm">
+                <p><label for="id_old_password">Old password</label> <input lay-verify="required|password" type="password" name="old_password" autofocus="" required="" id="id_old_password"></p>
+                <p><label for="id_new_password1">New password</label> <input lay-verify="required|password" type="password" name="new_password" required="" id="id_new_password1"></p>
+                <p><label for="id_new_password2">New password confirmation</label> <input lay-verify="required|confirmPass" type="password" name="new_password2" required="" id="id_new_password2"></p>
                 <div style="margin:15px 0 5px">
-                    <input type="submit" class="pure-button button-green" value="提交">
+                    <input type="button" class="pure-button button-green" lay-submit lay-filter="changePassForm" value="提交">
                 </div>
             </form>
         </div>
@@ -182,7 +181,58 @@
                        return '个人简介格式不对';
                    }
             },
-        });
+            password: [
+                /^[\S]{6,12}$/
+                ,'密码必须6到12位，且不能出现空格'
+            ],
+            confirmPass:function(value) {
+                if ($('#id_new_password1').val() !== value)
+                     return '两次密码输入不一致！';
+              }
+            });
+
+        form.on('submit(changePassForm)',function (data) {
+            $.ajax({
+                url:'/accounts/change_password/',
+                method:'post',
+                data: data.field,
+                dataType:'JSON',
+                success:function (data) {
+                    if(data.code == errCode){
+                        layer.open({
+                            title: '修改失败'
+                            ,content: data.msg,
+                        });
+                        return false;
+                    }else if(data.code == noLogin){
+                        layer.open({
+                            title: '请先登录'
+                            ,content: "请先登录",
+                        });
+                        setTimeout(function () {
+                            window.location.href="/accounts/login";
+                        },2000)
+                    }else {
+                        layer.open({
+                            title: '修改成功'
+                            ,content: "修改成功",
+                        });
+                        setTimeout(function () {
+                            window.location.href="/accounts/login";
+                        },2000)
+                    }
+                },
+                error:function (data) {
+                    layer.open({
+                        title: '修改失败'
+                        ,content: data.msg,
+                    });
+                    return false;
+                }
+            });
+            return false;
+        })
+
         form.on('submit(settingForm)',function (data) {
             $.ajax({
                 url:'/accounts/settingsDo/',

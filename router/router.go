@@ -22,8 +22,9 @@ func (h *HttpServer) settingRouter() {
 	h.engine.GET("/accounts/register", controllers.Register)      //注册
 	h.engine.POST("/accounts/registerDo", controllers.RegisterDo) //注册
 
-	h.engine.GET("/accounts/settings/", controllers.Settings)      //设置个人资料HTML
-	h.engine.POST("/accounts/settingsDo/", controllers.SettingsDo) //设置个人资料
+	h.engine.GET("/accounts/settings/", controllers.Settings)               //设置个人资料HTML
+	h.engine.POST("/accounts/settingsDo/", controllers.SettingsDo)          //设置个人资料
+	h.engine.POST("/accounts/change_password/", controllers.ChangePassword) //修改密码
 
 	h.engine.GET("/accounts/following/", controllers.Following)        //关注列表
 	h.engine.GET("/accounts/collect", controllers.Collect)             //收藏

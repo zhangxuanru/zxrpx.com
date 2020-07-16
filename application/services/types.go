@@ -45,3 +45,10 @@ type SettingUser struct {
 	Website   string `form:"website" `
 	Token     string `form:"token" binding:"required" json:"token"`
 }
+
+//修改密码
+type UserChangePassword struct {
+	OldPassword  string `form:"old_password" binding:"required"`
+	NewPassword  string `form:"new_password" binding:"required"`
+	ConfPassword string `form:"new_password2" binding:"required"`
+}

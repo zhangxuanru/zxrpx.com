@@ -6,9 +6,13 @@
 */
 package controllers
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 //我的资料
 func Profile(c *gin.Context) {
-
+	c.String(http.StatusOK, "hello world")
 }

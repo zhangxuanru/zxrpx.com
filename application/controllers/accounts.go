@@ -236,9 +236,13 @@ func ChangePassword(c *gin.Context) {
 	c.JSON(http.StatusOK, ResponseSucc(form, logic.SettingSuccess))
 }
 
-//我的图片
-func Media(c *gin.Context) {
-
+//关注列表
+func Following(c *gin.Context) {
+	account, _ := getUser(c)
+	c.HTML(http.StatusOK, "following.html", gin.H{
+		"frontDomain": configs.STATIC_DOMAIN,
+		"account":     account,
+	})
 }
 
 //收藏
@@ -248,11 +252,6 @@ func Collect(c *gin.Context) {
 
 //收藏列表
 func Favorites(c *gin.Context) {
-
-}
-
-//上传
-func Upload(c *gin.Context) {
 
 }
 
@@ -266,11 +265,6 @@ func Follow(c *gin.Context) {
 	services.NewAccount().Follow(0, authorId)
 }
 
-//关注列表
-func Following(c *gin.Context) {
-
-}
-
 //评论
 func Comment(c *gin.Context) {
 
@@ -278,5 +272,15 @@ func Comment(c *gin.Context) {
 
 //喜欢
 func Like(c *gin.Context) {
+
+}
+
+//我的图片
+func Media(c *gin.Context) {
+
+}
+
+//上传
+func Upload(c *gin.Context) {
 
 }

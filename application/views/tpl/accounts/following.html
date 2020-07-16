@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="zh" prefix="og: http://ogp.me/ns#">
+<head><meta charset="utf-8">
+    {{template "account_head" .}}
+    <title>关注</title>
+    <style>#header_inner { max-width: 1410px; }</style>
+</head>
+
+<body class="ua-authenticated is-authenticated">
+
+<div id="wrapper">
+    {{template "header" .}}
+
+    <div id="content" class="clearfix">
+        <div style="margin:30px auto">
+            {{template "account_tabs" .}}
+         </div>
+        <script>var el = document.querySelector('#account_tabs a[href="'+location.pathname.replace('outbox', 'inbox')+'"]'); if (el) el.className += ' selected';</script>
+        <div style="max-width:1408px;margin:auto;padding:0 20px">
+        </div>
+        <div style="max-width:1450px;margin:auto;padding:20px 0 0">
+            <div class="flex_grid user_list">
+                <div class="item" data-w="250" data-h="250">
+                    <a href="/zh/users/InspiredImages-57296/">
+                        <img width="250" src="https://cdn.pixabay.com/user/2019/11/19/18-56-46-517_250x250.jpg" alt="InspiredImages">
+                        <div class="top hide-xs hide-sm">
+                            <b title="图片"><i class="icon icon_images"></i> 1060</b>
+                            <b title="下载量"><i class="icon icon_download"></i> 2705506</b>
+                            <b title="喜欢"><i class="icon icon_like"></i> 31144</b>
+                            <b title="收藏"><i class="icon icon_favorite"></i> 32771</b>
+                        </div>
+                        <div class="bottom">InspiredImages<div>
+                                0 新图片
+                            </div></div>
+                    </a>
+                </div>
+                <div class="item" data-w="250" data-h="250">
+                    <a href="/zh/users/SatyaPrem-6578610/">
+                        <img width="250" src="https://cdn.pixabay.com/user/2019/05/12/13-20-54-654_250x250.jpg" alt="SatyaPrem">
+                        <div class="top hide-xs hide-sm">
+                            <b title="图片"><i class="icon icon_images"></i> 450</b>
+                            <b title="下载量"><i class="icon icon_download"></i> 139131</b>
+                            <b title="喜欢"><i class="icon icon_like"></i> 1534</b>
+                            <b title="收藏"><i class="icon icon_favorite"></i> 1358</b>
+                        </div>
+                        <div class="bottom">SatyaPrem<div>
+                                0 新图片
+                            </div></div>
+                    </a>
+                </div>
+                <div class="item" data-w="250" data-h="250">
+                    <a href="/zh/users/ykaiavu-7068951/">
+                        <img width="250" src="https://cdn.pixabay.com/user/2020/07/05/19-36-31-859_250x250.jpg" alt="ykaiavu">
+                        <div class="top hide-xs hide-sm">
+                            <b title="图片"><i class="icon icon_images"></i> 308</b>
+                            <b title="下载量"><i class="icon icon_download"></i> 263137</b>
+                            <b title="喜欢"><i class="icon icon_like"></i> 7393</b>
+                            <b title="收藏"><i class="icon icon_favorite"></i> 3323</b>
+                        </div>
+                        <div class="bottom">ykaiavu<div>
+                                23 新图片
+                            </div></div>
+                    </a>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:50px"></div>
+        </div>
+    </div>
+</div>
+<div id="fb-root"></div><a id="toTop">▲</a>
+<script src="{{.frontDomain}}/static/js/jquery-1.12.4.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="{{.frontDomain}}/static/js/jquery.js"><\/script>');
+    var LANG = '', LANG_URL_PREFIX = '', LANGS = [["cs","\u010ce\u0161tina"],["da","Dansk"],["de","Deutsch"],["en","English"],["es","Espa\u00f1ol"],["fr","Fran\u00e7ais"],["id","Indonesia"],["it","Italiano"],["hu","Magyar"],["nl","Nederlands"],["no","Norsk"],["pl","Polski"],["pt","Portugu\u00eas"],["ro","Rom\u00e2n\u0103"],["sk","Sloven\u010dina"],["fi","Suomi"],["sv","Svenska"],["tr","T\u00fcrk\u00e7e"],["vi","Vi\u1ec7t"],["th","\u0e44\u0e17\u0e22"],["bg","\u0411\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438"],["ru","\u0420\u0443\u0441\u0441\u043a\u0438\u0439"],["el","\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ae"],["ja","\u65e5\u672c\u8a9e"],["ko","\ud55c\uad6d\uc5b4"],["zh","\u7b80\u4f53\u4e2d\u6587"]], I18N = { 'delete': '确认删除？', 'safesearch': '安全搜索', 'adult_content': '成人内容' };
+</script>
+<script src="{{.frontDomain}}/static/js/base.9d3480b1.min.js"></script>
+<script>$('.flex_grid').flexImages({ rowHeight: 250 });</script>
+</body>
+</html>

@@ -34,13 +34,12 @@
                         <li>
                             <a href="/users/account/">我的资料</a>
                         </li>
-                        <li>
-                            <a href="/accounts/media/">我的图片</a>
+                        <li style="display: none">
+                            <a href="/accounts/media/" >我的图片</a>
                         </li>
-                        <li class="hide-xs"><a href="/accounts/media/upload/">上传</a></li>
+                        <li class="hide-xs" style="display: none"><a href="/accounts/media/upload/">上传</a></li>
                         <li><a href="/accounts/favorites/">收藏</a></li>
                         <li><a href="/accounts/following/">关注</a></li>
-                        <li><a href="/accounts/messages/inbox/">消息</a></li>
                         <li><a href="/accounts/settings/">设置</a></li>
                         <li class="pure-menu-separator"></li>
                         <li><a href="/accounts/logout/">注销</a></li>
@@ -51,7 +50,7 @@
                 <li class="hide-xs"><a class="ua-login-main-nav" href="/accounts/login">登录</a></li>
                 <li class="hide-xs"><a style="border-left:1px solid #eee" href="/accounts/register">Join</a></li>
             {{end}}
-                <li class="hide-xs">
+                <li class="hide-xs" style="display: none">
                     <a href="/accounts/media/upload/" class="pure-button button-green">
                         <i class="icon icon_upload"></i> 上传</a>
                 </li>

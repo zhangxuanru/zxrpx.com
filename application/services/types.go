@@ -52,3 +52,20 @@ type UserChangePassword struct {
 	NewPassword  string `form:"new_password" binding:"required"`
 	ConfPassword string `form:"new_password2" binding:"required"`
 }
+
+//关注列表
+type FollowList struct {
+	list []*Follow
+}
+
+type Follow struct {
+	UserName      string
+	HeadPhotoUrl  string
+	HeadPhotoFile string
+	PicNum        int
+	ViewNum       int
+	DownloadsNum  int
+	LikeNum       int
+	CommentNum    int
+	FollowerNum   int
+}

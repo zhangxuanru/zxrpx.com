@@ -39,3 +39,9 @@ func (p *PictureAttr) GetPxIdByFile(file string) (attr PictureAttr) {
 	GetDB().Where("file_name =?", file).Select("pic_id").First(&attr)
 	return
 }
+
+//根据图片ID 和宽度查询图片地址信息
+func (p *PictureAttr) GetAttrByPidWidth(picId int, width int) (attr PictureAttr) {
+	GetDB().Where("pic_id =? AND width=?", picId, width).Select("image_url,file_name").First(&attr)
+	return
+}

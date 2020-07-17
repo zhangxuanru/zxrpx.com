@@ -6,7 +6,10 @@
 */
 package services
 
-import "pix/application/models"
+import (
+	"fmt"
+	"pix/application/models"
+)
 
 //组合图片属性和图片tag 数据
 func (p *PicService) combinePicAttrTagData(picList []models.Picture) (result []*PhotoResult) {
@@ -82,4 +85,22 @@ func (p *PicService) incrByViewNum(picId, num int) (affected int64, err error) {
 	}
 	affected, err = models.NewPicture().IncrByViewNum(picId, num)
 	return
+}
+
+//拿用户的第一张图片
+func (p *PicService) GetUserFirstPhotoUrl(uid int) (ImageURL string, FileName string) {
+	var attr models.PictureAttr
+	query := &models.QueryParams{
+		Offset:  0,
+		Limit:   1,
+		Fields:  "px_img_id",
+		Where:   fmt.Sprintf("px_uid=%d", uid),
+		IsCount: false,
+	}
+	picList, _ := models.NewPicture().GetPicListByParams(query)
+	if len(picList) > 0 {
+		picData := picList[0]
+		attr = models.NewPictureAttr().GetAttrByPidWidth(picData.PxImgId, 486)
+	}
+	return attr.ImageURL, attr.FileName
 }

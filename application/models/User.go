@@ -42,6 +42,16 @@ func (u *User) GetUserByUidList(uidList []int) (list []User) {
 	return
 }
 
+//根据PX用户ID列表查询用户信息
+func (u *User) GetUserByPxUidList(uidList []int) (list []User) {
+	if len(uidList) == 0 {
+		return
+	}
+	fields := "id,user_name,px_uid,nick_name,head_portrait,file_name,is_qiniu"
+	GetDB().Where("px_uid IN (?) ", uidList).Select(fields).Find(&list)
+	return
+}
+
 //根据用户名和密码查询用户信息
 func (u *User) GetUserInfoByNameAndPass(userName string, password string) (user User) {
 	fields := "id,px_uid,nick_name,head_portrait,user_name,passwd"

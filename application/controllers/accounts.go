@@ -236,23 +236,23 @@ func ChangePassword(c *gin.Context) {
 	c.JSON(http.StatusOK, ResponseSucc(form, logic.SettingSuccess))
 }
 
-//关注列表
+//关注列表 //todo 明天继续
 func Following(c *gin.Context) {
-	account, _ := getUser(c)
+	var (
+		account *services.AccountAuth
+		err     error
+	)
+	if account, err = getUser(c); err != nil {
+		query := url.QueryEscape("/accounts/following/")
+		c.Redirect(http.StatusFound, "/accounts/login/?next="+query)
+	}
+	list := services.NewAccount().Following(account.UserPxId)
+	logrus.Printf("%+v\n\n", list)
+
 	c.HTML(http.StatusOK, "following.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"account":     account,
 	})
-}
-
-//收藏
-func Collect(c *gin.Context) {
-
-}
-
-//收藏列表
-func Favorites(c *gin.Context) {
-
 }
 
 //关注
@@ -263,6 +263,16 @@ func Follow(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/404")
 	}
 	services.NewAccount().Follow(0, authorId)
+}
+
+//收藏
+func Collect(c *gin.Context) {
+
+}
+
+//收藏列表
+func Favorites(c *gin.Context) {
+
 }
 
 //评论

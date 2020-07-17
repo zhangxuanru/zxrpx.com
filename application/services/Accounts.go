@@ -137,6 +137,39 @@ func (a *Account) ChangePassword(uid int, setPass UserChangePassword) (err error
 	return
 }
 
+//关注列表
+func (a *Account) Following(uid int) (data FollowList) {
+	list := models.NewUserFollow().GetFollowListByUid(uid)
+	uidList := make([]int, len(list))
+	for k, v := range list {
+		uidList[k] = v.AuthorId
+	}
+	userList := models.NewUser().GetUserByPxUidList(uidList)
+	userStatMap := models.NewUserStat().GetUserStatByPxUidList(uidList)
+
+	data.list = make([]*Follow, len(userList))
+	for k, v := range userList {
+		follow := &Follow{
+			UserName:      v.UserName,
+			HeadPhotoUrl:  v.HeadPortrait,
+			HeadPhotoFile: v.FileName,
+		}
+		if v.HeadPortrait == "" {
+			follow.HeadPhotoUrl, follow.HeadPhotoFile = NewPicService().GetUserFirstPhotoUrl(v.PxUid)
+		}
+		if userStat, ok := userStatMap[v.PxUid]; ok {
+			follow.DownloadsNum = userStat.DownloadsNum
+			follow.ViewNum = userStat.ViewNum
+			follow.FollowerNum = userStat.FollowerNum
+			follow.LikeNum = userStat.LikeNum
+			follow.CommentNum = userStat.CommentNum
+			follow.PicNum = userStat.PicNum
+		}
+		data.list[k] = follow
+	}
+	return
+}
+
 //关注
 func (a *Account) Follow(userId, authorId int) {
 

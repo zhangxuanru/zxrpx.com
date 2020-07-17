@@ -62,6 +62,22 @@ func (u *UserStat) GetUserStatByUidList(uidList []int) (userMap map[int]UserStat
 	return
 }
 
+func (u *UserStat) GetUserStatByPxUidList(uidList []int) (userMap map[int]UserStat) {
+	if len(uidList) == 0 {
+		userMap = make(map[int]UserStat)
+		return
+	}
+	var list []UserStat
+	fields := "id,uid,px_uid,pic_num,view_num,downloads_num,like_num,comment_num,follower_num"
+	GetDB().Where("px_uid IN (?) ", uidList).Select(fields).Find(&list)
+	userMap = make(map[int]UserStat, len(list))
+	for _, user := range list {
+		uid := int(user.PxUid)
+		userMap[uid] = user
+	}
+	return
+}
+
 //更新用户统计下载量
 func (u *UserStat) IncrByUserDownNum(pxUid, num int) (affected int64, err error) {
 	buildMap := map[string]interface{}{

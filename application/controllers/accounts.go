@@ -8,6 +8,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"pix/application/logic"
@@ -249,9 +250,14 @@ func Following(c *gin.Context) {
 	list := services.NewAccount().Following(account.UserPxId)
 	logrus.Printf("%+v\n\n", list)
 
+	for _,v:= range list.List{
+           fmt.Printf("v:%+v\n\n",v)
+	}
+
 	c.HTML(http.StatusOK, "following.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"account":     account,
+		"list":list.List,
 	})
 }
 
@@ -272,7 +278,16 @@ func Collect(c *gin.Context) {
 
 //收藏列表
 func Favorites(c *gin.Context) {
-
+	var (
+		account *services.AccountAuth
+		err     error
+	)
+	if account, err = getUser(c); err != nil {
+		query := url.QueryEscape("/accounts/following/")
+		c.Redirect(http.StatusFound, "/accounts/login/?next="+query)
+	}
+	list := services.NewAccount().Favorites(account.UserPxId)
+	logrus.Infof("list:%+v\n\n",list)
 }
 
 //评论

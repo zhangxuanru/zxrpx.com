@@ -19,48 +19,26 @@
         </div>
         <div style="max-width:1450px;margin:auto;padding:20px 0 0">
             <div class="flex_grid user_list">
+                {{range $k,$v:=.list}}
                 <div class="item" data-w="250" data-h="250">
-                    <a href="/zh/users/InspiredImages-57296/">
-                        <img width="250" src="https://cdn.pixabay.com/user/2019/11/19/18-56-46-517_250x250.jpg" alt="InspiredImages">
+                    <a href="/users/{{if ne $v.NickName ""}}{{$v.NickName}}{{else}} {{$v.UserName}} {{end}}-{{$v.UserId}}/">
+                        <img width="250" src="{{if ne $v.HeadPhotoFile ""}} {{ViewHeadPortrait $v.HeadPhotoFile 250 250}} {{else}} {{$v.HeadPhotoUrl}}{{end}}" alt="InspiredImages">
                         <div class="top hide-xs hide-sm">
-                            <b title="图片"><i class="icon icon_images"></i> 1060</b>
-                            <b title="下载量"><i class="icon icon_download"></i> 2705506</b>
-                            <b title="喜欢"><i class="icon icon_like"></i> 31144</b>
-                            <b title="收藏"><i class="icon icon_favorite"></i> 32771</b>
+                            <b title="图片"><i class="icon icon_images"></i> {{$v.PicNum}}</b>
+                            <b title="下载量"><i class="icon icon_download"></i> {{$v.DownloadsNum}} </b>
+                            <b title="喜欢"><i class="icon icon_like"></i> {{$v.LikeNum}} </b>
+                            <b title="收藏"><i class="icon icon_favorite"></i> {{$v.FollowerNum}}</b>
                         </div>
-                        <div class="bottom">InspiredImages<div>
+                        <div class="bottom">{{if ne $v.NickName ""}}
+                             {{$v.NickName}}
+                            {{else}}
+                                {{$v.UserName}}
+                            {{end}}<div>
                                 0 新图片
                             </div></div>
                     </a>
                 </div>
-                <div class="item" data-w="250" data-h="250">
-                    <a href="/zh/users/SatyaPrem-6578610/">
-                        <img width="250" src="https://cdn.pixabay.com/user/2019/05/12/13-20-54-654_250x250.jpg" alt="SatyaPrem">
-                        <div class="top hide-xs hide-sm">
-                            <b title="图片"><i class="icon icon_images"></i> 450</b>
-                            <b title="下载量"><i class="icon icon_download"></i> 139131</b>
-                            <b title="喜欢"><i class="icon icon_like"></i> 1534</b>
-                            <b title="收藏"><i class="icon icon_favorite"></i> 1358</b>
-                        </div>
-                        <div class="bottom">SatyaPrem<div>
-                                0 新图片
-                            </div></div>
-                    </a>
-                </div>
-                <div class="item" data-w="250" data-h="250">
-                    <a href="/zh/users/ykaiavu-7068951/">
-                        <img width="250" src="https://cdn.pixabay.com/user/2020/07/05/19-36-31-859_250x250.jpg" alt="ykaiavu">
-                        <div class="top hide-xs hide-sm">
-                            <b title="图片"><i class="icon icon_images"></i> 308</b>
-                            <b title="下载量"><i class="icon icon_download"></i> 263137</b>
-                            <b title="喜欢"><i class="icon icon_like"></i> 7393</b>
-                            <b title="收藏"><i class="icon icon_favorite"></i> 3323</b>
-                        </div>
-                        <div class="bottom">ykaiavu<div>
-                                23 新图片
-                            </div></div>
-                    </a>
-                </div>
+                {{end}}
             </div>
             <div style="text-align:center;margin-top:50px"></div>
         </div>

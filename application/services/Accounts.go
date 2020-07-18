@@ -147,10 +147,12 @@ func (a *Account) Following(uid int) (data FollowList) {
 	userList := models.NewUser().GetUserByPxUidList(uidList)
 	userStatMap := models.NewUserStat().GetUserStatByPxUidList(uidList)
 
-	data.list = make([]*Follow, len(userList))
+	data.List = make([]*Follow, len(userList))
 	for k, v := range userList {
 		follow := &Follow{
+			UserId:v.PxUid,
 			UserName:      v.UserName,
+			NickName:v.NickName,
 			HeadPhotoUrl:  v.HeadPortrait,
 			HeadPhotoFile: v.FileName,
 		}
@@ -165,10 +167,17 @@ func (a *Account) Following(uid int) (data FollowList) {
 			follow.CommentNum = userStat.CommentNum
 			follow.PicNum = userStat.PicNum
 		}
-		data.list[k] = follow
+		data.List[k] = follow
 	}
 	return
 }
+
+
+//收藏列表
+func (a *Account) Favorites(uid int) (data []int) {
+return
+}
+
 
 //关注
 func (a *Account) Follow(userId, authorId int) {

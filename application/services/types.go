@@ -55,11 +55,13 @@ type UserChangePassword struct {
 
 //关注列表
 type FollowList struct {
-	list []*Follow
+	List []*Follow
 }
 
 type Follow struct {
+	UserId int
 	UserName      string
+	NickName string
 	HeadPhotoUrl  string
 	HeadPhotoFile string
 	PicNum        int

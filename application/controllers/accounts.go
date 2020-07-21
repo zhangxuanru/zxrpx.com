@@ -305,7 +305,7 @@ func Collect(c *gin.Context) {
 	c.String(http.StatusOK, fmt.Sprintf("script:$('.favorite_button').addClass('pure-button-disabled').find('b').html(%d);", num+1))
 }
 
-//收藏列表
+//收藏列表 //todo 明天继续
 func Favorites(c *gin.Context) {
 	var (
 		account *services.AccountAuth
@@ -319,6 +319,7 @@ func Favorites(c *gin.Context) {
 	for _, v := range list {
 		fmt.Printf("v:%+v\n\n", v)
 	}
+
 	logrus.Infof("list:%+v\n\n", list)
 
 	c.HTML(http.StatusOK, "favorites.html", gin.H{

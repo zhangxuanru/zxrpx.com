@@ -68,3 +68,11 @@ func ViewPicByHeight(fileName string, height int) string {
 	url := fmt.Sprintf("%s%s%s%d%s", configs.STATIC_CDN_DOMAIN, fileName, "imageView2/0/h/", height, "/q/85|imageslim")
 	return url
 }
+
+//如果同时有图片源地址和文件名，判断显示是源地址还是CDN文件地址
+func ViewPicAddr(srcUrl, fileName string) string {
+	if Env == EnvTest && srcUrl != "" {
+		return srcUrl
+	}
+	return configs.STATIC_CDN_DOMAIN + fileName
+}

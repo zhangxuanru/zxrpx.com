@@ -32,23 +32,15 @@
         <div style="margin:30px auto">
             {{template "account_tabs" .}}
          </div>
-        <script>var el = document.querySelector('#account_tabs a[href="'+location.pathname.replace('outbox', 'inbox')+'"]'); if (el) el.className += ' selected';</script>
-        <div style="max-width:1408px;margin:auto;padding:0 20px">
-            <form action="." method="get" class="pure-form" style="display:inline-block">
-                <select name="type" style="font-size:14px;padding:6px;margin:0 10px 10px 0" onchange="$(this).closest('form').submit();">
-                    <option value="photo" selected>图片</option>
-                    <option value="video" disabled>視頻</option>
-                </select>
-                <input type="hidden" name="qs" value="">
-            </form>
-            <span style="display:inline-block;margin-left:15px" class="hide-xs hide-sm">
-<form class="tiny_search active" action="?" method="get"><label for="id_qs"></label><input id="id_qs" class="dirty" type="text" onkeyup="$(this).addClass('dirty')" name="qs" value="" placeholder='搜索'><input type="submit"><input type="hidden" name="type" value="photo"><input type="hidden" name="folder" value=""></form></span>
-        </div>
+
+
         <div style="margin:10px auto;max-width:1448px">
             <div class="flex_grid clearfix" style="overflow:visible">
-                <div id="favorite_23582241" class="item" data-w="640" data-h="427" style="overflow:visible">
-                    <a href="/zh/photos/sky-dawn-landscape-beach-sun-5407339/">
-                        <img src="https://cdn.pixabay.com/photo/2020/07/15/11/10/sky-5407339__340.jpg">
+
+             {{range $k,$item:=.list}}
+                <div id="favorite_{{$item.ImgId}}" class="item" data-w="640" data-h="427" style="overflow:visible">
+                    <a href="/photos/{{$item.ImgId}}">
+                        <img src="{{ViewPicAddr $item.ImgUrl $item.ImgFileName}}">
                     </a>
                     <a class="btn folder dd_box">&nbsp;</a>
                     <div style="white-space:nowrap">
@@ -60,6 +52,7 @@
                     </div>
                     <a class="btn delete" data-pk="23582241" data-obj_pk="5407339">×</a>
                 </div>
+             {{end}}
                 <div id="favorite_23496794" class="item" data-w="640" data-h="426" style="overflow:visible">
                     <a href="/zh/photos/pencils-crayons-colourful-rainbow-452238/">
                         <img src="https://cdn.pixabay.com/photo/2014/09/19/12/30/pencils-452238__340.jpg">
@@ -107,6 +100,7 @@
         <div style="text-align:center;margin-top:50px"></div>
     </div>
 </div>
+
 <div id="fb-root"></div><a id="toTop">▲</a>
 <script src="{{.frontDomain}}/static/js/jquery-1.12.4.min.js"></script>
 <script>
@@ -129,3 +123,4 @@
 </script>
 </body>
 </html>
+

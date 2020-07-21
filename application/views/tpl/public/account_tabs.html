@@ -4,9 +4,12 @@
         <a style="float:right" href="/users/{{ .account.UserName}}-{{ .account.UserId}}/">我的资料</a>
         <a href="/accounts/media/" style="display: none">我的图片</a>
         <a href="/accounts/upload/" style="display: none">上传</a>
-        <a href="/accounts/favorites/">收藏</a>
+        <a href="/accounts/favorites">收藏</a>
         <a class="hide-lg" href="/accounts/following/">关注</a>
         <a href="/accounts/settings/">设置</a>
     </div>
 </div>
+<script>
+    var el = document.querySelector('#account_tabs a[href="'+location.pathname.replace('outbox', 'inbox')+'"]'); if (el) el.className += ' selected';
+</script>
 {{end}}

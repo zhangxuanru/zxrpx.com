@@ -56,6 +56,9 @@ func ViewImageAddr(attrList []models.PictureAttr, height int) string {
 
 //显示头像
 func ViewHeadPortrait(fileName string, width, height int) string {
+	if fileName == "" || len(fileName) < 3 {
+		fileName = "timg.jpg"
+	}
 	headImgUrl := fmt.Sprintf("%s%s%s%d%s%d%s", configs.STATIC_CDN_DOMAIN, fileName, "?imageView2/1/w/", width, "/h/", height, "/q/80|imageslim")
 	return headImgUrl
 }

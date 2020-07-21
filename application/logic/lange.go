@@ -16,4 +16,6 @@ const (
 	SettingSuccess   = "修改成功"
 	SettingUpdateErr = "修改失败"
 	BeforLogin       = "请先登录"
+	IllegalRequest   = "非法请求"
+	FocusSuccess     = "关注成功"
 )

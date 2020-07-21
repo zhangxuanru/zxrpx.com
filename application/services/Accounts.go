@@ -150,9 +150,9 @@ func (a *Account) Following(uid int) (data FollowList) {
 	data.List = make([]*Follow, len(userList))
 	for k, v := range userList {
 		follow := &Follow{
-			UserId:v.PxUid,
+			UserId:        v.PxUid,
 			UserName:      v.UserName,
-			NickName:v.NickName,
+			NickName:      v.NickName,
 			HeadPhotoUrl:  v.HeadPortrait,
 			HeadPhotoFile: v.FileName,
 		}
@@ -172,14 +172,56 @@ func (a *Account) Following(uid int) (data FollowList) {
 	return
 }
 
-
-//收藏列表
-func (a *Account) Favorites(uid int) (data []int) {
-return
+//添加关注
+func (a *Account) Follow(userId, authorId int) (status bool, err error) {
+	if userId == 0 || authorId == 0 {
+		return false, errors.New("用户数据为空")
+	}
+	if id, err := models.NewUserFollow().AddFollow(userId, authorId); err != nil || id == 0 {
+		return false, err
+	}
+	return true, nil
 }
 
+//添加收藏
+func (a *Account) Collect(userId, imgId int) (status bool, err error) {
+	if userId == 0 || imgId == 0 {
+		return false, errors.New("数据为空")
+	}
+	if id, err := models.NewUserCollect().AddCollect(userId, imgId); id == 0 || err != nil {
+		return false, err
+	}
+	if _, err = models.NewPicture().EditByFavoritesNum(imgId, 1); err != nil {
+		return false, err
+	}
+	return true, nil
+}
 
-//关注
-func (a *Account) Follow(userId, authorId int) {
-
+//收藏列表
+func (a *Account) Favorites(uid int) (list []*Collect) {
+	var data CollectList
+	collectList := models.NewUserCollect().GetCollectListByUid(uid)
+	imgIdList := make([]int, len(collectList))
+	for k, item := range collectList {
+		imgIdList[k] = item.PxImgId
+	}
+	data.List = make([]*Collect, len(imgIdList))
+	imgAttr := NewPicService().GetPicAttrListByIds(imgIdList)
+	for k, imgId := range imgIdList {
+		if imgData, ok := imgAttr[imgId]; !ok {
+			continue
+		} else {
+			for _, item := range imgData {
+				if item.Height == 340 {
+					favorite := &Collect{
+						ImgId:       imgId,
+						ImgUrl:      item.ImageURL,
+						ImgFileName: item.FileName,
+					}
+					data.List[k] = favorite
+				}
+			}
+		}
+	}
+	return data.List
 }

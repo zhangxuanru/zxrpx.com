@@ -81,12 +81,13 @@
                             <input type="hidden" name="business" value="menzinger13&#64;aol&#46;com">
                             <input type="submit" id="donate_button" class="ua-donation-button">
                         </form>
+
                          <span id="follow_button" class="ua-engagement-follow pure-button button-sm ajax" data-href="/accounts/follow/{{.photo.User.PxUid}}/"><i class="check">✓</i> 关注</span>
                     </div>
                 </div>
                 <div class="like_buttons">
                     <span data-href="/images/like/{{.photo.PxImgId}}/?button" class="ua-engagement-like like_button pure-button pure-button-primary button-sm ajax" title="喜欢"><i class="icon icon_like_filled"></i><b>{{.photo.LikeNum}}</b></span>
-                    <span data-href="/accounts/favorite/photo/{{.photo.PxImgId}}/?button" class="ua-engagement-favorite favorite_button pure-button pure-button-primary button-sm ajax" title="收藏"><i class="icon icon_favorite_filled"></i><b>{{.photo.FavoritesNum}}</b></span>
+                    <span data-href="/accounts/collect/{{.photo.PxImgId}}/{{.photo.FavoritesNum}}" class="ua-engagement-favorite favorite_button pure-button pure-button-primary button-sm ajax" title="收藏"><i class="icon icon_favorite_filled"></i><b>{{.photo.FavoritesNum}}</b></span>
                  </div>
                  <div class="download_menu" data-type="images">
                     <span class="pure-button button-green ua-download-open-menu" style="display:block;max-width:310px;margin:10px 0 0">
@@ -167,9 +168,6 @@
                         {{end}}
                     </div>
 
-                    <script>
-                        if (window.jQuery) $('.comment .text').each(function(){ $(this).html(linkify($(this).html())); });
-                    </script>
 
                     <div style="margin:40px 0">
                         <a target="_blank" href="https://www.canva.cn/?utm_source=Pixabay&utm_term=PhotoPageBanner&utm_campaign=15Feb2019">
@@ -192,6 +190,12 @@
     window.jQuery || document.write('<script src="{{.frontDomain}}/static/js/jquery.js"><\/script>');
     var LANG = '', LANG_URL_PREFIX = '', LANGS = [], I18N = { 'delete': '确认删除？', 'safesearch': '安全搜索', 'adult_content': '成人内容' };
 </script>
+
+
+ <script>
+     if (window.jQuery) $('.comment .text').each(function(){ $(this).html(linkify($(this).html())); });
+ </script>
+
 <script src="{{.frontDomain}}/static/js/base.f3b82b8b.min.js"></script>
 
 <script>

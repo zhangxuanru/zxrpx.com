@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh" prefix="og: http://ogp.me/ns#">
+<head><meta charset="utf-8">
+    {{template "account_head" .}}
+    <title>收藏</title>
+    <style>
+        #header_inner { max-width: 1410px; }
+
+        .btn {
+            display: block; position: absolute; right: 5px; top: 5px; border-radius: 2px;
+            width: 32px; line-height: 30px; text-align: center; font-size: 22px;
+            color: #fff; opacity: 0; text-shadow: 0 0 2px rgba(0,0,0,.5); background: rgba(0,0,0,.5); transition: .3s;
+        }
+        .item:hover .btn { opacity: 1; }
+        .btn:hover { background: rgba(0,0,0,.8); }
+        .btn.folder {
+            right: 39px; height: 30px;
+            background-image: url({{.frontDomain}}/static/images/sprites.png); background-image: url({{.frontDomain}}/static/images/sprites.svg), none;
+            background-position: -190px -341px;
+        }
+        .edit_icon {
+            display: inline-block; position: relative; top: -1px; width: 11px; height: 11px;
+            background: url({{.frontDomain}}/static/images/sprites.png); background: url({{.frontDomain}}/static/images/sprites.svg), none;
+            background-position: -150px -50px;
+        }
+    </style>
+</head>
+<body class="ua-authenticated is-authenticated">
+
+<div id="wrapper">
+    {{template "header" .}}
+    <div id="content" class="clearfix">
+        <div style="margin:30px auto">
+            {{template "account_tabs" .}}
+         </div>
+        <script>var el = document.querySelector('#account_tabs a[href="'+location.pathname.replace('outbox', 'inbox')+'"]'); if (el) el.className += ' selected';</script>
+        <div style="max-width:1408px;margin:auto;padding:0 20px">
+            <form action="." method="get" class="pure-form" style="display:inline-block">
+                <select name="type" style="font-size:14px;padding:6px;margin:0 10px 10px 0" onchange="$(this).closest('form').submit();">
+                    <option value="photo" selected>图片</option>
+                    <option value="video" disabled>視頻</option>
+                </select>
+                <input type="hidden" name="qs" value="">
+            </form>
+            <span style="display:inline-block;margin-left:15px" class="hide-xs hide-sm">
+<form class="tiny_search active" action="?" method="get"><label for="id_qs"></label><input id="id_qs" class="dirty" type="text" onkeyup="$(this).addClass('dirty')" name="qs" value="" placeholder='搜索'><input type="submit"><input type="hidden" name="type" value="photo"><input type="hidden" name="folder" value=""></form></span>
+        </div>
+        <div style="margin:10px auto;max-width:1448px">
+            <div class="flex_grid clearfix" style="overflow:visible">
+                <div id="favorite_23582241" class="item" data-w="640" data-h="427" style="overflow:visible">
+                    <a href="/zh/photos/sky-dawn-landscape-beach-sun-5407339/">
+                        <img src="https://cdn.pixabay.com/photo/2020/07/15/11/10/sky-5407339__340.jpg">
+                    </a>
+                    <a class="btn folder dd_box">&nbsp;</a>
+                    <div style="white-space:nowrap">
+                        <p>移动</p>
+                        <form action="folder/move/23582241/" method="post" class="pure-form ajax_form">
+                            <input type="text" name="name" placeholder='新建文件夹' maxlength="40">
+                            <input type="submit" style="display:none">
+                        </form>
+                    </div>
+                    <a class="btn delete" data-pk="23582241" data-obj_pk="5407339">×</a>
+                </div>
+                <div id="favorite_23496794" class="item" data-w="640" data-h="426" style="overflow:visible">
+                    <a href="/zh/photos/pencils-crayons-colourful-rainbow-452238/">
+                        <img src="https://cdn.pixabay.com/photo/2014/09/19/12/30/pencils-452238__340.jpg">
+                    </a>
+                    <a class="btn folder dd_box">&nbsp;</a>
+                    <div style="white-space:nowrap">
+                        <p>移动</p>
+                        <form action="folder/move/23496794/" method="post" class="pure-form ajax_form">
+                            <input type="text" name="name" placeholder='新建文件夹' maxlength="40">
+                            <input type="submit" style="display:none">
+                        </form>
+                    </div>
+                    <a class="btn delete" data-pk="23496794" data-obj_pk="452238">×</a>
+                </div>
+                <div id="favorite_23335504" class="item" data-w="640" data-h="429" style="overflow:visible">
+                    <a href="/zh/photos/glass-roof-railway-station-berlin-4564418/">
+                        <img src="https://cdn.pixabay.com/photo/2019/10/20/18/16/glass-roof-4564418__340.jpg">
+                    </a>
+                    <a class="btn folder dd_box">&nbsp;</a>
+                    <div style="white-space:nowrap">
+                        <p>移动</p>
+                        <form action="folder/move/23335504/" method="post" class="pure-form ajax_form">
+                            <input type="text" name="name" placeholder='新建文件夹' maxlength="40">
+                            <input type="submit" style="display:none">
+                        </form>
+                    </div>
+                    <a class="btn delete" data-pk="23335504" data-obj_pk="4564418">×</a>
+                </div>
+                <div id="favorite_23335466" class="item" data-w="640" data-h="360" style="overflow:visible">
+                    <a href="/zh/photos/rainbow-water-river-trees-sunset-5372892/">
+                        <img src="https://cdn.pixabay.com/photo/2020/07/05/12/53/rainbow-5372892__340.jpg">
+                    </a>
+                    <a class="btn folder dd_box">&nbsp;</a>
+                    <div style="white-space:nowrap">
+                        <p>移动</p>
+                        <form action="folder/move/23335466/" method="post" class="pure-form ajax_form">
+                            <input type="text" name="name" placeholder='新建文件夹' maxlength="40">
+                            <input type="submit" style="display:none">
+                        </form>
+                    </div>
+                    <a class="btn delete" data-pk="23335466" data-obj_pk="5372892">×</a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:50px"></div>
+    </div>
+</div>
+<div id="fb-root"></div><a id="toTop">▲</a>
+<script src="{{.frontDomain}}/static/js/jquery-1.12.4.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="{{.frontDomain}}/static/js/jquery.js"><\/script>');
+    var LANG = '', LANG_URL_PREFIX = '/', LANGS = [["cs","\u010ce\u0161tina"],["da","Dansk"],["de","Deutsch"],["en","English"],["es","Espa\u00f1ol"],["fr","Fran\u00e7ais"],["id","Indonesia"],["it","Italiano"],["hu","Magyar"],["nl","Nederlands"],["no","Norsk"],["pl","Polski"],["pt","Portugu\u00eas"],["ro","Rom\u00e2n\u0103"],["sk","Sloven\u010dina"],["fi","Suomi"],["sv","Svenska"],["tr","T\u00fcrk\u00e7e"],["vi","Vi\u1ec7t"],["th","\u0e44\u0e17\u0e22"],["bg","\u0411\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438"],["ru","\u0420\u0443\u0441\u0441\u043a\u0438\u0439"],["el","\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ae"],["ja","\u65e5\u672c\u8a9e"],["ko","\ud55c\uad6d\uc5b4"],["zh","\u7b80\u4f53\u4e2d\u6587"]], I18N = { 'delete': '确认删除？', 'safesearch': '安全搜索', 'adult_content': '成人内容' };
+</script>
+<script src="{{.frontDomain}}/static/js/base.9d3480b1.min.js"></script>
+<script>
+    $('.flex_grid').flexImages({ rowHeight: 240 });
+    $('.btn.delete').click(function(){
+        if (confirm(I18N.delete)) {
+            var el = $('#favorite_'+$(this).data('pk'));
+            $.post(LANG_URL_PREFIX+'/accounts/favorite/photo/'+$(this).data('obj_pk')+'/', function(){ el.fadeOut(200, function(){
+                el.remove();
+                $('.flex_grid').flexImages({ rowHeight: 240 });
+            }); });
+        }
+        return false;
+    });
+</script>
+</body>
+</html>

@@ -15,7 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//图片详情页
+//图片详情页 //todo 判断关注状态，收藏，喜欢状态
 func Detail(c *gin.Context) {
 	var (
 		pxId       int

@@ -237,7 +237,7 @@ func ChangePassword(c *gin.Context) {
 	c.JSON(http.StatusOK, ResponseSucc(form, logic.SettingSuccess))
 }
 
-//关注列表 //todo 明天继续
+//关注列表
 func Following(c *gin.Context) {
 	var (
 		account *services.AccountAuth
@@ -248,32 +248,61 @@ func Following(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/accounts/login/?next="+query)
 	}
 	list := services.NewAccount().Following(account.UserPxId)
-	logrus.Printf("%+v\n\n", list)
-
-	for _,v:= range list.List{
-           fmt.Printf("v:%+v\n\n",v)
-	}
 
 	c.HTML(http.StatusOK, "following.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"account":     account,
-		"list":list.List,
+		"list":        list.List,
 	})
 }
 
 //关注
 func Follow(c *gin.Context) {
+	var (
+		account  *services.AccountAuth
+		authorId int
+		err      error
+	)
 	parAuthorId := c.Param("authorId")
-	authorId, err := strconv.Atoi(parAuthorId)
-	if err != nil {
-		c.Redirect(http.StatusFound, "/404")
+	if authorId, err = strconv.Atoi(parAuthorId); err != nil {
+		c.String(http.StatusOK, "<script>alert('非法请求')</script><i class='check'>✓</i> 关注</span>")
+		return
 	}
-	services.NewAccount().Follow(0, authorId)
+	if account, err = getUser(c); err != nil {
+		c.String(http.StatusOK, "<script>alert('请先登录')</script> <i class='check'>✓</i> 关注</span>")
+		return
+	}
+	if status, err := services.NewAccount().Follow(account.UserId, authorId); err != nil || status == false {
+		c.String(http.StatusOK, "<script>alert('"+err.Error()+"')</script> <i class='check'>✓</i> 关注</span>")
+		return
+	}
+	c.String(http.StatusOK, "script:$('#follow_button').addClass('pure-button-disabled');")
 }
 
 //收藏
 func Collect(c *gin.Context) {
-
+	var (
+		account *services.AccountAuth
+		imgId   int
+		status  bool
+		err     error
+	)
+	imgIdStr := c.Param("imgId")
+	cNumStr := c.Param("cNum")
+	if imgId, err = strconv.Atoi(imgIdStr); err != nil {
+		c.String(http.StatusOK, fmt.Sprintf("<script>alert('非法请求')</script><i class='icon icon_favorite_filled'></i><b>%s</b>", cNumStr))
+		return
+	}
+	if account, err = getUser(c); err != nil {
+		c.String(http.StatusOK, fmt.Sprintf("<script>alert('请先登录')</script><i class='icon icon_favorite_filled'></i><b>%s</b>", cNumStr))
+		return
+	}
+	if status, err = services.NewAccount().Collect(account.UserId, imgId); err != nil || status == false {
+		c.String(http.StatusOK, fmt.Sprintf("<script>alert('"+err.Error()+"')</script><i class='icon icon_favorite_filled'></i><b>%s</b>", cNumStr))
+		return
+	}
+	num, _ := strconv.Atoi(cNumStr)
+	c.String(http.StatusOK, fmt.Sprintf("script:$('.favorite_button').addClass('pure-button-disabled').find('b').html(%d);", num+1))
 }
 
 //收藏列表
@@ -283,11 +312,21 @@ func Favorites(c *gin.Context) {
 		err     error
 	)
 	if account, err = getUser(c); err != nil {
-		query := url.QueryEscape("/accounts/following/")
+		query := url.QueryEscape("/accounts/favorites")
 		c.Redirect(http.StatusFound, "/accounts/login/?next="+query)
 	}
 	list := services.NewAccount().Favorites(account.UserPxId)
-	logrus.Infof("list:%+v\n\n",list)
+	for _, v := range list {
+		fmt.Printf("v:%+v\n\n", v)
+	}
+	logrus.Infof("list:%+v\n\n", list)
+
+	c.HTML(http.StatusOK, "favorites.html", gin.H{
+		"frontDomain": configs.STATIC_DOMAIN,
+		"account":     account,
+		"list":        list,
+	})
+
 }
 
 //评论

@@ -59,9 +59,9 @@ type FollowList struct {
 }
 
 type Follow struct {
-	UserId int
+	UserId        int
 	UserName      string
-	NickName string
+	NickName      string
 	HeadPhotoUrl  string
 	HeadPhotoFile string
 	PicNum        int
@@ -70,4 +70,16 @@ type Follow struct {
 	LikeNum       int
 	CommentNum    int
 	FollowerNum   int
+}
+
+//收藏列表
+type CollectList struct {
+	List []*Collect
+}
+
+//收藏
+type Collect struct {
+	ImgId       int
+	ImgUrl      string
+	ImgFileName string
 }

@@ -68,5 +68,6 @@ func Detail(c *gin.Context) {
 		"isLike":       isLike,
 		"isCollect":    isCollect,
 		"isFollow":     isFollow,
+		"pxIdStr":      pxIdStr,
 	})
 }

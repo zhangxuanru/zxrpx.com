@@ -135,21 +135,24 @@
             <div class="left">
                 <div class="inside" style="margin-top:15px">
                     <div id="comments">
-                        <form onsubmit="$('#comment_submit_btn ').attr('disabled', 1);" class="ajax_form pure-form" data-target="#comments" data-replace="1" action="/images/comments/{{.photo.PxImgId}}/create/" method="post">
+
+                        <form onsubmit="$('#comment_submit_btn ').attr('disabled', 1);" class="ajax_form pure-form layui-form" lay-filter="commentForm" data-target="#comments" data-replace="1" action="/images/comment/{{.photo.PxImgId}}" method="post">
                             <table>
                                 <tr>
                                     <td><img srcset="{{.frontDomain}}/static/images/profile_image_dummy.svg 1x, {{.frontDomain}}/static/images/profile_image_dummy.svg 2x" src="{{.frontDomain}}/static/images/profile_image_dummy.svg" alt=""></td>
                                     <td style="padding-bottom:0">
-                                        <textarea name="text" cols="40" rows="10" placeholder="添加您的评论..." class="autosize" style="width:100%;height:48px" onfocus="$('#comment_submit').show();" maxlength="2000" required id="id_text"></textarea>
+                                        <textarea name="content" cols="40" rows="10" placeholder="添加您的评论..." class="autosize" style="width:100%;height:48px" onfocus="$('#comment_submit').show();" maxlength="2000" required id="id_text" lay-verify="required|content"></textarea>
+                                        <input type="hidden" value="{{.pxIdStr}}" class="pxId">
                                     </td>
                                 </tr>
                                 <tr style="display:none" id="comment_submit">
                                     <td></td><td style="padding-top:0">
-                                        <input id="comment_submit_btn"  type="submit" class="ua-engagement-comment pure-button button-green button-md" value="提交">
+                                        <input id="comment_submit_btn"  type="submit" class="ua-engagement-comment pure-button button-green button-md" lay-submit lay-filter="commentForm" value="提交">
                                     </td>
                                 </tr>
                             </table>
                         </form>
+
                 <table id="comment_list">
                     {{range $i,$comment :=.commentsList}}
                             <tr id="comment_{{$comment.CommentId}}" class="comment">
@@ -214,5 +217,45 @@
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({qForAds: 'photo:de:eichhörnchen eichkätzchen'});
 </script>
+
+ <script src="{{.frontDomain}}/static/layui/layui.js"></script>
+ <script type="text/javascript">
+       pxId = $(".pxId").val();
+     layui.use(['form','layer'], function() {
+         var layer = layui.layer
+             ,form = layui.form;
+         form.verify({
+             content: function(value){
+                 if(value.length <5){
+                     return '评论内容太少';
+                 }
+                 if(!new RegExp("^[\\w]{5,100}$").test(value)){
+                     return '内容格式不对';
+                 }
+             },
+         });
+         form.on('submit(commentForm)',function (data) {
+             $.ajax({
+                 url:'/images/comment/'+pxId,
+                 method:'post',
+                 data: data.field,
+                 dataType:'JSON',
+                 success:function (data) {
+                       console.log(data)
+                 },
+                 error:function (data) {
+                     layer.open({
+                         title: '登录失败'
+                         ,content: data.msg,
+                     });
+                     return false;
+                 }
+             });
+             return false;
+         })
+     })
+ </script>
+
+
 </body>
 </html>

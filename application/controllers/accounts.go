@@ -346,11 +346,6 @@ func DelFavorite(c *gin.Context) {
 	c.String(http.StatusOK, fmt.Sprintf("script:$('.photo-%d').removeClass('has_favorited').find('.icon_favorite').closest('.ajax').html('<i class='icon icon_favorite'></i> 609');", imgId))
 }
 
-//评论
-func Comment(c *gin.Context) {
-
-}
-
 //我的图片
 func Media(c *gin.Context) {
 

@@ -15,6 +15,8 @@ import (
 	"pix/configs"
 	"strconv"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -69,4 +71,13 @@ func Like(c *gin.Context) {
 	}
 	num, _ := strconv.Atoi(lNumStr)
 	c.String(http.StatusOK, fmt.Sprintf("script:$('.like_button').addClass('pure-button-disabled').find('b').html('%d');", num+1))
+}
+
+//评论 //todo 明天继续 评论
+func Comment(c *gin.Context) {
+	imgIdStr := c.Param("imgId")
+	content := c.PostForm("content")
+
+	c.JSON(http.StatusOK, nil)
+	logrus.Infoln("imgIdStr:", imgIdStr, "--content:", content)
 }

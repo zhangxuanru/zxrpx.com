@@ -48,3 +48,9 @@ func (u *UserFollow) AddFollow(userId, authorId int) (id int, err error) {
 	db := GetDB().Create(&user)
 	return user.Id, db.Error
 }
+
+//查询用户ID关注作者ID的信息
+func (u *UserFollow) GetFollowAuthIdByUid(userId, authorId int) (follow UserFollow) {
+	GetDB().Where("uid = ? AND status =? AND author_id =?", userId, 1, authorId).Select("id").Find(&follow)
+	return
+}

@@ -57,3 +57,9 @@ func (u *UserCollect) DelCollect(userId, PxImgId int) (affected int64, err error
 	updates := GetDB().Model(u).Where("uid = ? AND px_img_id = ?", userId, PxImgId).Updates(buildMap).Omit("add_time")
 	return updates.RowsAffected, updates.Error
 }
+
+//用户收藏数据
+func (u *UserCollect) GetCollectByUid(userId, imgId int) (user UserCollect) {
+	GetDB().Where("uid = ? AND px_img_id =? ", userId, imgId).Select("id").Find(&user)
+	return
+}

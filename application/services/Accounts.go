@@ -180,6 +180,15 @@ func (a *Account) Follow(userId, authorId int) (status bool, err error) {
 	return true, nil
 }
 
+//用户是否关注
+func (a *Account) ExistsFollow(userId, authorId int) bool {
+	follow := models.NewUserFollow().GetFollowAuthIdByUid(userId, authorId)
+	if follow.Id > 0 {
+		return true
+	}
+	return false
+}
+
 //添加收藏
 func (a *Account) Collect(userId, imgId int) (status bool, err error) {
 	if userId == 0 || imgId == 0 {
@@ -191,7 +200,21 @@ func (a *Account) Collect(userId, imgId int) (status bool, err error) {
 	if _, err = models.NewPicture().EditByFavoritesNum(imgId, 1); err != nil {
 		return false, err
 	}
+	pic := models.NewPicture().GetPxUidByPicId(imgId)
+	if pic.PxUid > 0 {
+		uid := int(pic.PxUid)
+		_, _ = models.NewUserStat().IncrByUserFollowerNum(uid, 1)
+	}
 	return true, nil
+}
+
+//用户是否收藏
+func (a *Account) ExistsCollect(userId, imgId int) bool {
+	collect := models.NewUserCollect().GetCollectByUid(userId, imgId)
+	if collect.Id > 0 {
+		return true
+	}
+	return false
 }
 
 //收藏列表

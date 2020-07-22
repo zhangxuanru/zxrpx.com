@@ -116,5 +116,19 @@ func (p *PicService) Like(userId, imgId, num int) (status bool, err error) {
 	if _, err = models.NewPicture().EditByLikeNum(imgId, num); err != nil {
 		return false, err
 	}
+	pic := models.NewPicture().GetPxUidByPicId(imgId)
+	if pic.PxUid > 0 {
+		uid := int(pic.PxUid)
+		_, _ = models.NewUserStat().IncrByUserLikeNum(uid, 1)
+	}
 	return true, nil
+}
+
+//判断用户是否已经喜欢过某张图片
+func (p *PicService) ExistsLike(userId, imgId int) bool {
+	like := models.NewUserLike().GetLikeByUid(userId, imgId)
+	if like.Id > 0 {
+		return true
+	}
+	return false
 }

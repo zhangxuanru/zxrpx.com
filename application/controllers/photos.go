@@ -15,7 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//图片详情页 //todo 判断关注状态，收藏，喜欢状态
+//图片详情页
 func Detail(c *gin.Context) {
 	var (
 		pxId       int
@@ -24,6 +24,9 @@ func Detail(c *gin.Context) {
 		picData    []*services.PhotoResult
 		account    *services.AccountAuth
 		commentNum = 3
+		isLike     bool //是否喜欢
+		isCollect  bool //是否收藏
+		isFollow   bool //是否关注
 	)
 	pxIdStr = c.Param("id")
 	if pxId, err = strconv.Atoi(pxIdStr); err != nil || pxId == 0 {
@@ -40,11 +43,18 @@ func Detail(c *gin.Context) {
 	recentImages := services.NewUserService().GetRecentImagesByUid(photo.User.PxUid, 12, pxId)
 	//获取推荐标签
 	tagList := services.NewTagService().GetRandOffsetTagList(16)
+	account, _ = getUser(c)
+	//获取喜欢，收藏，关注信息
+	if account.UserId > 0 {
+		isCollect = services.NewAccount().ExistsCollect(account.UserId, pxId)
+		isFollow = services.NewAccount().ExistsFollow(account.UserId, photo.User.PxUid)
+		isLike = services.NewPicService().ExistsLike(account.UserId, pxId)
+	}
 	//更新浏览量
 	go func() {
 		services.NewPicService().UpdateUserPhotoViewNumByPicId(pxId)
 	}()
-	account, _ = getUser(c)
+
 	c.HTML(http.StatusOK, "photos.html", gin.H{
 		"frontDomain":  configs.STATIC_DOMAIN,
 		"baseUrl":      "/photos/" + pxIdStr,
@@ -55,5 +65,8 @@ func Detail(c *gin.Context) {
 		"recentImages": recentImages,
 		"tagList":      tagList,
 		"account":      account,
+		"isLike":       isLike,
+		"isCollect":    isCollect,
+		"isFollow":     isFollow,
 	})
 }

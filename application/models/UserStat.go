@@ -95,3 +95,21 @@ func (u *UserStat) IncrByUserViewNum(pxUid, num int) (affected int64, err error)
 	updates := GetDB().Model(u).Where("px_uid = ?", pxUid).Updates(buildMap).Omit("add_time")
 	return updates.RowsAffected, updates.Error
 }
+
+//更新用户统计喜欢量
+func (u *UserStat) IncrByUserLikeNum(pxUid, num int) (affected int64, err error) {
+	buildMap := map[string]interface{}{
+		"like_num": gorm.Expr("like_num + ?", num),
+	}
+	updates := GetDB().Model(u).Where("px_uid = ?", pxUid).Updates(buildMap).Omit("add_time")
+	return updates.RowsAffected, updates.Error
+}
+
+//更新用户统计收藏总量
+func (u *UserStat) IncrByUserFollowerNum(pxUid, num int) (affected int64, err error) {
+	buildMap := map[string]interface{}{
+		"follower_num": gorm.Expr("follower_num + ?", num),
+	}
+	updates := GetDB().Model(u).Where("px_uid = ?", pxUid).Updates(buildMap).Omit("add_time")
+	return updates.RowsAffected, updates.Error
+}

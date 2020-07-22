@@ -29,13 +29,14 @@ func (h *HttpServer) settingRouter() {
 	h.engine.GET("/accounts/following/", controllers.Following)      //关注列表
 	h.engine.POST("/accounts/follow/:authorId/", controllers.Follow) //关注
 
-	h.engine.POST("/accounts/collect/:imgId/:cNum", controllers.Collect) //收藏
-	h.engine.GET("/accounts/favorites", controllers.Favorites)           //收藏列表
+	h.engine.POST("/accounts/collect/:imgId/:cNum", controllers.Collect)    //收藏
+	h.engine.GET("/accounts/favorites", controllers.Favorites)              //收藏列表
+	h.engine.POST("/accounts/delfavorite/:imgId/", controllers.DelFavorite) //删除收藏
+	h.engine.POST("/images/like/:imgId/:lNum", controllers.Like)            //喜欢
 
 	h.engine.GET("/accounts/upload", controllers.Upload)   //上传图片
 	h.engine.GET("/accounts/media", controllers.Media)     //我的图片
 	h.engine.GET("/accounts/comment", controllers.Comment) //提交评论
-	h.engine.GET("/accounts/like", controllers.Like)       //喜欢
 
 	h.engine.GET("/users/:user/", controllers.Profile) //我的资料
 

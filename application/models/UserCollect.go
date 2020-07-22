@@ -48,3 +48,12 @@ func (u *UserCollect) AddCollect(userId, PxImgId int) (id int, err error) {
 	db := GetDB().Create(&user)
 	return user.Id, db.Error
 }
+
+//删除关注
+func (u *UserCollect) DelCollect(userId, PxImgId int) (affected int64, err error) {
+	buildMap := map[string]interface{}{
+		"status": 0,
+	}
+	updates := GetDB().Model(u).Where("uid = ? AND px_img_id = ?", userId, PxImgId).Updates(buildMap).Omit("add_time")
+	return updates.RowsAffected, updates.Error
+}

@@ -8,7 +8,6 @@ package services
 
 import (
 	"errors"
-	"fmt"
 	"pix/application/models"
 	"strings"
 	"time"
@@ -126,8 +125,6 @@ func (a *Account) ChangePassword(uid int, setPass UserChangePassword) (err error
 		return errors.New("两次密码输入不一致！")
 	}
 	user := models.NewUser().GetPasswordByUid(uid)
-	fmt.Printf("user:%+v\n\n", user)
-	fmt.Printf("setPass:%+v\n\n", setPass)
 	if user.Passwd != setPass.OldPassword {
 		return errors.New("原密码输入错误！")
 	}
@@ -224,4 +221,15 @@ func (a *Account) Favorites(uid int) (list []*Collect) {
 		}
 	}
 	return data.List
+}
+
+//删除收藏
+func (a *Account) DelFavorite(userId, imgId int) (status bool, err error) {
+	if userId == 0 || imgId == 0 {
+		return false, errors.New("数据为空")
+	}
+	if _, err := models.NewUserCollect().DelCollect(userId, imgId); err != nil {
+		return false, err
+	}
+	return true, nil
 }

@@ -83,6 +83,15 @@ func (p *Picture) EditByFavoritesNum(picId, num int) (affected int64, err error)
 	return updates.RowsAffected, updates.Error
 }
 
+//更新喜欢总数
+func (p *Picture) EditByLikeNum(picId, num int) (affected int64, err error) {
+	buildMap := map[string]interface{}{
+		"like_num": gorm.Expr("like_num + ?", num),
+	}
+	updates := GetDB().Model(p).Where("px_img_id = ?", picId).Updates(buildMap).Omit("add_time")
+	return updates.RowsAffected, updates.Error
+}
+
 //根据图片ID查询图片作者ID
 func (p *Picture) GetPxUidByPicId(picId int) (pic Picture) {
 	GetDB().Where("px_img_id =?", picId).Select("px_uid").First(&pic)

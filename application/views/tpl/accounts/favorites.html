@@ -32,73 +32,23 @@
         <div style="margin:30px auto">
             {{template "account_tabs" .}}
          </div>
-
-
         <div style="margin:10px auto;max-width:1448px">
             <div class="flex_grid clearfix" style="overflow:visible">
-
              {{range $k,$item:=.list}}
                 <div id="favorite_{{$item.ImgId}}" class="item" data-w="640" data-h="427" style="overflow:visible">
                     <a href="/photos/{{$item.ImgId}}">
                         <img src="{{ViewPicAddr $item.ImgUrl $item.ImgFileName}}">
                     </a>
-                    <a class="btn folder dd_box">&nbsp;</a>
-                    <div style="white-space:nowrap">
-                        <p>移动</p>
-                        <form action="folder/move/23582241/" method="post" class="pure-form ajax_form">
-                            <input type="text" name="name" placeholder='新建文件夹' maxlength="40">
-                            <input type="submit" style="display:none">
-                        </form>
-                    </div>
-                    <a class="btn delete" data-pk="23582241" data-obj_pk="5407339">×</a>
+                    <a class="btn delete" data-pk="{{$item.ImgId}}" data-obj_pk="{{$item.ImgId}}">×</a>
                 </div>
              {{end}}
-                <div id="favorite_23496794" class="item" data-w="640" data-h="426" style="overflow:visible">
-                    <a href="/zh/photos/pencils-crayons-colourful-rainbow-452238/">
-                        <img src="https://cdn.pixabay.com/photo/2014/09/19/12/30/pencils-452238__340.jpg">
-                    </a>
-                    <a class="btn folder dd_box">&nbsp;</a>
-                    <div style="white-space:nowrap">
-                        <p>移动</p>
-                        <form action="folder/move/23496794/" method="post" class="pure-form ajax_form">
-                            <input type="text" name="name" placeholder='新建文件夹' maxlength="40">
-                            <input type="submit" style="display:none">
-                        </form>
-                    </div>
-                    <a class="btn delete" data-pk="23496794" data-obj_pk="452238">×</a>
-                </div>
-                <div id="favorite_23335504" class="item" data-w="640" data-h="429" style="overflow:visible">
-                    <a href="/zh/photos/glass-roof-railway-station-berlin-4564418/">
-                        <img src="https://cdn.pixabay.com/photo/2019/10/20/18/16/glass-roof-4564418__340.jpg">
-                    </a>
-                    <a class="btn folder dd_box">&nbsp;</a>
-                    <div style="white-space:nowrap">
-                        <p>移动</p>
-                        <form action="folder/move/23335504/" method="post" class="pure-form ajax_form">
-                            <input type="text" name="name" placeholder='新建文件夹' maxlength="40">
-                            <input type="submit" style="display:none">
-                        </form>
-                    </div>
-                    <a class="btn delete" data-pk="23335504" data-obj_pk="4564418">×</a>
-                </div>
-                <div id="favorite_23335466" class="item" data-w="640" data-h="360" style="overflow:visible">
-                    <a href="/zh/photos/rainbow-water-river-trees-sunset-5372892/">
-                        <img src="https://cdn.pixabay.com/photo/2020/07/05/12/53/rainbow-5372892__340.jpg">
-                    </a>
-                    <a class="btn folder dd_box">&nbsp;</a>
-                    <div style="white-space:nowrap">
-                        <p>移动</p>
-                        <form action="folder/move/23335466/" method="post" class="pure-form ajax_form">
-                            <input type="text" name="name" placeholder='新建文件夹' maxlength="40">
-                            <input type="submit" style="display:none">
-                        </form>
-                    </div>
-                    <a class="btn delete" data-pk="23335466" data-obj_pk="5372892">×</a>
-                </div>
+
             </div>
         </div>
+
         <div style="text-align:center;margin-top:50px"></div>
     </div>
+
 </div>
 
 <div id="fb-root"></div><a id="toTop">▲</a>
@@ -113,7 +63,7 @@
     $('.btn.delete').click(function(){
         if (confirm(I18N.delete)) {
             var el = $('#favorite_'+$(this).data('pk'));
-            $.post(LANG_URL_PREFIX+'/accounts/favorite/photo/'+$(this).data('obj_pk')+'/', function(){ el.fadeOut(200, function(){
+            $.post('/accounts/delfavorite/'+$(this).data('obj_pk')+'/', function(){ el.fadeOut(200, function(){
                 el.remove();
                 $('.flex_grid').flexImages({ rowHeight: 240 });
             }); });

@@ -92,5 +92,6 @@ func (h *HttpServer) LoadTemplateFunc() {
 		"ViewImageAddr":    logic.ViewImageAddr,
 		"ViewHeadPortrait": logic.ViewHeadPortrait,
 		"ViewPicByHeight":  logic.ViewPicByHeight,
+		"ViewPicAddr":      logic.ViewPicAddr,
 	})
 }

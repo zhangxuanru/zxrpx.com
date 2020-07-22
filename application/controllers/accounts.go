@@ -305,7 +305,7 @@ func Collect(c *gin.Context) {
 	c.String(http.StatusOK, fmt.Sprintf("script:$('.favorite_button').addClass('pure-button-disabled').find('b').html(%d);", num+1))
 }
 
-//收藏列表 //todo 明天继续
+//收藏列表
 func Favorites(c *gin.Context) {
 	var (
 		account *services.AccountAuth
@@ -316,27 +316,38 @@ func Favorites(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/accounts/login/?next="+query)
 	}
 	list := services.NewAccount().Favorites(account.UserPxId)
-	for _, v := range list {
-		fmt.Printf("v:%+v\n\n", v)
-	}
-
-	logrus.Infof("list:%+v\n\n", list)
-
 	c.HTML(http.StatusOK, "favorites.html", gin.H{
 		"frontDomain": configs.STATIC_DOMAIN,
 		"account":     account,
 		"list":        list,
 	})
+}
 
+//删除收藏
+func DelFavorite(c *gin.Context) {
+	var (
+		account *services.AccountAuth
+		imgId   int
+		err     error
+	)
+	imgIdStr := c.Param("imgId")
+	if imgId, err = strconv.Atoi(imgIdStr); err != nil {
+		c.String(http.StatusOK, fmt.Sprintf("<script>alert('非法请求')</script>"))
+		return
+	}
+	if account, err = getUser(c); err != nil {
+		c.String(http.StatusOK, fmt.Sprintf("<script>alert('请先登录')</script>"))
+		return
+	}
+	if status, err := services.NewAccount().DelFavorite(account.UserId, imgId); status == false || err != nil {
+		c.String(http.StatusOK, fmt.Sprintf("<script>alert('"+err.Error()+"')</script>"))
+		return
+	}
+	c.String(http.StatusOK, fmt.Sprintf("script:$('.photo-%d').removeClass('has_favorited').find('.icon_favorite').closest('.ajax').html('<i class='icon icon_favorite'></i> 609');", imgId))
 }
 
 //评论
 func Comment(c *gin.Context) {
-
-}
-
-//喜欢
-func Like(c *gin.Context) {
 
 }
 

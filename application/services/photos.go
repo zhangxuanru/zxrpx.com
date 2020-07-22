@@ -107,3 +107,14 @@ func (p *PicService) GetPxIdByFile(file string) int {
 	attr := models.NewPictureAttr().GetPxIdByFile(file)
 	return attr.PicId
 }
+
+//喜欢操作
+func (p *PicService) Like(userId, imgId, num int) (status bool, err error) {
+	if _, err = models.NewUserLike().AddLike(userId, imgId); err != nil {
+		return false, err
+	}
+	if _, err = models.NewPicture().EditByLikeNum(imgId, num); err != nil {
+		return false, err
+	}
+	return true, nil
+}

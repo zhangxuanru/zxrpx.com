@@ -7,11 +7,13 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"pix/application/logic"
 	"pix/application/services"
 	"pix/configs"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -42,4 +44,29 @@ func Download(c *gin.Context) {
 	c.Writer.Header().Add("Content-Type", "application/octet-stream")
 	c.Writer.Header().Add("Content-Disposition", "attachment; filename=\""+filename+"\"")
 	_, _ = c.Writer.Write(body)
+}
+
+//喜欢
+func Like(c *gin.Context) {
+	var (
+		account *services.AccountAuth
+		imgId   int
+		err     error
+	)
+	imgIdStr := c.Param("imgId")
+	lNumStr := c.Param("lNum")
+	if imgId, err = strconv.Atoi(imgIdStr); err != nil {
+		c.String(http.StatusOK, fmt.Sprintf("<script>alert('非法请求')</script><i class='icon icon_like_filled'></i><b>%s</b>", lNumStr))
+		return
+	}
+	if account, err = getUser(c); err != nil || account.UserId == 0 {
+		c.String(http.StatusOK, fmt.Sprintf("<script>alert('请先登录')</script><i class='icon icon_like_filled'></i><b>%s</b>", lNumStr))
+		return
+	}
+	if _, err = services.NewPicService().Like(account.UserId, imgId, 1); err != nil {
+		c.String(http.StatusOK, fmt.Sprintf("<script>alert('%s')</script><i class='icon icon_like_filled'></i><b>%s</b>", err.Error(), lNumStr))
+		return
+	}
+	num, _ := strconv.Atoi(lNumStr)
+	c.String(http.StatusOK, fmt.Sprintf("script:$('.like_button').addClass('pure-button-disabled').find('b').html('%d');", num+1))
 }

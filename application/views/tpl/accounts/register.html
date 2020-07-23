@@ -91,8 +91,9 @@
                 success:function (data) {
                     if(data.code == errCode){
                         layer.open({
-                            title: '注册失败'
-                            ,content: data.msg,
+                            title: '注册失败',
+                            content: data.msg,
+                            time:2000,
                         });
                         form.val('registerForm',{
                             "token":data.data.token
@@ -100,8 +101,9 @@
                         return false;
                     }else {
                         layer.open({
-                            title: '注册成功'
-                            ,content: "注册成功",
+                            title: '注册成功',
+                            content: "注册成功",
+                            time:2000,
                         });
                         setTimeout(function () {
                             window.location.href = data.data.next;
@@ -110,8 +112,9 @@
                 },
                 error:function (data) {
                     layer.open({
-                        title: '注册失败'
-                        ,content: data.msg,
+                        title: '注册失败',
+                        content: data.msg,
+                        time:2000,
                     });
                     return false;
                 }

@@ -33,6 +33,26 @@ func (c *Comments) GetListByPicId(picId int, offset, limit int) (list []Comments
 	return
 }
 
+//添加评论
+func (c *Comments) AddComment(uid int, picId int, content string) (id int, err error) {
+	comment := Comments{
+		PicId:   picId,
+		Content: content,
+		Uid:     uid,
+		State:   1,
+		Sort:    1,
+		AddTime: time.Now(),
+	}
+	db := GetDB().Create(&comment)
+	return comment.Id, db.Error
+}
+
+//根据UID和图片ID获取评论总数
+func (c *Comments) GetCommentCountByUid(uid, picId int) (count int) {
+	GetDB().Model(c).Where("pic_id=? AND uid=?", picId, uid).Count(&count)
+	return
+}
+
 func (c *Comments) Insert() (id int, err error) {
 	create := GetDB().Create(c)
 	return c.Id, create.Error

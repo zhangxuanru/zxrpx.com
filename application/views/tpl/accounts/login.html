@@ -83,8 +83,9 @@
                 success:function (data) {
                     if(data.code == errCode){
                         layer.open({
-                            title: '登录失败'
-                            ,content: data.msg,
+                            title: '登录失败',
+                            content: data.msg,
+                            time:2000,
                         });
                         form.val('loginForm',{
                             "token":data.data.token
@@ -92,8 +93,9 @@
                         return false;
                     }else {
                         layer.open({
-                            title: '登录成功'
-                            ,content: "登录成功",
+                            title: '登录成功',
+                            content: "登录成功",
+                            time:2000,
                         });
                         setTimeout(function () {
                             window.location.href = data.data.next;
@@ -103,8 +105,9 @@
                 },
                 error:function (data) {
                     layer.open({
-                        title: '登录失败'
-                        ,content: data.msg,
+                        title: '登录失败',
+                        content: data.msg,
+                        time:2000,
                     });
                     return false;
                 }

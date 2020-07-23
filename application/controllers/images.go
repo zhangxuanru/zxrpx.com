@@ -15,8 +15,6 @@ import (
 	"pix/configs"
 	"strconv"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -73,11 +71,30 @@ func Like(c *gin.Context) {
 	c.String(http.StatusOK, fmt.Sprintf("script:$('.like_button').addClass('pure-button-disabled').find('b').html('%d');", num+1))
 }
 
-//评论 //todo 明天继续 评论
+//评论
 func Comment(c *gin.Context) {
+	var (
+		account *services.AccountAuth
+		imgId   int
+		err     error
+	)
 	imgIdStr := c.Param("imgId")
 	content := c.PostForm("content")
-
-	c.JSON(http.StatusOK, nil)
-	logrus.Infoln("imgIdStr:", imgIdStr, "--content:", content)
+	if len(content) < 5 {
+		c.JSON(http.StatusOK, ResponseErr(nil, logic.CommentContentShort))
+		return
+	}
+	if account, err = getUser(c); err != nil || account.UserId == 0 {
+		c.JSON(http.StatusOK, ResponseErr(nil, logic.BeforLogin))
+		return
+	}
+	if imgId, err = strconv.Atoi(imgIdStr); err != nil {
+		c.JSON(http.StatusOK, ResponseErr(nil, logic.IllegalRequest))
+		return
+	}
+	if status, err := services.NewComments().AddComment(account.UserId, imgId, content); err != nil || status == false {
+		c.JSON(http.StatusOK, ResponseErr(nil, logic.COMMENTERR))
+		return
+	}
+	c.JSON(http.StatusOK, ResponseSucc(nil, logic.COMMENTSUCCESS))
 }

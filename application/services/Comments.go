@@ -7,6 +7,8 @@
 package services
 
 import (
+	"errors"
+	"fmt"
 	"pix/application/models"
 	"time"
 )
@@ -73,4 +75,17 @@ func (c *CommentsService) getUidList(comments []models.Comments) []int {
 		delete(uMap, index)
 	}
 	return list
+}
+
+//添加评论内容
+func (c *CommentsService) AddComment(uid int, picId int, content string) (status bool, err error) {
+	count := models.NewComments().GetCommentCountByUid(uid, picId)
+	fmt.Println(count)
+	if count > 10 {
+		return false, errors.New("评论已达上限")
+	}
+	if id, err := models.NewComments().AddComment(uid, picId, content); err != nil || id < 1 {
+		return false, err
+	}
+	return true, nil
 }

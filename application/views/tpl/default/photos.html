@@ -116,7 +116,7 @@
                     <div class="item" data-w="640" data-h="426">
                         <a href="/photos/{{$item.PxImgId}}">
                             <img title="{{$item.TagStr}}" src="{{$frontDomain}}/static/images/blank.gif" alt="" data-src="{{ViewImageAddr $item.Attr 180}}">
-                            <em>{{$item.TagStr}}</em>
+                            <em style="display: none">{{$item.TagStr}}</em>
                         </a>
                     </div>
                     {{end}}
@@ -161,7 +161,7 @@
                                 </td>
                                 <td>
                                     <div style="font-size:14px">
-                                        {{$comment.NickName}} <span style="font-size:12px;color:#999">&nbsp; {{$comment.AddTime}} 分钟以前</span>
+                                        {{$comment.NickName}} <span style="font-size:12px;color:#999">&nbsp; {{$comment.AddTime}}</span>
                                     </div>
                                     <div class="text linkify">{{$comment.Content}}</div>
                                 </td>
@@ -229,8 +229,8 @@
                  if(value.length <5){
                      return '评论内容太少';
                  }
-                 if(!new RegExp("^[\\w]{5,100}$").test(value)){
-                     return '内容格式不对';
+                 if(value.length > 100){
+                     return '评论内容太多';
                  }
              },
          });
@@ -241,12 +241,25 @@
                  data: data.field,
                  dataType:'JSON',
                  success:function (data) {
-                       console.log(data)
+                       if(data.code!=200){
+                           layer.open({
+                               title: '评论失败',
+                               content: data.msg,
+                               time:2000,
+                           });
+                           return
+                       }
+                     layer.open({
+                         title: '评论成功',
+                         content: data.msg,
+                         time:2000,
+                     });
                  },
                  error:function (data) {
                      layer.open({
-                         title: '登录失败'
+                         title: '评论失败'
                          ,content: data.msg,
+                         time:2000,
                      });
                      return false;
                  }

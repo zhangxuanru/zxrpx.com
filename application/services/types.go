@@ -83,3 +83,17 @@ type Collect struct {
 	ImgUrl      string
 	ImgFileName string
 }
+
+//ES图片索引结构
+type PhotoIndexData struct {
+	PicId      int    `json:"pic_id"`
+	UserId     int    `json:"user_id"`
+	CategoryId int    `json:"category_id"`
+	ImageType  string `json:"image_type"`
+	PicColor   string `json:"pic_color"`
+	Direction  string `json:"direction"`
+	Category   string `json:"category"`
+	Tags       string `json:"tags"`
+	IsHandpick int    `json:"is_handpick"`
+	AddDate    int64  `json:"add_date"`
+}

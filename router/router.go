@@ -38,7 +38,8 @@ func (h *HttpServer) settingRouter() {
 	h.engine.GET("/accounts/upload", controllers.Upload) //上传图片
 	h.engine.GET("/accounts/media", controllers.Media)   //我的图片
 
-	h.engine.GET("/users/:user/", controllers.Profile) //我的资料
+	h.engine.GET("/users/:user/", controllers.Profile)            //我的资料
+	h.engine.GET("/photo/search/:text/", controllers.PhotoSearch) //搜索
 
 	//h.engine.Any()
 

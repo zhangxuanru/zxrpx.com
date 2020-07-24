@@ -104,3 +104,41 @@ func (p *PicService) GetUserFirstPhotoUrl(uid int) (ImageURL string, FileName st
 	}
 	return attr.ImageURL, attr.FileName
 }
+
+//根据图片ID获取图片信息
+func (p *PicService) GetPicListByIds(idList []int) (result []*PhotoResult) {
+	var (
+		attrRes    attrMapRes
+		tagRes     tagMapRes
+		tagService = NewTagService()
+		picList    []models.Picture
+	)
+	result = make([]*PhotoResult, len(idList))
+	picList = models.NewPicture().GetPicListByIds(idList)
+	tagRes = tagService.GetTagListByPicIds(idList)
+	attrRes = p.GetPicAttrListByIds(idList)
+	for key, pic := range picList {
+		if _, ok := attrRes[pic.PxImgId]; !ok || len(attrRes[pic.PxImgId]) == 0 {
+			continue
+		}
+		result[key] = &PhotoResult{
+			Id:             pic.Id,
+			Uid:            pic.Uid,
+			CategoryId:     pic.CategoryId,
+			PxImgId:        pic.PxImgId,
+			ImageType:      pic.ImageType,
+			ImageFormat:    pic.ImageFormat,
+			ImageFormatStr: getImgExt(pic.ImageFormat),
+			LikeNum:        pic.LikeNum,
+			FavoritesNum:   pic.FavoritesNum,
+			CommentsNum:    pic.CommentsNum,
+			ViewNum:        pic.ViewNum,
+			DownloadsNum:   pic.DownloadsNum,
+			AddTime:        pic.AddTime,
+			Attr:           attrRes[pic.PxImgId],
+			Tags:           tagRes[pic.PxImgId],
+			TagStr:         tagService.GetTagStrByTagModels(tagRes[pic.PxImgId]),
+		}
+	}
+	return result
+}

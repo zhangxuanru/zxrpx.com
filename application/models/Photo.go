@@ -97,3 +97,10 @@ func (p *Picture) GetPxUidByPicId(picId int) (pic Picture) {
 	GetDB().Where("px_img_id =?", picId).Select("px_uid").First(&pic)
 	return
 }
+
+//根据图片ID数组查询图片信息
+func (p *Picture) GetPicListByIds(ids []int) (result []Picture) {
+	var fields = "id,uid,px_img_id,category_id,like_num,view_num,downloads_num,favorites_num,comments_num,image_type,image_format,add_time"
+	GetDB().Where("px_img_id IN (?) AND state=?", ids, 1).Select(fields).Find(&result)
+	return
+}

@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"pix/configs"
 	"reflect"
+	"strings"
 
 	"github.com/olivere/elastic/v7"
 	"github.com/sirupsen/logrus"
@@ -27,7 +28,12 @@ type Search struct {
 func NewElastic() *Search {
 	log := logrus.New()
 	var err error
-	client, err = elastic.NewClient(elastic.SetSniff(false), elastic.SetErrorLog(log), elastic.SetURL(host))
+	client, err = elastic.NewClient(
+		elastic.SetSniff(false),
+		elastic.SetErrorLog(log),
+		elastic.SetURL(host),
+		elastic.SetBasicAuth(configs.ESUSER, configs.ESPASSWORD),
+	)
 	if err != nil {
 		logrus.Error("elastic.NewClient err:", err)
 		panic(err)
@@ -47,10 +53,13 @@ func NewElastic() *Search {
 }
 
 //按tag名搜索
-func (s *Search) SearchTag(tag string, offset, limit int) (photoResult []*PhotoResult, total int, err error) {
+func (s *Search) SearchTag(tag string, offset, limit int) (photoResult []*PhotoResult, tagList []string, total int, err error) {
 	boolQuery := elastic.NewBoolQuery()
 	query := elastic.NewMatchPhraseQuery("tags", tag).Analyzer("ik_smart")
 	boolQuery.Must(query)
+
+	//只查指定字段
+	fsc := elastic.NewFetchSourceContext(true).Include("pic_id", "tags")
 
 	//test
 	//src, _ := boolQuery.Source()
@@ -59,22 +68,30 @@ func (s *Search) SearchTag(tag string, offset, limit int) (photoResult []*PhotoR
 	//test end
 
 	result, err := s.client.Search().Index(configs.ES_INDEX).Query(boolQuery).
-		From(offset).Size(limit).Pretty(true).Do(context.Background())
-
+		From(offset).Size(limit).FetchSourceContext(fsc).Pretty(true).Do(context.Background())
+	if err != nil {
+		return nil, nil, 0, err
+	}
 	total = int(result.Hits.TotalHits.Value)
 	if total > 0 {
-		photoResult = s.getPhotoResult(result, limit)
+		photoResult, tagList = s.getPhotoResult(result, limit)
 	}
 	return
 }
 
 //根据搜索结果获取图片信息
-func (s *Search) getPhotoResult(result *elastic.SearchResult, limit int) (photoResult []*PhotoResult) {
+func (s *Search) getPhotoResult(result *elastic.SearchResult, limit int) (photoResult []*PhotoResult, tagList []string) {
 	var photo PhotoIndexData
 	pxIdList := make([]int, limit)
+	tagList = make([]string, 0)
 	for k, item := range result.Each(reflect.TypeOf(photo)) {
 		if photoData, ok := item.(PhotoIndexData); ok {
 			pxIdList[k] = photoData.PicId
+			if len(tagList) < 15 {
+				tagStr := photoData.Tags
+				tagStrList := strings.Split(tagStr, ",")
+				tagList = append(tagList, tagStrList...)
+			}
 		}
 	}
 	photoResult = NewPicService().GetPicListByIds(pxIdList)

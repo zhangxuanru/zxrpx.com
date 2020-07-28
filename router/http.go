@@ -89,6 +89,7 @@ func (h *HttpServer) LoadStatic() {
 func (h *HttpServer) LoadTemplateFunc() {
 	h.engine.SetFuncMap(template.FuncMap{
 		"ViewWH":           logic.ViewWHAttr,
+		"ViewSearchWH":     logic.ViewSearchWHAttr,
 		"ViewImageAddr":    logic.ViewImageAddr,
 		"ViewHeadPortrait": logic.ViewHeadPortrait,
 		"ViewPicByHeight":  logic.ViewPicByHeight,

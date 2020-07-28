@@ -84,13 +84,19 @@ func (s *Search) getPhotoResult(result *elastic.SearchResult, limit int) (photoR
 	var photo PhotoIndexData
 	pxIdList := make([]int, limit)
 	tagList = make([]string, 0)
+	tagNameMap := make(map[string]struct{})
 	for k, item := range result.Each(reflect.TypeOf(photo)) {
 		if photoData, ok := item.(PhotoIndexData); ok {
 			pxIdList[k] = photoData.PicId
-			if len(tagList) < 15 {
-				tagStr := photoData.Tags
-				tagStrList := strings.Split(tagStr, ",")
-				tagList = append(tagList, tagStrList...)
+			if len(tagNameMap) < 15 {
+				tagStrList := strings.Split(photoData.Tags, ",")
+				for _, tag := range tagStrList {
+					tag = strings.TrimSpace(tag)
+					if _, ok := tagNameMap[tag]; !ok {
+						tagNameMap[tag] = struct{}{}
+						tagList = append(tagList, tag)
+					}
+				}
 			}
 		}
 	}

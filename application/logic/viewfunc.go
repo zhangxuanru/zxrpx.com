@@ -28,6 +28,16 @@ func ViewWHAttr(index int, style string) int {
 	return attr.Height
 }
 
+//搜索页模板宽高设置
+func ViewSearchWHAttr(index int, style string) int {
+	viewAttr := GetSearchViewAttr()
+	attr := viewAttr[index]
+	if style == "w" {
+		return attr.Width
+	}
+	return attr.Height
+}
+
 //根据图片属性和宽度获取图片地址
 func ViewImageAddr(attrList []models.PictureAttr, height int) string {
 	if len(attrList) == 0 {

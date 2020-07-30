@@ -97,3 +97,14 @@ type PhotoIndexData struct {
 	IsHandpick int    `json:"is_handpick"`
 	AddDate    int64  `json:"add_date"`
 }
+
+//图片搜索
+type SearchPhoto struct {
+	KeyWord     string `form:"key"`
+	Order       string `form:"order"`
+	PhotoType   string `form:"type"`
+	Orientation string `form:"orientation"`
+	Cat         string `form:"cat"`
+	Colors      string `form:"colors"`
+	Page        int    `form:"page" `
+}

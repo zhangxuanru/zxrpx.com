@@ -11,11 +11,11 @@
                 {{if le  .page 1}}
                     <i>‹</i>
                 {{else}}
-                    <a href="{{.baseUrl}}?page={{.prevPage}}" class="pure-button"><i>‹</i></a>
+                    <a href="{{.baseUrl}}&page={{.prevPage}}" class="pure-button"><i>‹</i></a>
                 {{end}}
 
                 {{if .isNextPage}}
-                    <a href="{{.baseUrl}}?page={{.nextPage}}" class="pure-button"><i>›</i></a>
+                    <a href="{{.baseUrl}}&page={{.nextPage}}" class="pure-button"><i>›</i></a>
                 {{end}}
 
             </div>
@@ -24,37 +24,27 @@
         <div class="media_filter">
             <span style="padding:5px 10px;background:#eee;border-radius:2px" title="排序方式" class="dd_box menu"><b>热门</b> <i class="arrow"></i></span>
             <div>
-                <a href="/images/search/?order=latest">最新</a>
-                <a href="/images/search/">热门<i class="check">✓</i></a>
-                <a href="/images/search/?order=ec">小编精选</a>
+                <a href="{{.baseUrl}}&order=latest">最新</a>
+                <a href="{{.baseUrl}}&order=hot">热门<i class="check">✓</i></a>
             </div>
             <span class="dd_box menu">图片 <i class="arrow"></i></span>
             <div>
-                <a href="/images/search/">图片<i class="check">✓</i></a>
-                <a style="padding-left:25px" href="/photo/search/">照片</a>
-                <a style="padding-left:25px" href="/vectors/search/">矢量图</a>
-                <a style="padding-left:25px" href="/illustrations/search/">插画</a>
+                <a href="{{.baseUrl}}">图片<i class="check">✓</i></a>
+                <a style="padding-left:25px" href="{{.baseUrl}}&type=photo">照片</a>
+                <a style="padding-left:25px" href="{{.baseUrl}}&type=vectors">矢量图</a>
+                <a style="padding-left:25px" href="{{.baseUrl}}&type=illustrations">插画</a>
             </div>
             <span class="dd_box menu">图像方向 <i class="arrow"></i></span>
             <div>
-                <a href="/images/search/">任意方位<i class="check">✓</i></a>
-                <a href="/images/search/?orientation=horizontal">水平</a>
-                <a href="/images/search/?orientation=vertical">垂直</a>
+                <a href="{{.baseUrl}}">任意方位<i class="check">✓</i></a>
+                <a href="{{.baseUrl}}&orientation=horizontal">水平</a>
+                <a href="{{.baseUrl}}&orientation=vertical">垂直</a>
             </div>
             <span class="dd_box menu">类别 <i class="arrow"></i></span>
+
             <div id="cat_filter"></div>
-            <form action=".." method="get" class="add_search_params filter" style="display:inline-block">
-                <span class="dd_box menu">尺寸 <i class="arrow"></i></span>
-                <div style="padding:10px 15px 15px">
-                    <div class="pure-form">
-                        <p style="margin:0 0 5px">大于</p>
-                        <input type="text" name="min_width" value="" placeholder="宽度" class="min_width_height">
-                        <i class="times" style="font-size:14px;margin:0 3px">×</i>
-                        <input type="text" name="min_height" value="" placeholder="高度" class="min_width_height">
-                        px
-                        &nbsp; <input type="submit" class="pure-button button-md" value="转到" style="padding:0 20px;line-height:28px;position:relative;top:-1px">
-                    </div>
-                </div>
+            <form action="{{.baseUrl}}" method="get" class="add_search_params filter" style="display:inline-block">
+                <input type="hidden" name="key" value="{{.query}}">
                 <span class="dd_box menu">颜色 <i class="arrow"></i></span>
                 <div style="padding:10px 15px 15px">
                     <label><input type="checkbox" name="colors" value="transparent"> 透明</label>
@@ -72,7 +62,6 @@
                         <input id="cf_gray_2" type="checkbox" name="colors" value="gray"><label for="cf_gray_2"><b class="gray"></b></label>
                         <input id="cf_black_2" type="checkbox" name="colors" value="black"><label for="cf_black_2"><b class="black"></b></label>
                         <input id="cf_brown_2" type="checkbox" name="colors" value="brown"><label for="cf_brown_2"><b class="brown"></b></label>
-
                     </div>
                     <input type="submit" class="pure-button button-md" value="转到" style="padding:0 20px;line-height:28px">
                 </div>

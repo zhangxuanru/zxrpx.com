@@ -23,7 +23,7 @@
                                 </div>
                                 <span itemProp="caption">
                                     {{range $j,$tag := $v.Tags}}
-                                          <a href="/photo/search/{{$tag.TagName}}/">{{$tag.TagName}}</a>
+                                          <a href="/photo/search/?key={{$tag.TagName}}">{{$tag.TagName}}</a>
                                     {{end}}
                                 </span>
                             </div>
@@ -51,7 +51,7 @@
 </script>
 <script src="{{.frontDomain}}/static/js/base.f3b82b8b.min.js"></script>
 <script>
-    var cat_base_url = "/images/search/?cat=val";
+    var cat_base_url = "{{.baseUrl}}&cat=val";
     $('.header_search').find('input[type="text"], input:checked, input[type="hidden"]').each(function(){
         var i = this;
         $('.add_search_params').each(function(){

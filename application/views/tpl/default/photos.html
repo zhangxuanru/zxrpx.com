@@ -55,7 +55,7 @@
                             </div>
                             <h1>
                                {{range $j,$tag := .photo.Tags}}
-                                    <a href="/photo/search/{{$tag.TagName}}">{{$tag.TagName}}</a>
+                                    <a href="/photo/search/?key={{$tag.TagName}}">{{$tag.TagName}}</a>
                                 {{end}}
                             </h1>
                         </div>
@@ -181,7 +181,7 @@
                     </div>
                     <p class="tags">
                         {{range $i,$tag := .tagList}}
-                             <a href="/photo/search/{{$tag.TagName}}">{{$tag.TagName}}</a><i>, </i>
+                             <a href="/photo/search/?key={{$tag.TagName}}">{{$tag.TagName}}</a><i>, </i>
                        {{end}}
                     </p>
                 </div>

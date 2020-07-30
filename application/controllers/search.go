@@ -7,13 +7,12 @@
 package controllers
 
 import (
-	"fmt"
 	"math"
 	"net/http"
 	"pix/application/services"
 	"pix/configs"
-	"strconv"
-	"strings"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,45 +20,40 @@ import (
 //搜索
 func PhotoSearch(c *gin.Context) {
 	var (
-		limit = 5
-		page  int
-		err   error
+		limit  = 60
+		err    error
+		search services.SearchPhoto
 	)
-	query := strings.TrimSpace(c.Param("text"))
-	if len(query) == 0 {
-		c.Redirect(http.StatusFound, "/404")
+	if err = c.ShouldBindQuery(&search); err != nil {
+		logrus.Error("search ShouldBindQuery error:", err)
 	}
-	if len(query) > 10 {
-		query = string([]rune(query)[:10])
+	if len(search.KeyWord) > 10 {
+		search.KeyWord = string([]rune(search.KeyWord)[:10])
 	}
-	pageStr := c.DefaultQuery("page", "1")
-	if page, err = strconv.Atoi(pageStr); err != nil || page > 500 || page < 1 {
-		page = 1
+	if search.Page > 100 || search.Page < 1 {
+		search.Page = 1
 	}
-	offset := (page - 1) * limit
-	list, tagList, total, err := services.NewElastic().SearchTag(query, offset, limit)
+	offset := (search.Page - 1) * limit
+	list, tagList, total, err := services.NewElastic().SearchQuery(&search, offset, limit)
+	template := "search.html"
 	if err != nil {
-		c.Redirect(http.StatusFound, "/404")
-	}
-	//todo .....
-	for _, v := range list {
-		fmt.Printf("%+v\n\n", v)
+		template = "not.html"
 	}
 	totalPage := int(math.Ceil(float64(total) / float64(limit)))
-	isNextPage := totalPage-page >= 1
+	isNextPage := totalPage-search.Page >= 1
 	account, _ := getUser(c)
-	c.HTML(http.StatusOK, "search.html", gin.H{
+	c.HTML(http.StatusOK, template, gin.H{
 		"list":        list,
 		"tagList":     tagList,
 		"total":       total,
 		"account":     account,
 		"frontDomain": configs.STATIC_DOMAIN,
-		"query":       query,
-		"page":        page,
-		"prevPage":    page - 1,
-		"nextPage":    page + 1,
+		"query":       search.KeyWord,
+		"page":        search.Page,
+		"prevPage":    search.Page - 1,
+		"nextPage":    search.Page + 1,
 		"totalPage":   totalPage,
 		"isNextPage":  isNextPage,
-		"baseUrl":     "/photo/search/" + query + "/",
+		"baseUrl":     "/photo/search/?key=" + search.KeyWord,
 	})
 }

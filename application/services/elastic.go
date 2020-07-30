@@ -8,6 +8,7 @@ package services
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"pix/configs"
 	"reflect"
@@ -52,23 +53,49 @@ func NewElastic() *Search {
 	}
 }
 
-//按tag名搜索
-func (s *Search) SearchTag(tag string, offset, limit int) (photoResult []*PhotoResult, tagList []string, total int, err error) {
+//按关键字搜索
+func (s *Search) SearchQuery(params *SearchPhoto, offset, limit int) (photoResult []*PhotoResult, tagList []string, total int, err error) {
+	var (
+		result *elastic.SearchResult
+	)
 	boolQuery := elastic.NewBoolQuery()
-	query := elastic.NewMatchPhraseQuery("tags", tag).Analyzer("ik_smart")
-	boolQuery.Must(query)
-
+	if len(params.KeyWord) > 0 {
+		query := elastic.NewMatchPhraseQuery("tags", strings.TrimSpace(params.KeyWord)).Analyzer("ik_smart")
+		boolQuery.Must(query)
+	}
+	if len(params.PhotoType) > 0 {
+		query := elastic.NewTermQuery("image_type", params.PhotoType)
+		boolQuery.Must(query)
+	}
+	if len(params.Orientation) > 0 {
+		query := elastic.NewTermQuery("direction", params.Orientation)
+		boolQuery.Must(query)
+	}
+	if len(params.Cat) > 0 {
+		query := elastic.NewTermQuery("category", strings.TrimSpace(params.Cat))
+		boolQuery.Must(query)
+	}
+	if len(params.Colors) > 0 {
+		query := elastic.NewTermQuery("pic_color", params.Colors)
+		boolQuery.Must(query)
+	}
 	//只查指定字段
 	fsc := elastic.NewFetchSourceContext(true).Include("pic_id", "tags")
 
 	//test
-	//src, _ := boolQuery.Source()
-	//data, _ := json.MarshalIndent(src, "", "  ")
-	//logrus.Println("source:", string(data))
+	src, _ := boolQuery.Source()
+	data, _ := json.MarshalIndent(src, "", "  ")
+	logrus.Println("source:", string(data))
+	fmt.Println("---------")
 	//test end
 
-	result, err := s.client.Search().Index(configs.ES_INDEX).Query(boolQuery).
-		From(offset).Size(limit).FetchSourceContext(fsc).Pretty(true).Do(context.Background())
+	if params.Order == "latest" {
+		result, err = s.client.Search().Index(configs.ES_INDEX).Query(boolQuery).
+			From(offset).Size(limit).Sort("add_date", true).FetchSourceContext(fsc).Pretty(true).Do(context.Background())
+	} else {
+		result, err = s.client.Search().Index(configs.ES_INDEX).Query(boolQuery).
+			From(offset).Size(limit).FetchSourceContext(fsc).Pretty(true).Do(context.Background())
+	}
 	if err != nil {
 		return nil, nil, 0, err
 	}

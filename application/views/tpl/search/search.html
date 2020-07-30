@@ -25,7 +25,7 @@
                         近期图像:
                         <span style="text-transform:capitalize">&nbsp;
                            {{range $i,$tag:=.tagList}}
-                               <a style="color:#bbb" href="/photo/search/{{$tag}}">{{$tag}}</a>&nbsp;
+                               <a style="color:#bbb" href="/photo/search/?key={{$tag}}">{{$tag}}</a>&nbsp;
                            {{end}}
                         </span>
                     </div>
@@ -50,7 +50,7 @@
                                 </div>
                                 <span itemProp="caption">
                                      {{range $j,$tag := $photo.Tags}}
-                                         <a href="/photo/search/{{$tag.TagName}}">{{$tag.TagName}}</a>
+                                         <a href="/photo/search/?key={{$tag.TagName}}">{{$tag.TagName}}</a>
                                      {{end}}
                                 </span>
                             </div>
@@ -62,7 +62,7 @@
 
 
             {{if .isNextPage}}
-                <a style="display:block;margin:50px auto;max-width:240px" class="pure-button" href="{{.baseUrl}}?page={{.nextPage}}">
+                <a style="display:block;margin:50px auto;max-width:240px" class="pure-button" href="{{.baseUrl}}&page={{.nextPage}}">
                     下一页 <i class="single_quot">›</i></a>
             {{end}}
 
@@ -82,7 +82,7 @@
 </script>
 <script src="{{.frontDomain}}/static/js/base.70977a21.min.js"></script>
 <script>
-    var cat_base_url = "/zh/photos/search/%E6%B3%A2%E9%9F%B3737-800/?cat=val";
+    var cat_base_url = "{{.baseUrl}}&cat=val";
 
     $('.header_search').find('input[type="text"], input:checked, input[type="hidden"]').each(function(){
         var i = this;

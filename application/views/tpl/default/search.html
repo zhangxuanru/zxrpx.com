@@ -60,14 +60,12 @@
                 </div>
             </div>
 
-            <p style="margin:40px 0 25px;text-align:center" class="getty-banner getty-ad">
-                Pixabay users get
-                <a target="_blank" class="getty-banner-link" href="/go/?t=getty-image-list-has-next-page?utm_source=pixabay&utm_medium=affiliate&utm_campaign=SRP_photo_limitedresults&referrer_url=https%3A//pixabay.com/zh/photos/search/%25E6%25B5%25B7/&utm_term=%E6%B5%B7">
-                    20% off at iStock with code PIXABAY20
-                </a>
-            </p>
-            <a style="display:block;margin:50px auto;max-width:240px" class="pure-button" href="/zh/photos/search/%E6%B5%B7/?pagi=2">
-                下一页 <i class="single_quot">›</i></a>
+
+            {{if .isNextPage}}
+                <a style="display:block;margin:50px auto;max-width:240px" class="pure-button" href="{{.baseUrl}}?page={{.nextPage}}">
+                    下一页 <i class="single_quot">›</i></a>
+            {{end}}
+
             <div style="border-top:1px solid #f0f1f4;max-width:1788px;margin:auto;padding:10px 20px 0">
                 <span id="paginator_clone" style="z-index:999;position:relative;top:-10px"></span>
                 <div style="position:relative;top:8px;left:2px;font-size:14px" class="hide-xs hide-sm hide-md">{{.total}} {{.query}}的免费图片</div>

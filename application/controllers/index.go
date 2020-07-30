@@ -43,5 +43,6 @@ func Index(c *gin.Context) {
 		"totalPage":   totalPage,
 		"isNextPage":  isNextPage,
 		"account":     account,
+		"baseUrl":     "/",
 	})
 }

@@ -7,18 +7,24 @@
 package controllers
 
 import (
+	"fmt"
+	"math"
 	"net/http"
 	"pix/application/services"
 	"pix/configs"
+	"strconv"
 	"strings"
-
-	"github.com/sirupsen/logrus"
 
 	"github.com/gin-gonic/gin"
 )
 
 //搜索
 func PhotoSearch(c *gin.Context) {
+	var (
+		limit = 5
+		page  int
+		err   error
+	)
 	query := strings.TrimSpace(c.Param("text"))
 	if len(query) == 0 {
 		c.Redirect(http.StatusFound, "/404")
@@ -26,15 +32,22 @@ func PhotoSearch(c *gin.Context) {
 	if len(query) > 10 {
 		query = string([]rune(query)[:10])
 	}
-	account, _ := getUser(c)
-	list, tagList, total, err := services.NewElastic().SearchTag(query, 0, 10)
+	pageStr := c.DefaultQuery("page", "1")
+	if page, err = strconv.Atoi(pageStr); err != nil || page > 500 || page < 1 {
+		page = 1
+	}
+	offset := (page - 1) * limit
+	list, tagList, total, err := services.NewElastic().SearchTag(query, offset, limit)
 	if err != nil {
 		c.Redirect(http.StatusFound, "/404")
 	}
-	logrus.Infof("list:%+v\n\n", list)
-	logrus.Infof("total:%d\n\n", total)
-	logrus.Infof("err:%v\n\n", err)
-
+	//todo .....
+	for _, v := range list {
+		fmt.Printf("%+v\n\n", v)
+	}
+	totalPage := int(math.Ceil(float64(total) / float64(limit)))
+	isNextPage := totalPage-page >= 1
+	account, _ := getUser(c)
 	c.HTML(http.StatusOK, "search.html", gin.H{
 		"list":        list,
 		"tagList":     tagList,
@@ -42,9 +55,11 @@ func PhotoSearch(c *gin.Context) {
 		"account":     account,
 		"frontDomain": configs.STATIC_DOMAIN,
 		"query":       query,
-		"page":        1,
-		"totalPage":   2,
-		"prevPage":    1,
-		"nextPage":    2,
+		"page":        page,
+		"prevPage":    page - 1,
+		"nextPage":    page + 1,
+		"totalPage":   totalPage,
+		"isNextPage":  isNextPage,
+		"baseUrl":     "/photo/search/" + query + "/",
 	})
 }

@@ -85,8 +85,10 @@ func (s *Search) getPhotoResult(result *elastic.SearchResult, limit int) (photoR
 	pxIdList := make([]int, limit)
 	tagList = make([]string, 0)
 	tagNameMap := make(map[string]struct{})
+	i := 0
 	for k, item := range result.Each(reflect.TypeOf(photo)) {
 		if photoData, ok := item.(PhotoIndexData); ok {
+			i++
 			pxIdList[k] = photoData.PicId
 			if len(tagNameMap) < 15 {
 				tagStrList := strings.Split(photoData.Tags, ",")
@@ -100,6 +102,7 @@ func (s *Search) getPhotoResult(result *elastic.SearchResult, limit int) (photoR
 			}
 		}
 	}
+	pxIdList = pxIdList[:i]
 	photoResult = NewPicService().GetPicListByIds(pxIdList)
 	return
 }

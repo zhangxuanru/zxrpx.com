@@ -11,40 +11,49 @@
                 {{if le  .page 1}}
                     <i>‹</i>
                 {{else}}
-                    <a href="{{.baseUrl}}&page={{.prevPage}}" class="pure-button"><i>‹</i></a>
+                    <a href="{{.searchUrl}}&page={{.prevPage}}" class="pure-button"><i>‹</i></a>
                 {{end}}
 
                 {{if .isNextPage}}
-                    <a href="{{.baseUrl}}&page={{.nextPage}}" class="pure-button"><i>›</i></a>
+                    <a href="{{.searchUrl}}&page={{.nextPage}}" class="pure-button"><i>›</i></a>
                 {{end}}
 
             </div>
         </div>
 
         <div class="media_filter">
-            <span style="padding:5px 10px;background:#eee;border-radius:2px" title="排序方式" class="dd_box menu"><b>热门</b> <i class="arrow"></i></span>
-            <div>
-                <a href="{{.baseUrl}}&order=latest">最新</a>
-                <a href="{{.baseUrl}}&order=hot">热门<i class="check">✓</i></a>
+            <span style="padding:5px 10px;background:#eee;border-radius:2px" title="排序方式" class="dd_box menu">
+                <b class="box_order">热门</b> <i class="arrow"></i>
+            </span>
+            <div class="box_order_div">
+                <a href="{{ReplaceUrlParam .searchUrl "order" "latest"}}">最新</a>
+                <a href="{{ReplaceUrlParam .searchUrl "order" "hot"}}">热门<i class="check">✓</i></a>
             </div>
-            <span class="dd_box menu">图片 <i class="arrow"></i></span>
-            <div>
-                <a href="{{.baseUrl}}">图片<i class="check">✓</i></a>
-                <a style="padding-left:25px" href="{{.baseUrl}}&type=photo">照片</a>
-                <a style="padding-left:25px" href="{{.baseUrl}}&type=vectors">矢量图</a>
-                <a style="padding-left:25px" href="{{.baseUrl}}&type=illustrations">插画</a>
+
+            <span class="dd_box menu"><b class="box_type">图片</b> <i class="arrow"></i></span>
+            <div class="box_type_div">
+                <a href="{{.searchUrl}}">图片<i class="check">✓</i></a>
+                <a style="padding-left:25px" href="{{ReplaceUrlParam .searchUrl "type" "photo"}}">照片</a>
+                <a style="padding-left:25px" href="{{ReplaceUrlParam .searchUrl "type" "vector"}}">矢量图</a>
+                <a style="padding-left:25px" href="{{ReplaceUrlParam .searchUrl "type" "illustration"}}">插画</a>
             </div>
-            <span class="dd_box menu">图像方向 <i class="arrow"></i></span>
-            <div>
-                <a href="{{.baseUrl}}">任意方位<i class="check">✓</i></a>
-                <a href="{{.baseUrl}}&orientation=horizontal">水平</a>
-                <a href="{{.baseUrl}}&orientation=vertical">垂直</a>
+            <span class="dd_box menu"><b class="box_orientation">图像方向</b> <i class="arrow"></i></span>
+            <div class="box_orientation_div">
+                <a href="{{.searchUrl}}">任意方位<i class="check">✓</i></a>
+                <a href="{{ReplaceUrlParam .searchUrl "orientation" "horizontal"}}">水平</a>
+                <a href="{{ReplaceUrlParam .searchUrl "orientation" "vertical"}}">垂直</a>
             </div>
-            <span class="dd_box menu">类别 <i class="arrow"></i></span>
+            <span class="dd_box menu"><b class="box_category">类别</b> <i class="arrow"></i></span>
 
             <div id="cat_filter"></div>
-            <form action="{{.baseUrl}}" method="get" class="add_search_params filter" style="display:inline-block">
+            <form action="{{.searchUrl}}" method="get" class="add_search_params filter" style="display:inline-block">
                 <input type="hidden" name="key" value="{{.query}}">
+                <input type="hidden" name="order" value="{{.search.Order}}">
+                <input type="hidden" name="cat" value="{{.search.Cat}}">
+                <input type="hidden" name="type" value="{{.search.PhotoType}}">
+                <input type="hidden" name="orientation" value="{{.search.Orientation}}">
+
+
                 <span class="dd_box menu">颜色 <i class="arrow"></i></span>
                 <div style="padding:10px 15px 15px">
                     <label><input type="checkbox" name="colors" value="transparent"> 透明</label>

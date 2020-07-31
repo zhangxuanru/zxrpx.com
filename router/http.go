@@ -94,5 +94,7 @@ func (h *HttpServer) LoadTemplateFunc() {
 		"ViewHeadPortrait": logic.ViewHeadPortrait,
 		"ViewPicByHeight":  logic.ViewPicByHeight,
 		"ViewPicAddr":      logic.ViewPicAddr,
+		"ReplaceUrlParam":  logic.ReplaceUrlParam,
+		"RemoveUrlParam":   logic.RemoveUrlParam,
 	})
 }

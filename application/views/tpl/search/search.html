@@ -82,12 +82,12 @@
 </script>
 <script src="{{.frontDomain}}/static/js/base.70977a21.min.js"></script>
 <script>
-    var cat_base_url = "{{.baseUrl}}&cat=val";
+    var cat_base_url = "{{RemoveUrlParam .baseUrl "cat"}}&cat=val";
 
     $('.header_search').find('input[type="text"], input:checked, input[type="hidden"]').each(function(){
         var i = this;
         $('.add_search_params').each(function(){
-            if (i.value && (!$(this).hasClass('filter') || i.name != 'colors' && i.name != 'min_width' && i.name != 'min_height' && i.name != 'q'))
+            if (i.value && (!$(this).hasClass('filter') || i.name != 'colors' && i.name != 'min_width' && i.name != 'min_height' && i.name != 'key'))
                 $(this).append($('<input type="hidden" name="'+i.name+'">').val(i.value));
         });
     });
@@ -100,6 +100,9 @@
 
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({qForAds: 'photo:zh:{{.query}}'});
+
+
 </script>
+<script src="{{.frontDomain}}/static/js/searchParams.js"></script>
 </body>
 </html>

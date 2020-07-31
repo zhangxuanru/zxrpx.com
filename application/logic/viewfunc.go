@@ -8,8 +8,10 @@ package logic
 
 import (
 	"fmt"
+	"net/url"
 	"pix/application/models"
 	"pix/configs"
+	"strings"
 )
 
 const (
@@ -85,4 +87,35 @@ func ViewPicAddr(srcUrl, fileName string) string {
 		return srcUrl
 	}
 	return configs.STATIC_CDN_DOMAIN + fileName
+}
+
+//替换URl中具体的参数和值
+func ReplaceUrlParam(urlStr string, key string, val string) string {
+	u, err := url.Parse(urlStr)
+	if err != nil {
+		return urlStr
+	}
+	par := u.Query().Get(key)
+	old := fmt.Sprintf("%s=%s", key, par)
+	new := fmt.Sprintf("%s=%s", key, val)
+	if par == "" {
+		urlStr += "&" + new
+	} else {
+		urlStr = strings.Replace(urlStr, old, new, 1)
+	}
+	return urlStr
+}
+
+//删除URL参数中某一个
+func RemoveUrlParam(urlStr string, key string) string {
+	u, err := url.Parse(urlStr)
+	if err != nil {
+		return urlStr
+	}
+	par := u.Query().Get(key)
+	if par != "" {
+		old := fmt.Sprintf("%s=%s", key, par)
+		urlStr = strings.Replace(urlStr, old, "", 1)
+	}
+	return urlStr
 }

@@ -66,14 +66,14 @@
         <a id="logo_authenticated" href="/"></a>
         <i class="toggle_mobile_search icon icon_menu_loupe"></i>
         <div id="media_type_menu" class="hide-xs hide-sm hide-md hide-lg">
-            <a href="/photos/">照片</a>
-            <a href="/illustrations/">插画</a>
-            <a href="/vectors/">向量</a>
+            <a href="{{.searchUrl}}&type=photo">照片</a>
+            <a href="{{.searchUrl}}&type=illustration">插画</a>
+            <a href="{{.searchUrl}}&type=vector">矢量图</a>
         </div>
         <div id="mobile_search_background">
             <span class="pure-button button-md" style="float:right;margin:11px 14px 0 0;border-radius:2px!important;padding:9px 12px 9px;color:#7a7e98">✖</span>
         </div>
-        <form class="media_search header_search" action="/images/search/" method="get">
+        <form class="media_search header_search" action="/photo/search/" method="get">
             <div>
                 <div class="dd_box menu" data-left="1">
                     <span class="image_type" style="margin-right:2px">图片</span>
@@ -89,8 +89,8 @@
                 </div>
                 <input type="submit" value=" " class="loupe">
                 <span>
-                        <input class="q" type="text" name="q" value="" placeholder="搜索" data-autofocus>
-                    </span>
+                        <input class="q" type="text" name="key" value="" placeholder="搜索" data-autofocus>
+              </span>
                 <div style="position:absolute;left:-9999px">
                     <input type="text" name="hp" autocomplete="off" tabindex="-1" value="">
                     <input type="hidden" name="order" value="">

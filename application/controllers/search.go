@@ -9,6 +9,7 @@ package controllers
 import (
 	"math"
 	"net/http"
+	"pix/application/logic"
 	"pix/application/services"
 	"pix/configs"
 
@@ -27,6 +28,9 @@ func PhotoSearch(c *gin.Context) {
 	if err = c.ShouldBindQuery(&search); err != nil {
 		logrus.Error("search ShouldBindQuery error:", err)
 	}
+	if key := c.Param("key"); len(key) > 0 {
+		search.KeyWord = key
+	}
 	if len(search.KeyWord) > 10 {
 		search.KeyWord = string([]rune(search.KeyWord)[:10])
 	}
@@ -36,13 +40,15 @@ func PhotoSearch(c *gin.Context) {
 	offset := (search.Page - 1) * limit
 	list, tagList, total, err := services.NewElastic().SearchQuery(&search, offset, limit)
 	template := "search.html"
-	if err != nil {
+	if err != nil || total == 0 {
 		template = "not.html"
 	}
 	totalPage := int(math.Ceil(float64(total) / float64(limit)))
 	isNextPage := totalPage-search.Page >= 1
 	account, _ := getUser(c)
+	baseUrl := logic.BuildSearchUrl(&search)
 	c.HTML(http.StatusOK, template, gin.H{
+		"search":      search,
 		"list":        list,
 		"tagList":     tagList,
 		"total":       total,
@@ -54,6 +60,7 @@ func PhotoSearch(c *gin.Context) {
 		"nextPage":    search.Page + 1,
 		"totalPage":   totalPage,
 		"isNextPage":  isNextPage,
-		"baseUrl":     "/photo/search/?key=" + search.KeyWord,
+		"baseUrl":     baseUrl,
+		"searchUrl":   baseUrl,
 	})
 }

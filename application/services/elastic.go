@@ -58,6 +58,9 @@ func (s *Search) SearchQuery(params *SearchPhoto, offset, limit int) (photoResul
 	var (
 		result *elastic.SearchResult
 	)
+
+	fmt.Printf("parans:%+v\n\n", params)
+
 	boolQuery := elastic.NewBoolQuery()
 	if len(params.KeyWord) > 0 {
 		query := elastic.NewMatchPhraseQuery("tags", strings.TrimSpace(params.KeyWord)).Analyzer("ik_smart")

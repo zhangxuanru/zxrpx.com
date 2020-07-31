@@ -44,5 +44,6 @@ func Index(c *gin.Context) {
 		"isNextPage":  isNextPage,
 		"account":     account,
 		"baseUrl":     "/?",
+		"searchUrl":   "/photo/search/?",
 	})
 }

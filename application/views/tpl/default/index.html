@@ -51,7 +51,7 @@
 </script>
 <script src="{{.frontDomain}}/static/js/base.f3b82b8b.min.js"></script>
 <script>
-    var cat_base_url = "{{.baseUrl}}&cat=val";
+    var cat_base_url = "{{RemoveUrlParam .searchUrl "cat"}}&cat=val";
     $('.header_search').find('input[type="text"], input:checked, input[type="hidden"]').each(function(){
         var i = this;
         $('.add_search_params').each(function(){

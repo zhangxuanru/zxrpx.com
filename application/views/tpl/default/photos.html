@@ -65,9 +65,9 @@
             <div class="right">
                 <div style="margin:0 0 20px">
                     <div class="clearfix">
-                        <a href="/users/{{.photo.User.PxUid}}">
+                        <a href="/users/nick-{{.photo.User.PxUid}}">
                             <img class="hover_opacity" style="float:left;width:48px;height:48px;border-radius:48px;margin:0 12px 0 0" alt="{{.photo.User.NickName}}" srcset="{{ViewHeadPortrait .photo.User.FileName 48 48}} 1x, {{ViewHeadPortrait .photo.User.FileName 96 96}} 2x" src="{{ViewHeadPortrait .photo.User.FileName 48 48}}"></a>
-                        <a style="display:block;font-size:15px;margin:-3px 0 -8px 60px;color:#555" class="hover_opacity" href="/users/{{.photo.User.PxUid}}/">
+                        <a style="display:block;font-size:15px;margin:-3px 0 -8px 60px;color:#555" class="hover_opacity" href="/users/nick-{{.photo.User.PxUid}}/">
                             {{.photo.User.NickName}} / {{.photo.User.PicNum}} 张照片
                         </a>
                         <br>

@@ -50,6 +50,27 @@ func (p *PicService) GetPicListByAddTimeOrder() (result []*PhotoResult, count in
 	return p.combinePicAttrTagData(picList), count
 }
 
+//按添加时间和uid获取图片列表
+func (p *PicService) GetLatestPhotoList(page int, limit int, uid int, order string) (result []*PhotoResult, count int) {
+	var picList []models.Picture
+	offset := (page - 1) * limit
+	params := &models.QueryParams{
+		Offset:  offset,
+		Limit:   limit,
+		IsCount: true,
+		Fields:  Fields,
+		Order:   order,
+		Where:   "state=1",
+	}
+	if uid > 0 {
+		params.Where += fmt.Sprintf(" AND px_uid=%d", uid)
+	}
+	if picList, count = models.NewPicture().GetPicListByParams(params); len(picList) == 0 {
+		return
+	}
+	return p.combinePicAttrTagData(picList), count
+}
+
 //根据图片ID获取图片详情
 func (p *PicService) GetPhotosDetailByPxId(pxId int) (result []*PhotoResult) {
 	var picList []models.Picture

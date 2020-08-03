@@ -11,11 +11,11 @@
                 {{if le  .page 1}}
                     <i>‹</i>
                 {{else}}
-                    <a href="{{.searchUrl}}&page={{.prevPage}}" class="pure-button"><i>‹</i></a>
+                    <a href="{{.baseUrl}}&page={{.prevPage}}" class="pure-button"><i>‹</i></a>
                 {{end}}
 
                 {{if .isNextPage}}
-                    <a href="{{.searchUrl}}&page={{.nextPage}}" class="pure-button"><i>›</i></a>
+                    <a href="{{.baseUrl}}&page={{.nextPage}}" class="pure-button"><i>›</i></a>
                 {{end}}
 
             </div>

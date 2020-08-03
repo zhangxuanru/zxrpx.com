@@ -58,7 +58,7 @@ func (p *PicService) comBindPicUserResult(picList []models.Picture) (result []*P
 	if len(uidList) == 0 {
 		return
 	}
-	userData := NewUserService().GetUserDataByUidList(uidList)
+	userData := NewUserService().GetUserDataByUidList(uidList, 1)
 	for _, item := range result {
 		if _, ok := userData[item.Uid]; ok {
 			item.User = userData[item.Uid]

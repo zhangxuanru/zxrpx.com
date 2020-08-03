@@ -40,6 +40,16 @@ func ViewSearchWHAttr(index int, style string) int {
 	return attr.Height
 }
 
+//个人资料页 图片宽高设置
+func ViewUserProfilePhotoWHAttr(index int, style string) int {
+	viewAttr := UserProFilePhotoAttr()
+	attr := viewAttr[index]
+	if style == "w" {
+		return attr.Width
+	}
+	return attr.Height
+}
+
 //根据图片属性和宽度获取图片地址
 func ViewImageAddr(attrList []models.PictureAttr, height int) string {
 	if len(attrList) == 0 {

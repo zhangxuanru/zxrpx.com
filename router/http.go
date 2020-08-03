@@ -88,13 +88,14 @@ func (h *HttpServer) LoadStatic() {
 //模板函数
 func (h *HttpServer) LoadTemplateFunc() {
 	h.engine.SetFuncMap(template.FuncMap{
-		"ViewWH":           logic.ViewWHAttr,
-		"ViewSearchWH":     logic.ViewSearchWHAttr,
-		"ViewImageAddr":    logic.ViewImageAddr,
-		"ViewHeadPortrait": logic.ViewHeadPortrait,
-		"ViewPicByHeight":  logic.ViewPicByHeight,
-		"ViewPicAddr":      logic.ViewPicAddr,
-		"ReplaceUrlParam":  logic.ReplaceUrlParam,
-		"RemoveUrlParam":   logic.RemoveUrlParam,
+		"ViewWH":                 logic.ViewWHAttr,
+		"ViewSearchWH":           logic.ViewSearchWHAttr,
+		"ViewUserProfilePhotoWH": logic.ViewUserProfilePhotoWHAttr,
+		"ViewImageAddr":          logic.ViewImageAddr,
+		"ViewHeadPortrait":       logic.ViewHeadPortrait,
+		"ViewPicByHeight":        logic.ViewPicByHeight,
+		"ViewPicAddr":            logic.ViewPicAddr,
+		"ReplaceUrlParam":        logic.ReplaceUrlParam,
+		"RemoveUrlParam":         logic.RemoveUrlParam,
 	})
 }

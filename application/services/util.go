@@ -6,7 +6,9 @@
 */
 package services
 
-import "pix/application/models"
+import (
+	"pix/application/models"
+)
 
 //获取图片ID列表
 func getPxIdByPicList(picList []models.Picture) []int {
@@ -46,4 +48,13 @@ func getImgExt(format int) string {
 		return ext
 	}
 	return "JPG"
+}
+
+//获取uid
+func getUidByUserList(list []models.User) []int {
+	userIds := make([]int, len(list))
+	for k, item := range list {
+		userIds[k] = item.Id
+	}
+	return userIds
 }

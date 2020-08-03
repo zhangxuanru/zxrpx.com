@@ -42,8 +42,16 @@ func NewUserService() *UserService {
 }
 
 //根据UId获取用户信息
-func (u *UserService) GetUserDataByUidList(uidList []int) (userMap UserCenter) {
-	userInfoList := models.NewUser().GetUserByUidList(uidList)
+func (u *UserService) GetUserDataByUidList(uidList []int, userType int) (userMap UserCenter) {
+	var (
+		userInfoList []models.User
+	)
+	if userType == 2 {
+		userInfoList = models.NewUser().GetUserByPxUidList(uidList)
+		uidList = getUidByUserList(userInfoList)
+	} else {
+		userInfoList = models.NewUser().GetUserByUidList(uidList)
+	}
 	if len(userInfoList) == 0 {
 		userMap = make(UserCenter)
 		return
@@ -51,7 +59,8 @@ func (u *UserService) GetUserDataByUidList(uidList []int) (userMap UserCenter) {
 	userStatMap := models.NewUserStat().GetUserStatByUidList(uidList)
 	userMap = make(UserCenter, len(userInfoList))
 	for _, user := range userInfoList {
-		stat := userStatMap[user.Id]
+		index := user.Id
+		stat := userStatMap[index]
 		userInfo := &UserStat{
 			Uid:          user.Id,
 			PxUid:        user.PxUid,
@@ -66,12 +75,12 @@ func (u *UserService) GetUserDataByUidList(uidList []int) (userMap UserCenter) {
 			CommentNum:   stat.CommentNum,
 			FollowerNum:  stat.FollowerNum,
 		}
-		userMap[user.Id] = userInfo
+		userMap[index] = userInfo
 	}
 	return
 }
 
-//根据uid获取近期的num张图像,排队pxId的图片
+//根据uid获取近期的num张图像,排除pxId的图片
 func (u *UserService) GetRecentImagesByUid(uid int, num int, pxId int) (result []*PhotoResult) {
 	var picList []models.Picture
 	params := &models.QueryParams{
@@ -125,5 +134,22 @@ func (u *UserService) UpdateUserInfo(uid int, buildMap map[string]interface{}) (
 //修改用户扩展资料
 func (u *UserService) UpdateUserExtend(uid int, buildMap map[string]interface{}) (err error) {
 	_, err = models.NewUserExtend().UpdateExtend(uid, buildMap)
+	return
+}
+
+//个人资料页
+func (u *UserService) Profile(uid int, tab string, page, limit int) (userData *UserStat, photoList []*PhotoResult, count int) {
+	userMap := u.GetUserDataByUidList([]int{uid}, 2)
+	for _, item := range userMap {
+		if item.PxUid == uid {
+			userData = item
+			break
+		}
+	}
+	if tab == "latest" {
+		photoList, count = NewPicService().GetLatestPhotoList(page, limit, uid, "add_time DESC")
+	} else {
+		photoList, count = NewPicService().GetLatestPhotoList(page, limit, uid, "like_num DESC")
+	}
 	return
 }

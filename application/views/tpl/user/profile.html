@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh" prefix="og: http://ogp.me/ns#">
+<head>
+    {{template "account_head" .}}
+    <title>{{.userData.NickName}} | 13520v.com</title>
+     <link rel="stylesheet" href="{{.frontDomain}}/static/css/audio.42ba4c90.min.css" />
+    <style>
+        .tab_menu { border-top: 0; font-size: 15px; text-transform: uppercase; }
+
+        #stats a, #stats span { white-space: nowrap; margin: 0 10px; color: #fff; font-size: 14px; line-height: 1.5; }
+        #stats span i { cursor: default; }
+
+        .edit_profile_links { opacity: 0; position: absolute; top: 20px; right: 20px; transition: .2s; }
+        #hero:hover .edit_profile_links { display: block; opacity: 1; }
+
+        .user_links { position: absolute; left: 20px; bottom: 14px; }
+        .user_links a { margin-right: 12px; }
+        .action_buttons { position: absolute; right: 20px; bottom: 15px; text-shadow: none; }
+        @media screen and (max-width:1080px) {
+            .action_buttons { position: relative; right: 0; bottom: 0; margin: 18px 0 4px; }
+            .user_links { display: none; }
+        }
+        .badges { position: absolute; top: 5px; left: 5px; display: flex; align-items: center; justify-content: center; }
+        .badges > span { margin-right: 8px; display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 22px; background: rgba(0,0,0,.3); }
+        .badges > span .icon { top: 0; }
+
+        .cameras a { display: inline-block; width: 150px; text-align: center; margin: 0 0 30px 40px; color: #555; font-size: 13px; }
+        .cameras i { display: inline-block; line-height: 130px; }
+        .cameras img { vertical-align: middle; }
+        .cameras div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .followers img { margin: 0 0 10px 13px; width: 48px; height: 48px; }
+
+        .flex_grid .active { background: rgba(255,0,0,.7) !important; }
+
+        .tab_menu+div.profile-audio {
+            background: white;
+        }
+
+        .tab_menu[data-tab="audio"] {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body class="ua-authenticated is-authenticated">
+<div id="wrapper">
+    {{template "header" .}}
+    <div id="content" class="clearfix">
+        <div id="hero" style="margin:0 0 20px;background:#96a6bd;text-align:center">
+            <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5)"></div>
+            <div style="position:relative;padding-bottom:16px">
+                <h1 style="font-size:32px;padding-top:25px">{{.userData.NickName}}</h1>
+                <div style="text-align:center;margin:22px 0 20px">
+                    <img style="border:2px solid #fff;width:125px;height:125px;border-radius:90px" src="{{ViewHeadPortrait .userData.FileName 250 250}}" alt="Victoria_Borodinova">
+                </div>
+                <div id="stats" style="max-height:22px;overflow:hidden;padding:0 15px">
+                     <span title="图片"><i class="icon icon_images"></i> {{.userData.PicNum}}</span>
+                    <span title="下载量"><i class="icon icon_download"></i> {{.userData.DownloadsNum}}</span>
+                    <span title="喜欢"><i class="icon icon_like_filled"></i> {{.userData.LikeNum}}</span>
+                    <span title="收藏"><i class="icon icon_favorite_filled"></i> {{.userData.FollowerNum}}</span>
+                    <span title="评论" class="hide-lg"><i class="icon icon_comment_filled"></i> {{.userData.CommentNum}}</span>
+                 </div>
+                <div class="action_buttons">
+                     <span id="follow_button" class="ua-engagement-follow pure-button pure-button-primary button-sm {{if .isFollow}} pure-button-disabled {{else}} ajax {{end}} " data-href="/accounts/follow/{{.userData.PxUid}}/">
+                         <i class="check">✓</i> 关注</span>
+                </div>
+            </div>
+        </div>
+        {{if ge .photoLen 1}}
+        <div class="tab_menu" data-tab="popular">
+            <a href="?tab=popular" {{if eq .tab "popular"}} class="selected" {{end}}>热门</a>
+            <a href="?tab=latest"  {{if eq .tab "latest"}} class="selected" {{end}} class="">最新</a>
+         </div>
+        {{end}}
+
+        <div class="profile-popular">
+            <div>
+                <div class="flex_grid credits">
+                    {{range $i,$photo :=.photoList}}
+                         <div class="item" data-w="{{ViewUserProfilePhotoWH $i "w"}}" data-h="{{ViewUserProfilePhotoWH $i "h"}}">
+                        <a href="/photos/{{$photo.PxImgId}}">
+                            <img srcset="{{ViewImageAddr $photo.Attr 340}} 1x, {{ViewImageAddr $photo.Attr 480}} 2x" src="{{ViewImageAddr $photo.Attr 340}}" alt="{{$photo.TagStr}}" title="{{$photo.TagStr}}">
+                            <section class="badges">
+                                <span title="This upload is featured on Pixabay">
+                                <i class="icon icon_featured_badge"></i>
+                                </span>
+                            </section>
+                        </a>
+                        <div>
+                            <div class="counts hide-xs hide-sm photo-{{$photo.PxImgId}} ">
+                                <em data-href="/images/like/{{$photo.PxImgId}}/" class="ajax ua-engagement-like">
+                                    <i class="icon icon_like"></i> {{$photo.LikeNum}}</em>
+                                <em data-href="/accounts/favorite/photo/{{$photo.PxImgId}}/" class="ajax ua-engagement-favorite">
+                                    <i class="icon icon_favorite"></i> {{$photo.FavoritesNum}}</em>
+                                <em data-location="/photos/{{$photo.PxImgId}}/#comments">
+                                    <i class="icon icon_comment"></i> {{$photo.CommentsNum}}</em>
+                            </div>
+                            <span>
+                 {{range $j,$tag := $photo.Tags}}
+					<a href="/photo/search/?key={{$tag.TagName}}">{{$tag.TagName}}</a>
+                 {{end}}
+					</span>
+                        </div>
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;margin:40px 20px 10px">
+            <div class="paginator">
+                {{if gt  .page 1}}
+                    <a href="{{.baseUrl}}&page={{.prevPage}}" class="pure-button"><i>‹</i></a>
+                {{end}}
+                {{if .isNextPage}}
+                    <a class="pure-button next" href="{{.baseUrl}}&&page={{.nextPage}}"><i>›</i></a>
+               {{end}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="fb-root"></div><a id="toTop">▲</a>
+<script src="{{.frontDomain}}/static/js/jquery-1.12.4.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="{{.frontDomain}}/static/js/jquery.js"><\/script>');
+    var LANG = '', LANG_URL_PREFIX = '', LANGS = [["cs","\u010ce\u0161tina"],["da","Dansk"],["de","Deutsch"],["en","English"],["es","Espa\u00f1ol"],["fr","Fran\u00e7ais"],["id","Indonesia"],["it","Italiano"],["hu","Magyar"],["nl","Nederlands"],["no","Norsk"],["pl","Polski"],["pt","Portugu\u00eas"],["ro","Rom\u00e2n\u0103"],["sk","Sloven\u010dina"],["fi","Suomi"],["sv","Svenska"],["tr","T\u00fcrk\u00e7e"],["vi","Vi\u1ec7t"],["th","\u0e44\u0e17\u0e22"],["bg","\u0411\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438"],["ru","\u0420\u0443\u0441\u0441\u043a\u0438\u0439"],["el","\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ae"],["ja","\u65e5\u672c\u8a9e"],["ko","\ud55c\uad6d\uc5b4"],["zh","\u7b80\u4f53\u4e2d\u6587"]], I18N = { 'delete': '确认删除？', 'safesearch': '安全搜索', 'adult_content': '成人内容' };
+</script>
+<script src="{{.frontDomain}}/static/js/base.70977a21.min.js"></script>
+<script>
+    $(function(){
+        if ((document.documentMode || 10) > 9) $('#hero').prepend("<svg style='position:absolute;top:0;left:0;width:100%;height:100%' viewBox='0 0 640 425' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' preserveAspectRatio='xMidYMid slice'><filter id='blur'><feGaussianBlur stdDeviation='3'/></filter><image xlink:href='https://cdn.pixabay.com/photo/2018/04/30/15/50/flower-3363021_640.jpg' width='640' height='425' filter='url(#blur)'/></svg>");
+    });
+    $('.flex_grid').flexImages({rowHeight: 320});
+    $('[data-lazy]').unveil(400);
+</script>
+</body>
+</html>

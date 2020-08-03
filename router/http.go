@@ -9,11 +9,13 @@ package router
 import (
 	"context"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"os/signal"
 	"pix/application/logic"
 	"pix/configs"
+	"strconv"
 	"syscall"
 	"time"
 
@@ -58,7 +60,9 @@ func (h *HttpServer) StartServer() {
 			logrus.Fatal("ListenAndServe err:", err)
 		}
 	}()
-	logrus.Println("进程ID=", os.Getpid())
+	pidStr := strconv.Itoa(os.Getpid())
+	ioutil.WriteFile("./bin/server.pid", []byte(pidStr), os.ModePerm)
+
 }
 
 //监听信号关闭服务

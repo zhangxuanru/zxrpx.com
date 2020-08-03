@@ -15,8 +15,9 @@ import (
 )
 
 const (
-	Env           = EnvTest
+	Env           = EnvProduct
 	EnvTest       = "test"
+	EnvProduct    = "product"
 	DefaultPicUrl = ""
 )
 

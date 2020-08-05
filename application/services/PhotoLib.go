@@ -113,8 +113,8 @@ func (p *PicService) GetPicListByIds(idList []int) (result []*PhotoResult) {
 		tagService = NewTagService()
 		picList    []models.Picture
 	)
-	result = make([]*PhotoResult, len(idList))
 	picList = models.NewPicture().GetPicListByIds(idList)
+	result = make([]*PhotoResult, len(picList))
 	tagRes = tagService.GetTagListByPicIds(idList)
 	attrRes = p.GetPicAttrListByIds(idList)
 	for key, pic := range picList {

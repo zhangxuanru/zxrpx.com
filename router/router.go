@@ -41,6 +41,7 @@ func (h *HttpServer) settingRouter() {
 	h.engine.GET("/users/:user/", controllers.Profile)          //我的资料
 	h.engine.GET("/photo/search/", controllers.PhotoSearch)     //搜索
 	h.engine.GET("/photo/search/:key", controllers.PhotoSearch) //搜索
+	h.engine.GET("/image/search/:key", controllers.PhotoSearch) //搜索
 
 	//h.engine.Any()
 

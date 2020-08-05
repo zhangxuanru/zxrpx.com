@@ -8,7 +8,6 @@ package services
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"pix/configs"
 	"reflect"
@@ -59,7 +58,7 @@ func (s *Search) SearchQuery(params *SearchPhoto, offset, limit int) (photoResul
 		result *elastic.SearchResult
 	)
 
-	fmt.Printf("parans:%+v\n\n", params)
+	//fmt.Printf("parans:%+v\n\n", params)
 
 	boolQuery := elastic.NewBoolQuery()
 	if len(params.KeyWord) > 0 {
@@ -86,10 +85,10 @@ func (s *Search) SearchQuery(params *SearchPhoto, offset, limit int) (photoResul
 	fsc := elastic.NewFetchSourceContext(true).Include("pic_id", "tags")
 
 	//test
-	src, _ := boolQuery.Source()
-	data, _ := json.MarshalIndent(src, "", "  ")
-	logrus.Println("source:", string(data))
-	fmt.Println("---------")
+	//src, _ := boolQuery.Source()
+	//data, _ := json.MarshalIndent(src, "", "  ")
+	//logrus.Println("source:", string(data))
+	//fmt.Println("---------")
 	//test end
 
 	if params.Order == "latest" {
